@@ -1,0 +1,16 @@
+version: '3'
+networks: 
+  nvmanh-network:
+    external: true
+services:
+  eContact:
+    image: eContact
+    container_name: eContact
+    restart: always
+    networks:
+      - nvmanh-network
+    ports:
+      - '9002:80'
+    build:
+      context: .
+      dockerfile: MS.eContact.Web/Dockerfile

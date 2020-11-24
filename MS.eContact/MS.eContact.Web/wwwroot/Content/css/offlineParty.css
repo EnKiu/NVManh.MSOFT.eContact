@@ -1,0 +1,153 @@
+﻿
+
+#register-offline {
+    position: fixed;
+    /*width:200px;*/
+    /*height:50px;*/
+    border: 1px solid #ccc;
+    right: 10px;
+    bottom: 10px;
+}
+
+
+.ui-dialog {
+    padding: 0;
+}
+
+    .ui-dialog .ui-dialog-titlebar {
+        background-color: #0072bc !important;
+    }
+
+.ui-widget-header {
+    border: none;
+}
+
+.ui-corner-all {
+    border-radius: unset;
+}
+
+.ui-dialog .ui-dialog-titlebar-close {
+    background-image: url(../Icons/tool-sprites.png);
+    background-color: transparent;
+    background-repeat: no-repeat;
+    background-position: 0 0;
+    border: none;
+    /*background-size: 20px;*/
+    border-radius: 100%;
+}
+
+    .ui-dialog .ui-dialog-titlebar-close:hover {
+        cursor: pointer;
+        background-color: #ff0000;
+    }
+
+.offline-party-item {
+    color: #0026ff;
+    cursor: pointer;
+}
+
+    .offline-party-item:hover {
+        text-decoration: underline;
+    }
+
+#dialog-form label {
+    font-weight: bold;
+}
+
+/*thead, tbody {
+    display: block;
+}*/
+
+table {
+    width: 100%; /* 140px * 5 column + 16px scrollbar width */
+    border-spacing: 0;
+    /*border: none;*/
+}
+
+tbody, thead tr {
+    display: block;
+}
+
+tbody {
+    height: 160px;
+    overflow-y: auto;
+    overflow-x: hidden;
+}
+
+
+thead th:last-child {
+    width: 38px; /* 140px + 16px scrollbar width */
+}
+
+.memberName-item {
+    color: #ff0000;
+}
+
+.event-text {
+    font-style: italic;
+}
+
+.col-01 {
+    width: 20px;
+}
+
+.col-02 {
+    width: 283px;
+}
+
+.col-01-tbody {
+    width: 31px;
+}
+
+.col-02-tbody {
+    width: 287px;
+}
+.col-03-tbody {
+    width: 41px;
+}
+
+.event-info {
+    display: block;
+}
+.event-info-time, .event-info-place, .event-info-price {
+    align-items: center;
+    display: flex;
+    margin: 6px 0px;
+}
+.event-info-item-icons {
+    background-size: auto;
+    background-repeat: no-repeat;
+    display: inline-block;
+    height: 16px;
+    width: 16px;
+    margin: 0px 10px;
+}
+.event-info-time-icons {
+    background-position: 0 -302px;
+    background-image: url('/Content/Icons/IconsFB.png');
+}
+.event-info-place-icons {
+    background-position: -17px -373px;
+    background-image: url('/Content/Icons/IconsFB2.png');
+}
+.event-info-price-icons {
+    background-position: -17px -339px;
+    background-image: url('/Content/Icons/IconsFB2.png');
+}
+.text-blur {
+    color: #90949c;
+}
+.text-active{
+    color:#12b500;
+}
+.event-text-content-item {
+    color: #4b4f56;
+}
+.title-link{
+    color:#0026ff;
+}
+
+.event-card{
+    cursor:pointer;
+    margin:5px 0;
+}

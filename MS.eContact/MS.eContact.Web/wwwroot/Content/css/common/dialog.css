@@ -1,0 +1,167 @@
+﻿body {
+}
+
+.msg-success {
+    width: 250px;
+    height: 50px;
+    right: 0;
+    bottom: 0;
+    position: fixed;
+    background-color: #808080;
+    opacity: 0.4;
+    content: "fasdfasdf";
+    text-align: center;
+    font-size: 28px;
+    font-weight: bold;
+    padding-top: 50px;
+    color:#4cff00;
+}
+.ui-dialog {
+    position: absolute;
+    top: 0;
+    left: 0;
+    padding: 0;
+    outline: 0;
+    border: 5px solid #0072bc !important;
+    border-radius: 4px !important;
+}
+
+    .ui-dialog .ui-dialog-titlebar {
+        border-radius: unset !important;
+        border: none !important;
+        padding: 0px 4px 4px 4px !important;
+        font-weight: normal !important;
+        color:#fff !important;
+    }
+
+    .ui-dialog .ui-dialog-titlebar-close {
+        width: 20px;
+        padding: 1px;
+        height: 20px;
+        right: 2px;
+        top: 2px;
+        margin: 0px;
+    }
+
+    .ui-dialog .ui-dialog-content {
+        position: relative;
+        padding: 8px 8px 0px;
+        width: 670px;
+        left: 0px;
+        top: 0px;
+        height: 299px
+    }
+
+
+    .ui-dialog table tbody tr td div {
+        display: inline-flex !important;
+        width: 100%;
+    }
+
+    .ui-dialog .ui-dialog-titlebar-close {
+        overflow: hidden !important;
+        width: 16px !important;
+        height: 16px !important;
+        background-image: url(../Icons/tool-sprites.png);
+        margin: 0 !important;
+        filter: alpha(opacity=50) !important;
+        background-position: 0 0 !important;
+    }
+
+.ui-button .ui-icon {
+    background-image: url(../Icons/tool-sprites.png);
+}
+
+.ui-dialog .ui-dialog-buttonpane {
+    padding: unset !important;
+    border: none !important;
+}
+
+    .ui-dialog .ui-dialog-buttonpane button {
+        margin: 0px 8px 8px 0px !important;
+    }
+
+#btnSaveCustomer, #btnSaveAndAddDialog, #btnCloseDialog {
+    float: right;
+    
+}
+
+    #btnSaveCustomer:hover, #btnSaveAndAddDialog:hover, #btnCloseDialog:hover, #btnHelpDialog:hover {
+        border-color: #126daf;
+    }
+
+#btnSaveCustomer {
+    background-image: url(../Icons/Save16.png);
+    background-repeat: no-repeat;
+    background-position-y: center;
+    background-position-x: 15px;
+    border-radius: 0px;
+    width: 75px;
+    padding-left: 28px;
+}
+#btnCloseDialog {
+    background-image: url(../Icons/Disable16.png) !important;
+    background-repeat: no-repeat;
+    background-position-y: center;
+    background-position-x: 15px;
+    border-radius: 0px;
+    width: 90px;
+    padding-left: 28px;
+}
+
+#btnSaveAndAddDialog {
+    background-image: url(../Icons/SaveAdd16.png);
+    background-repeat: no-repeat;
+    background-position-y: center;
+    background-position-x: 18px;
+    border-radius: 0px;
+    width: 125px;
+    padding-left: 30px;
+}
+
+
+
+#btnHelpDialog {
+    background-image: url(../Icons/Help16.png) !important;
+    background-repeat: no-repeat;
+    /*background-position: 0-1595px !important;*/
+    background-position-y: center !important;
+    background-position-x: 15px !important;
+    border-radius: 0px;
+    width: 75px;
+    padding-left: 28px;
+    margin-left:8px !important;
+}
+
+#dialog-message {
+    min-height:unset !important;
+}
+.question-content {
+    min-height: 50px;
+    display: inline-flex;
+}
+.question-icon {
+    width: 50px;
+    background-image: url(../Icons/icon-question.png);
+    background-repeat: no-repeat;
+}
+
+.dialog-message-bottom-toolbar #btnConfirm{
+    background-image: url(../Icons/Save16.png);
+    background-repeat: no-repeat;
+    background-position-y: center;
+    background-position-x: 15px;
+    border-radius: 0px;
+    width: 100px;
+    padding-left: 28px;
+}
+
+.dialog-message-bottom-toolbar #btnCancel{
+    background-image: url(../Icons/Save16.png);
+    background-repeat: no-repeat;
+    background-position-y: center;
+    background-position-x: 15px;
+    border-radius: 0px;
+    width: 100px;
+    padding-left: 28px;
+}

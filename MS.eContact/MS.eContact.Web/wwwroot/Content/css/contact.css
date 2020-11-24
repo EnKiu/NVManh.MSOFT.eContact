@@ -1,0 +1,259 @@
+﻿
+.search-box {
+    border: 1px solid #ccc;
+}
+
+#btnSearch {
+    border-top-right-radius: 5px;
+    border-bottom-right-radius: 5px;
+}
+
+.modal-header {
+    padding: 0px 5px !important;
+}
+
+    .modal-header .close {
+        margin: 0px 5px 5px auto !important;
+        padding: 0px !important;
+    }
+
+.modal.show .modal-dialog {
+    max-width: 400px !important;
+}
+
+
+
+.li-label-text {
+    width: 100px;
+    display: inline-block;
+    color: #3d65b1;
+    font-weight: 500;
+}
+
+.li-label-text-icon {
+    width: 100px;
+    display: inline-block;
+    padding-left: 20px;
+    font-weight: 500;
+    float: left;
+    color: #3d65b1;
+    height: 28px;
+    line-height: 28px;
+}
+
+.li-detail {
+    width: calc(100%-100px);
+    margin-left: 100px;
+}
+
+.info-mobile input {
+    background-color: #ffd800;
+    color: #0094ff;
+    font-weight: bold;
+    margin-bottom: 10px;
+    text-align: center;
+    box-sizing: border-box;
+    width: 100%;
+}
+
+.readonly {
+    border: none !important;
+}
+
+.info-mobile2 input {
+    background-color: #b6ff00;
+    color: #b200ff;
+    font-weight: bold;
+    text-align: center;
+    box-sizing: border-box;
+    width: 100%;
+}
+
+.li-facebook {
+    background-image: url(../Icons/facebook.png);
+    background-size: 30px;
+    background-repeat: no-repeat;
+    background-position: 5px 11px;
+}
+
+    .li-facebook input {
+        color: #0026ff;
+        width: 100%;
+        box-sizing: border-box;
+    }
+
+.li-zalo {
+    background-image: url(../Icons/zalo.png);
+    background-size: 40px;
+    background-repeat: no-repeat;
+    background-position: 1px 9px;
+}
+
+    .li-zalo input {
+        color: #0026ff;
+        width: 100%;
+        box-sizing: border-box;
+    }
+
+.modal-content textarea {
+    resize: none;
+    width: 100%;
+    padding: 2px 6px;
+    border: 1px solid #0094ff;
+}
+
+.modal-content input {
+    padding: 2px 6px;
+    border: 1px solid #0094ff;
+}
+
+.li-other p {
+    font-style: italic;
+}
+
+.list-contact {
+    font-size: 13px !important;
+    margin-top:20px;
+}
+
+.call-mobile {
+    padding: 2px;
+    margin-left: 10px;
+    background-image: url(../Icons/call_phone.png);
+    border: 1px solid #ccc;
+    display: inline-flex;
+}
+
+.info-general {
+    display: block;
+    padding-left: 145px;
+}
+
+.avatar-detail {
+    width: 130px;
+    height: 130px !important;
+    float: left;
+}
+
+#avatar-box {
+    cursor: default;
+}
+
+.avatar-onEditMode {
+    border: 3px solid #0026ff;
+    cursor: pointer !important;
+}
+
+.card-title {
+    margin-bottom: 5px !important;
+    font-weight: 500;
+    text-shadow: 2px 2px aliceblue;
+    color: #0094ff;
+}
+
+.card-body {
+    width: 100%;
+    padding: 0px;
+    display: inline-block;
+}
+
+.rank-star {
+    background-image: url(../imgs/rank.png);
+    background-repeat: no-repeat;
+    background-size: 100px 100px;
+    height: 20px;
+    border-bottom: none !important;
+    margin-bottom: 10px;
+}
+
+.rank-star-5 {
+    background-position: 0px 0px;
+}
+
+.rank-star-4 {
+    background-position: 0px -20px;
+}
+
+.rank-star-3 {
+    background-position: 0px -40px;
+}
+
+.rank-star-2 {
+    background-position: 0px -60px;
+}
+
+.rank-star-1 {
+    background-position: 0px -80px;
+}
+
+
+.box-success-message {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: rgba(0, 0, 0, 0.4);
+    z-index: 99999;
+    /*opacity: 0.4;*/
+}
+
+.success-message-content {
+    position: relative;
+    width: 300px;
+    height: 150px;
+    background-color: #fff;
+    color: blue;
+    font-size: 24px;
+    font-weight: 500;
+    margin: 200px auto;
+    text-align: center;
+    z-index: 999999;
+    line-height: 150px;
+}
+
+#tbContactDetail th {
+    vertical-align: middle !important;
+}
+
+#tbContactDetail td {
+    vertical-align: middle !important;
+}
+
+.td-avatar {
+    padding: 2px !important;
+}
+
+.th-avatar {
+    margin-left: auto !important;
+    margin-right: auto !important;
+    width: 100% !important;
+}
+
+.info-mobile, .info-mobile2 {
+    display: inline-flex;
+}
+
+    .info-mobile a, .info-mobile2 a {
+        margin-left: 4px;
+        width: 32px;
+        height: 28px;
+        /*border:1px solid #ccc;*/
+        background-image: url(../Icons/call_phone.png);
+        background-repeat: no-repeat;
+        background-size: 24px 24px;
+    }
+
+
+#register-offline{
+    position:fixed;
+    /*width:200px;*/
+    /*height:50px;*/
+    border:1px solid #ccc;
+    right:10px;
+    bottom:10px;
+}
+#register-offline:hover{
+    /*background-color:aqua;*/
+    /*cursor:pointer;*/
+}

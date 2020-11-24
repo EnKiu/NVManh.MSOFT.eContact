@@ -1,0 +1,213 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Trang chủ</title>
+    <link href="/Content/css/libraries/jquery-ui.css" rel="stylesheet">
+    <link href="/Content/css/libraries/bootstrap.css" rel="stylesheet">
+    <link href="/Content/css/libraries/bootstrap-responsive.css" rel="stylesheet">
+    <link href="/Content/css/common/common.css" rel="stylesheet">
+    <link href="/Content/css/common/dialog.css" rel="stylesheet">
+    <link href="/Content/css/common/grid.css" rel="stylesheet">
+    <link href="/Content/css/contact.css" rel="stylesheet">
+    <style>
+        body {
+            padding-top: 36px;
+        }
+
+        .title-1 {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            background-color: #343a40;
+            color: #fff !important;
+            font-weight: bold;
+            padding: 5px 0px;
+            text-transform: uppercase;
+            z-index: 99999;
+        }
+
+        #lblUserName {
+            color: #bf6dfb !important;
+            font-weight: bold;
+        }
+    </style>
+</head>
+<body class="" style="">
+    <center>
+        <div class="title-1" style="">
+            Website nội bộ cựu học sinh A1 (2004-2007)
+        </div>
+        <!--<div class="title-2"> Khóa: (2004-2007)</div>-->
+        <!--<div class="title-3">Trường THPT Tứ Sơn</div>-->
+    </center>
+    <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+        <div class="container">
+            <a class="navbar-brand" href="#">
+                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" class="d-block mx-auto" role="img" viewBox="0 0 24 24" focusable="false"><title>A1 - Tứ Sơn</title><circle cx="12" cy="12" r="10"></circle><path d="M14.31 8l5.74 9.94M9.69 8h11.48M7.38 12l5.74-9.94M9.69 16L3.95 6.06M14.31 16H2.83m13.79-4l-5.74 9.94"></path></svg>
+            </a>
+            <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarsExample07" aria-controls="navbarsExample07" aria-expanded="false" aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+
+            <div class="collapse navbar-collapse" id="navbarsExample07">
+                <ul id="navLeft" class="navbar-nav mr-auto">
+                    <li class="nav-item">
+                        <a class="nav-link active" href="/">Danh bạ</a>
+                    </li>
+
+                    <li class="nav-item">
+                        <a class="nav-link" href="/Event">Sự kiện</a>
+                    </li>
+
+                    <li class="nav-item dropdown disabled">
+                        <a class="nav-link dropdown-toggle" href="#" id="dropdown07" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Hoạt động</a>
+                        <div class="dropdown-menu" aria-labelledby="dropdown07">
+                            <a class="dropdown-item" href="#">Cưới/Hỏi</a>
+                            <a class="dropdown-item" href="#">Tân gia</a>
+                        </div>
+                    </li>
+                </ul>
+                <ul class="navbar-nav navbar-right">
+                    <li id="navUserInfo" class="nav-item dropdown active" style="">
+                        <a class="nav-link dropdown-toggle" href="#" id="lblUserName" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"></a>
+                        <div class="dropdown-menu" aria-labelledby="dropdown07">
+                            <a class="dropdown-item" href="#">Thông tin tài khoản</a>
+                            <a id="navLogout" class="dropdown-item" href="#">Đăng xuất</a>
+                        </div>
+                    </li>
+                    <li id="navLogin" class="nav-item active" style="        display: none">
+                        <a class="nav-link" href="/Account/Login" id="btnUserInfo">Đăng nhập</a>
+                    </li>
+                </ul>
+                <form class="form-inline my-2 my-md-0">
+                </form>
+            </div>
+        </div>
+    </nav>
+
+    <div class="container">
+        <div class="list-contact">
+            <div class="input-group mb-3">
+                <input id="txtSearch" type="text" class="form-control" placeholder="Nhập tên hoặc SĐT" aria-label="Recipient's username" aria-describedby="basic-addon2">
+                <div class="input-group-append">
+                    <button id="btnSearch" class="btn btn-primary" type="button">Tìm kiếm</button>
+                </div>
+                <button id="btnReload" class="btn btn-outline-success" type="button" style="margin-left:10px; float:right;">Tải lại</button>
+            </div>
+            <form>
+                <table id="tbContacts" class="table table-bordered">
+                    <thead>
+                        <tr>
+                            <th scope="col" style="width:120px">#</th>
+                            <th scope="col" style="width:200px">Họ tên</th>
+                            <th scope="col">Số điện thoại</th>
+                            <!--<th scope="col">Nơi ở hiện tại</th>
+                            <th scope="col" style="width:60px">Xem</th>-->
+                        </tr>
+                    </thead>
+                    <tbody id="tbContactDetail" class=""></tbody>
+                </table>
+            </form>
+        </div>
+        <!-- Modal Detail -->
+        <div class="modal fade" id="exampleModalCenter" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" style="display: none;" aria-hidden="true">
+            <div class="modal-dialog modal-dialog-centered" role="document">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <!--<h6 class="modal-title" id="exampleModalLongTitle">Thông tin chi tiết</h6>-->
+                        <button id="btnCloseDetail" type="button" class="close" data-dismiss="modal" aria-label="Close">
+                            <span aria-hidden="true">×</span>
+                        </button>
+                    </div>
+                    <div class="modal-body form">
+                        <div class="card-body">
+                            <div id="avatar-box" class="avatar-detail">
+                                <img id="avatar" class="card-img-top" src="/Content/imgs/users/avatar/e1233ff4-06ae-406a-ae0d-e6d9cf8c3556.jpg" alt="Card image cap" align="middle">
+                            </div>
+                            <div class="info-general">
+                                <div id="txtName" class="card-title">Trần Văn Duy</div>
+                                <div class="rank-star rank-star-2"></div>
+                                <div>
+                                    <div class="info-mobile"><input id="txtMobile" class="readonly" readonly="readonly" value=""><a href="tel:0975812622"></a></div>
+                                    <div class="info-mobile2" style="display: none;"><input id="txtMobile2" class="readonly" readonly="readonly" value=""><a href="tel:0968214621"></a></div>
+                                </div>
+                            </div>
+                        </div>
+                        <!--<p class="card-text">Thành viên này chưa cập nhật thông tin nơi ở hoặc nghề nghiệp</p>-->
+                        <div class="">
+                            <ul class="list-group list-group-flush">
+                                <li class="list-group-item li-facebook">
+                                    <div class="li-label-text-icon">Facebook: </div>
+                                    <div class="li-detail"><input id="txtFacebook" class="readonly" readonly="readonly" value=""></div>
+                                </li>
+                                <li class="list-group-item li-zalo">
+                                    <div class="li-label-text-icon">Zalo: </div>
+                                    <div class="li-detail"><input id="txtZalo" class="readonly" readonly="readonly" value=""></div>
+                                </li>
+                                <li class="list-group-item li-workPlace">
+                                    <div class="li-label-text">Nơi làm việc: </div><span></span>
+                                    <textarea id="txtWorkPlace" hidden="hidden" style="display: none;"></textarea>
+                                </li>
+                                <li class="list-group-item li-other">
+                                    <p></p>
+                                    <textarea id="txtOtherInfo" hidden="hidden" style="display: none;"></textarea>
+                                </li>
+                                <li class="list-group-item li-upload" hidden="hidden">
+                                    <input id="fuAvatarImage" type="file" class="readonly" readonly="readonly">
+                                </li>
+                            </ul>
+                        </div>
+                        <!--<div class="card-body">
+                            <a href="#" class="card-link">Card link</a>
+                            <a href="#" class="card-link">Another link</a>
+                        </div>-->
+                    </div>
+                    <div class="modal-footer" style="display:block">
+                        <button id="btnCancel" type="button" class="btn btn-dark" style="float: left; display: none;" hidden="hidden">Khôi phục</button>
+                        <button id="btnClose" type="button" class="btn btn-primary" data-dismiss="modal" style="float:right">Đóng</button>
+                        <button id="btnUpdateInfo" type="button" class="btn btn-info btnEdit" style="float:right">Cập nhật thông tin</button>
+                        <button id="btnSave" type="button" class="btn btn-warning" style="float: right; width: 120px; display: none;">Lưu lại</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="box-success-message" hidden="hidden">
+            <div class="success-message-content">Cập nhật thành công</div>
+        </div>
+        <div id="register-offline" class="btn btn-primary">
+            <a href="offlineParty.html" style="color:#ffffff">Đăng ký họp lớp 30/04/2018</a>
+        </div>
+
+
+        <hr>
+        <footer>
+            <p>© 2020 - manhnv.net</p>
+        </footer>
+    </div>
+
+    <script src="/Scripts/Libraries/jquery-3.3.1.js"></script>
+    <script src="/Scripts/Libraries/jquery-ui.js"></script>
+    <script src="/Scripts/Libraries/bootstrap.min.js"></script>
+    <script src="/Scripts/Common/base.js"></script>
+    <script src="/Scripts/Common/common.js"></script>
+    <script src="/Scripts/Common/control.js"></script>
+    <script src="/Scripts/Common/service.js"></script>
+    <script src="/Scripts/Common/resource.js"></script>
+    <script src="/Scripts/Views/accountAuth.js"></script>
+    <script src="/Scripts/Views/contact.js"></script>
+    <script>
+        $(document).ready(function () {
+            var pathName = window.location.pathname;
+            $('#navLeft .active').removeClass('active');
+            $('#navLeft [href="{0}"]'.format(pathName)).addClass('active');
+            var accountName = sessionStorage.getItem('username');
+            $('#lblUserName').html(accountName);
+        })
+    </script>
+
+
+</body>
+</html>

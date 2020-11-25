@@ -3,9 +3,9 @@ networks:
   nvmanh-network:
     external: true
 services:
-  eContact:
-    image: eContact
-    container_name: eContact
+  e-contact:
+    image: e-contact
+    container_name: e-contact
     restart: always
     networks:
       - nvmanh-network

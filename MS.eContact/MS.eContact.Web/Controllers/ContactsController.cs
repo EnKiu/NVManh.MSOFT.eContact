@@ -22,6 +22,7 @@ namespace MS.eContact.Web.Controllers
         {
             _configuration = configuration;
             _env = env;
+            _repository = repository;
         }
 
         public override async Task<IActionResult> Put(string id)
@@ -94,8 +95,11 @@ namespace MS.eContact.Web.Controllers
                 }
             }
             // Cập nhật các thông tin khác:
-
-            return Ok(contact);
+            var rowAffects = _repository.Update(contact, id);
+            if (rowAffects > 0)
+                return Ok(contact);
+            else
+                return NoContent();
         }
     }
 }

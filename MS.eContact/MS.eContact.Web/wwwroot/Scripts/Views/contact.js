@@ -316,8 +316,7 @@ var contactDetailJS = {
             formData.append('file', file);
             formData.append('contactId', contactDetailJS.contactId);
             formData.append('contact', JSON.stringify(contact));
-            debugger
-            serviceAjax.postFile(contactDetailJS.uriFileUpload, formData, true, contactDetailJS.afterPostContact);
+            serviceAjax.putForm(contactDetailJS.uriFileUpload, formData, true, contactDetailJS.afterPostContact);
         } else {
             contactDetailJS.setModeView();
         }
@@ -370,7 +369,7 @@ var contactDetailJS = {
      * Author: NVMANH (16/03/2018) 
      */
     afterPostContact: function (response) {
-        if (response.Success) {
+        if (response) {
             contactJS.getData($('.modal-content'), false);
             contactDetailJS.commitNewDataAfterSave();
         } else {

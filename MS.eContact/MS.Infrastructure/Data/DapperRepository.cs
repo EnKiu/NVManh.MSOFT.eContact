@@ -110,7 +110,20 @@ namespace MS.Infrastructure.Data
 
         public int Update(TEntity entity, object pks)
         {
-            throw new NotImplementedException();
+            var rowAffects = 0;
+            _unitOfWork.Connection.Open();
+            _unitOfWork.Begin();
+            try
+            {
+                rowAffects = _unitOfWork.Connection.Execute($"Proc_Update{_tableName}", entity, commandType: System.Data.CommandType.StoredProcedure);
+                _unitOfWork.Commit();
+            }
+            catch (Exception)
+            {
+                _unitOfWork.Rollback();
+            }
+            _unitOfWork.Connection.Close();
+            return rowAffects;
         }
 
         public async Task<int> UpdateAsync(TEntity entity, object pks)
@@ -129,7 +142,6 @@ namespace MS.Infrastructure.Data
             }
             _unitOfWork.Connection.Close();
             return rowAffects;
-            throw new NotImplementedException();
         }
         #endregion
 

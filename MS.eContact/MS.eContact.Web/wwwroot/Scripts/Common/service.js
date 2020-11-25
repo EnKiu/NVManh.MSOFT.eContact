@@ -80,7 +80,34 @@
     * @param {function} callback
     * Author: NVMANH (11/05/2019)
     */
-    postFile: function (uri, param, async, callback) {
+    postForm: function (uri, param, async, callback) {
+        var headers = serviceAjax.setRequestHeader();
+        $.ajax({
+            url: uri,
+            type: 'POST',
+            data: param,
+            contentType: false,
+            processData: false,
+            async: async === undefined ? false : async,
+            headers: headers
+        }).done(function (res) {
+            if (callback) {
+                callback(res);
+            }
+        }).fail(function (res) {
+            serviceAjax.doAfterFailAjaxRequest(res);
+        });
+    },
+
+    /**
+    * Thêm mới dữ liệu kèm theo các File
+    * @param {string} uri
+    * @param {JSON} param
+    * @param {bool} async
+    * @param {function} callback
+    * Author: NVMANH (11/05/2019)
+    */
+    putForm: function (uri, param, async, callback) {
         var headers = serviceAjax.setRequestHeader();
         $.ajax({
             url: uri,

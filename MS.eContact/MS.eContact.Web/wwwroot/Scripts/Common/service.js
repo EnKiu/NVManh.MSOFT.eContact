@@ -84,7 +84,7 @@
         var headers = serviceAjax.setRequestHeader();
         $.ajax({
             url: uri,
-            type: 'POST',
+            type: 'PUT',
             data: param,
             contentType: false,
             processData: false,

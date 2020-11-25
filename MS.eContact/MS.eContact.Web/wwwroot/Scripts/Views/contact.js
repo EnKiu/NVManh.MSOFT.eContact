@@ -228,7 +228,7 @@ var contactDetailJS = {
     self: this,
     contactId: null,
     currentContact: null,
-    uriFileUpload: "/api/Upload/user/PostUserImage",
+    uriFileUpload: "/api/v1/contacts/38e94157-cce9-46c6-bdae-b9928d8ff4e4",
     isUpdate: false,
     /* ---------------------------------------------------------------
      * Description: Mode Edit
@@ -316,7 +316,7 @@ var contactDetailJS = {
             formData.append('file', file);
             formData.append('contactId', contactDetailJS.contactId);
             formData.append('contact', JSON.stringify(contact));
-
+            debugger
             serviceAjax.postFile(contactDetailJS.uriFileUpload, formData, true, contactDetailJS.afterPostContact);
         } else {
             contactDetailJS.setModeView();

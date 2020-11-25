@@ -41,8 +41,10 @@ namespace MS.eContact.Web.Controllers
 
         // PUT api/<BaseController>/5
         [HttpPut("{id}")]
-        public void Put(int id, [FromBody] string value)
+        public virtual async Task<IActionResult> Put(string id)
         {
+           
+            return await Task.FromResult(Ok());
         }
 
         // DELETE api/<BaseController>/5

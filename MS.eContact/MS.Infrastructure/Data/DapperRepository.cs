@@ -43,7 +43,20 @@ namespace MS.Infrastructure.Data
 
         public async Task<int> AddAsync(TEntity entity)
         {
-            throw new NotImplementedException();
+            var rowAffects = 0;
+            _unitOfWork.Connection.Open();
+            _unitOfWork.Begin();
+            try
+            {
+                rowAffects = await _unitOfWork.Connection.ExecuteAsync($"Proc_Insert{_tableName}", entity, commandType: System.Data.CommandType.StoredProcedure);
+                _unitOfWork.Commit();
+            }
+            catch (Exception)
+            {
+                _unitOfWork.Rollback();
+            }
+            _unitOfWork.Connection.Close();
+            return rowAffects;
         }
 
         public async Task<int> AddAsync(IEnumerable<TEntity> entities)
@@ -102,6 +115,20 @@ namespace MS.Infrastructure.Data
 
         public async Task<int> UpdateAsync(TEntity entity, object pks)
         {
+            var rowAffects = 0;
+            _unitOfWork.Connection.Open();
+            _unitOfWork.Begin();
+            try
+            {
+                rowAffects = await _unitOfWork.Connection.ExecuteAsync($"Proc_Update{_tableName}", entity, commandType: System.Data.CommandType.StoredProcedure);
+                _unitOfWork.Commit();
+            }
+            catch (Exception)
+            {
+                _unitOfWork.Rollback();
+            }
+            _unitOfWork.Connection.Close();
+            return rowAffects;
             throw new NotImplementedException();
         }
         #endregion

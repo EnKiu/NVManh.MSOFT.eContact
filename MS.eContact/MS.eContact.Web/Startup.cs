@@ -69,8 +69,9 @@ namespace MS.eContact.Web
             app.UseRouting();
 
             app.UseAuthorization();
-            app.UseStaticFiles();
-            app.UseDefaultFiles(new DefaultFilesOptions { DefaultFileNames = new List<string> { "index.html" } });
+            app.UseFileServer();
+            //app.UseStaticFiles();
+            //app.UseDefaultFiles(new DefaultFilesOptions { DefaultFileNames = new List<string> { "index.html" } });
             app.UseEndpoints(endpoints =>
             {
                 endpoints.MapControllers();

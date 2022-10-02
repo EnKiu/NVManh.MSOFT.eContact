@@ -9,6 +9,8 @@ using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
 using Microsoft.OpenApi.Models;
 using MS.ApplicationCore.Interfaces;
+using MS.ApplicationCore.Utilities;
+using MS.Infrastructure;
 using MS.Infrastructure.Data;
 using MS.Infrastructure.UnitOfWork;
 using Newtonsoft.Json.Serialization;
@@ -32,6 +34,8 @@ namespace MS.eContact.Web
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
+            //CommonConst.ServerFileUrl = Configuration["ServerFiles"];
+            CommonConst.ServerFileUrl = String.Format("{0}/{1}", Configuration["ServerFiles"], Configuration["ServerFilePath"]);
             services.AddControllers()
                 .AddNewtonsoftJson(options =>
                 {
@@ -41,6 +45,7 @@ namespace MS.eContact.Web
             SqlMapper.AddTypeHandler(new MySqlGuidTypeHandler());
             SqlMapper.RemoveTypeMap(typeof(Guid));
             SqlMapper.RemoveTypeMap(typeof(Guid?));
+            services.AddCors();
             //services.AddDbContext<DataContex>(options =>
             //              options.UseMySql(
             //                  Configuration.GetConnectionString("DefaultConnection")));
@@ -52,6 +57,7 @@ namespace MS.eContact.Web
             services.AddScoped<IUnitOfWork, UnitOfWork>();
             services.AddScoped(typeof(IRepository<>), typeof(DapperRepository<>));
             services.AddScoped(typeof(IAsyncRepository<>), typeof(DapperRepository<>));
+            services.AddScoped<IFileTransfer, FileTransfer>();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -63,7 +69,7 @@ namespace MS.eContact.Web
                 app.UseSwagger();
                 app.UseSwaggerUI(c => c.SwaggerEndpoint("/swagger/v1/swagger.json", "MS.eContact.Web v1"));
             }
-
+            app.UseCors(o => o.AllowAnyHeader().AllowAnyMethod().AllowAnyOrigin());
             app.UseHttpsRedirection();
 
             app.UseRouting();

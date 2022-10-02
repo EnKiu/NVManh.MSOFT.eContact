@@ -1,0 +1,67 @@
+<template>
+  <div class="page-title" style="">Website nội bộ cựu học sinh A1 (2004-2007) - trường thpt tứ sơn</div>
+  <nav class="navbar">
+    <div class="logo"></div>
+    <div class="navbar-list">
+        <router-link to="/contacts" class="navbar-item">
+            <span class="navbar-item__text">Danh bạ</span>
+        </router-link>
+         <router-link to="/events" class="navbar-item">
+            <span class="navbar-item__text">Sự kiện</span>
+        </router-link>
+         <router-link to="/pictures" class="navbar-item">
+            <span class="navbar-item__text">Kho ảnh</span>
+        </router-link>
+    </div>
+  </nav>
+</template>
+<script>
+export default {};
+</script>
+
+<style scoped>
+.page-title{
+    position: fixed;
+    top:0;
+    width: 100%;
+    height: 40px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background-color: black;
+    color: #fff;
+    text-align: center;
+    text-transform: uppercase;
+    font-weight: 700;
+}
+.navbar{
+    position: fixed;
+    top: 40px;
+    width: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    height: 40px;
+    background-color: #000;
+    color: #fff;
+    border-top: 1px solid #fff;
+}
+.navbar-list{
+    height: 100%;
+    display: flex;
+    align-items: center;
+}
+.navbar-item{
+ height: 100%;
+ padding: 0 24px;
+ display: flex;
+ align-items: center;
+}
+.router-link-active{
+    background-color: #cccc;
+}
+.navbar a{
+    color: #fff;
+    text-decoration: none;
+}
+</style>

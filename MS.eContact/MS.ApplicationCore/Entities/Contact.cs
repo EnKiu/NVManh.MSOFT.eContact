@@ -1,4 +1,5 @@
 ﻿using MS.ApplicationCore.Enums;
+using MS.ApplicationCore.Utilities;
 using System;
 using System.Collections.Generic;
 using System.Text;
@@ -59,5 +60,15 @@ namespace MS.ApplicationCore.Entities
         public Int64 Sort { get; set; }
         public int RankStar { get; set; }
         public string AvatarLink { get; set; }
+        public string? AvatarFullPath
+        {
+            get
+            {
+                var random = new Random();
+                if (AvatarLink != null)
+                    return String.Format("{0}{1}?v={2}", CommonConst.ServerFileUrl, AvatarLink, random.Next(1, 999));
+                return null;
+            }
+        }
     }
 }

@@ -1,0 +1,110 @@
+@import url(../assets/fonts/icofont/icofont.min.css);
+@import url(./base/button.css);
+@import url(./base/input.css);
+body {
+    font-family: MFonts;
+    font-size: 13px;
+    margin: 0;
+}
+
+* {
+    font-family: MFonts;
+}
+
+@font-face {
+    font-family: MFonts;
+    src: url(../assets/fonts/nunito-sans/nunito-sans.regular.ttf);
+}
+
+.bg-yellow {
+    background-color: yellow;
+}
+
+::-webkit-scrollbar {
+    width: 8px;
+    height: 8px
+}
+
+::-webkit-scrollbar-track {
+    box-shadow: 0 0 0 0 #d4d4d4;
+    border-radius: 15px;
+    background-color: #fff
+}
+
+::-webkit-scrollbar-thumb {
+    background-color: #d6d6d6;
+    border-radius: 15px
+}
+
+::-moz-placeholder {
+    color: #9b9b9b
+}
+
+::-webkit-input-placeholder {
+    color: #9b9b9b
+}
+
+.dialog::-webkit-scrollbar {
+    width: 6px;
+    height: 10px
+}
+
+::-webkit-scrollbar-thumb {
+    /* background: #9aa4bb; */
+    width: 6px;
+    height: 10px;
+    border-radius: 4px
+}
+
+::-webkit-scrollbar-track {
+    background: #f1f1f1
+}
+
+.loading {
+    position: fixed;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background-color: rgba(0, 0, 0, 0.173);
+}
+
+.loading__icon {
+    width: 24px;
+    height: 24px;
+    border: 8px solid #fff;
+    border-top: 8px solid #001affc9;
+    border-radius: 50%;
+    animation: spin 500ms infinite linear;
+    -webkit-animation: spin 500ms infinite linear;
+}
+
+@-moz-keyframes spin {
+    from {
+        -moz-transform: rotate(0deg);
+    }
+    to {
+        -moz-transform: rotate(360deg);
+    }
+}
+
+@-webkit-keyframes spin {
+    from {
+        -webkit-transform: rotate(0deg);
+    }
+    to {
+        -webkit-transform: rotate(360deg);
+    }
+}
+
+@keyframes spin {
+    from {
+        transform: rotate(0deg);
+    }
+    to {
+        transform: rotate(360deg);
+    }
+}

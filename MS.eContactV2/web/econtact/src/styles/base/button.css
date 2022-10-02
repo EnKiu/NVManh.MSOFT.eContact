@@ -1,0 +1,28 @@
+.btn {
+    border: none;
+    outline: none;
+    border-radius: 4px;
+    height: 36px;
+    min-width: 75px;
+    padding: 0 16px;
+    cursor: pointer;
+}
+
+.btn-default {
+    background-color: #0062CC;
+    color: #fff;
+}
+
+.btn--close:hover {
+    background-color: #ccc !important;
+}
+
+.dialog__button--cancel {
+    background-color: #ff0000 !important;
+    color: #fff !important;
+}
+
+.btn:hover,
+.btn:focus {
+    opacity: .6;
+}

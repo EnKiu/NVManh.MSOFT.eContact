@@ -16,6 +16,7 @@ namespace MS.ApplicationCore.Entities
         public string EventAddress { get; set; }
         public decimal Spends { get; set; }
         public string Note { get; set; }
+        public bool? IsCancel { get; set; }
         public string StartTimeText
         {
             get

@@ -66,12 +66,12 @@ namespace MS.Infrastructure.Data
         #endregion
 
         #region GET
-        public IEnumerable<TEntity> All()
+        public virtual IEnumerable<TEntity> All()
         {
             return _unitOfWork.Connection.Query<TEntity>($"SELECT * FROM {_tableName}",_unitOfWork.Transaction, commandType: System.Data.CommandType.Text);
         }
 
-        public async Task<IEnumerable<TEntity>> AllAsync()
+        public virtual async Task<IEnumerable<TEntity>> AllAsync()
         {
             return await _unitOfWork.Connection.QueryAsync<TEntity>($"SELECT * FROM {_tableName}", _unitOfWork.Transaction, commandType: System.Data.CommandType.Text);
         }

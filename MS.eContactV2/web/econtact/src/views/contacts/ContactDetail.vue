@@ -3,7 +3,7 @@
     <template v-slot:content>
       <div class="contact-info">
         <div class="contact--general">
-          <div class="contact__avatar" @click="avatarOnClick">
+          <div class="contact__avatar" :class="{'edit-able':formMode!=3}" @click="avatarOnClick">
             <img :src="contact.AvatarFullPath" alt="" />
           </div>
           <div class="contact__info">
@@ -104,13 +104,13 @@
       >
         Hủy bỏ
       </button>
-      <button class="btn btn-default" v-if="formMode == 3" @click="onChangeEditMode">
-        Cập nhật thông tin
+      <button class="btn btn--default" v-if="formMode == 3" @click="onChangeEditMode">
+        Sửa thông tin
       </button>
       <button
         v-if="formMode != 3"
         type="submit"
-        class="btn btn-default dialog__button--save"
+        class="btn btn--default dialog__button--save"
         @click="onSubmit"
       >
         Lưu
@@ -137,10 +137,9 @@
   </div>
 </template>
 <script>
-import MDialog from "../../components/base/MDialog.vue";
 export default {
   name: "BaseDialog",
-  components: { MDialog },
+  components: { },
   props: {
     title: {
       type: String,
@@ -262,10 +261,12 @@ export default {
   display: flex;
   align-items: center;
   justify-content: center;
+  pointer-events: none;
 }
 
 .contact__avatar img {
-  width: 100%;
+  width: calc(100% - 2px);
+  height: calc(100% - 2px);
 }
 .contact__info--name {
   font-size: 16px;
@@ -359,7 +360,11 @@ export default {
 button + button {
   margin-left: 16px;
 }
-
+.edit-able{
+  border: 1px solid #0094ff;
+  cursor: pointer;
+  pointer-events: all !important;
+}
 /* .--address>div,.--company>div{
     max-width: 200px;
 } */

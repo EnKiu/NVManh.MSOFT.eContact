@@ -8,7 +8,7 @@
     cursor: pointer;
 }
 
-.btn-default {
+.btn--default {
     background-color: #0062CC;
     color: #fff;
 }
@@ -22,7 +22,10 @@
     color: #fff !important;
 }
 
-.btn:hover,
+.btn:hover {
+    background-color: #3395FF;
+}
+
 .btn:focus {
-    opacity: .6;
+    background-color: #004999;
 }

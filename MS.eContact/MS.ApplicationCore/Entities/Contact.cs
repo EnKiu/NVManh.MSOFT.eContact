@@ -66,7 +66,7 @@ namespace MS.ApplicationCore.Entities
             {
                 var random = new Random();
                 if (AvatarLink != null)
-                    return String.Format("{0}{1}?v={2}", CommonConst.ServerFileUrl, AvatarLink, random.Next(1, 999));
+                    return String.Format("{0}/{1}?v={2}", CommonConst.ServerFileUrl, AvatarLink, random.Next(1, 999));
                 return null;
             }
         }

@@ -58,6 +58,7 @@ namespace MS.eContact.Web
             services.AddScoped(typeof(IRepository<>), typeof(DapperRepository<>));
             services.AddScoped(typeof(IAsyncRepository<>), typeof(DapperRepository<>));
             services.AddScoped<IFileTransfer, FileTransfer>();
+            services.AddScoped<IEventRepository, EventRepository>();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -75,7 +76,7 @@ namespace MS.eContact.Web
             app.UseRouting();
 
             app.UseAuthorization();
-            app.UseFileServer();
+            //app.UseFileServer();
             //app.UseStaticFiles();
             //app.UseDefaultFiles(new DefaultFilesOptions { DefaultFileNames = new List<string> { "index.html" } });
             app.UseEndpoints(endpoints =>

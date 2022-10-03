@@ -36,7 +36,7 @@
               />
             </td>
             <td>
-              {{ contact.FirstName }} <b>{{ contact.LastName }}</b>
+              <a @click="onSelectContact(contact)">{{ contact.FirstName }} <b>{{ contact.LastName }}</b></a>
             </td>
             <td>{{ contact.PhoneNumber }}<br />{{ contact.MobileNumber }}</td>
           </tr>
@@ -111,7 +111,7 @@ export default {
     },
     afterSave() {
       this.loadData();
-      this.detailFormMode = null;
+      this.detailFormMode = this.Enum.FormMode.VIEW;
     },
   },
   data() {

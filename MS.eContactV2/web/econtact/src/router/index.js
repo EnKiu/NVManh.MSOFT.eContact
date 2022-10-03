@@ -1,12 +1,12 @@
 import { createRouter, createWebHistory } from 'vue-router'
 import ContactList from '../views/contacts/ContactList.vue'
 import EventList from '../views/events/EventList.vue'
-import NewList from '../views/news/NewList.vue'
+// import NewList from '../views/news/NewList.vue'
 import PictureList from '../views/pictures/PictureList.vue'
 const routes = [{
         path: '/',
-        name: 'News',
-        component: NewList,
+        name: 'ContactList',
+        component: ContactList,
     },
     {
         path: '/contacts',

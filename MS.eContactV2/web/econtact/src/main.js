@@ -4,6 +4,7 @@ import router from './router'
 import commonJs from './scripts/common';
 import Enum from './scripts/enum';
 import MInput from './components/base/MInput.vue'
+import MCombobox from './components/base/MCombobox.vue'
 import MDialog from './components/base/MDialog.vue'
 import 'element-plus/dist/index.css'
 import 'element-plus/es/components/loading/style/css'
@@ -14,6 +15,7 @@ import CKEditor from '@ckeditor/ckeditor5-vue'
 
 const app = createApp(App);
 app.component("MInput", MInput);
+app.component("MCombobox", MCombobox);
 app.component("MDialog", MDialog);
 app.config.globalProperties.commonJs = commonJs;
 app.config.globalProperties.Enum = Enum;

@@ -5,10 +5,18 @@
         v-model="state1"
         :fetch-suggestions="querySearch"
         clearable
-        class="inline-input w-50"
+        class="inline-input w-100"
         placeholder="Nhập và chọn Họ và tên của bạn"
         @select="handleSelect"
       />
+       <m-combobox
+          label="Tình trạng hôn nhân"
+          url="/api/v1/events/contact-no-register?eventId=1"
+          v-model="contact.ContactId"
+          propValue="ContactId"
+          propText="FirstName"
+        >
+        </m-combobox>
     </template>
     <template v-slot:footer> </template>
   </m-dialog>
@@ -55,6 +63,7 @@ export default {
     return {
       state1: [],
       contacts: [],
+      contact:{}
     };
   },
 };

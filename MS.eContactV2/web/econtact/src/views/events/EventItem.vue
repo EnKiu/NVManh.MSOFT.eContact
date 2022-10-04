@@ -44,7 +44,7 @@
       v-if="timeLeftInfo != null && item.IsCancel == false"
       class="event__button"
     >
-      <button class="btn btn--default">
+      <button class="btn btn--default" @click="onRegister">
         <div>Đăng ký tham gia ngay</div>
         <div>(Còn <span class="--color-red --bold">{{ timeLeftInfo }}</span>)</div>
       </button>
@@ -57,11 +57,10 @@
 export default {
   name: "EventItem",
   props: ["item"],
-  emits: [],
+  emits: ["onRegister"],
   computed: {
     eventDateFormat: function () {
       var eventDate = this.item.EventDate;
-      console.log(this.commonJs.formatDate(eventDate));
       return this.commonJs.formatDate(eventDate);
     },
     timeStartFormat: function () {
@@ -91,6 +90,9 @@ export default {
     this.interValTime();
   },
   methods: {
+    onRegister(){
+      this.$emit("onRegister",this.item);
+    },
     interValTime() {
       this.calculatorTimeInfo();
       var nowTime = new Date();

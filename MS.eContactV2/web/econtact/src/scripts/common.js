@@ -1,4 +1,11 @@
 /* eslint-disable */
+import store from "@/store";
+// import router from "@/router";
+import MISAEnum from "./enum";
+// import { AUTH_REQUEST } from "@/store/actions/auth";
+import { CLEAR_ERROR_MSG, SET_ERROR_MSG } from '@/store/actions/notification.js';
+import { SHOW_LOADING, HIDE_LOADING } from '@/store/actions/loading.js';
+import { CLEAR_TOAST, SET_TOAST } from '@/store/actions/toast.js';
 const commonJs = {
     change_alias: function(alias) {
         var str = alias;
@@ -101,5 +108,87 @@ const commonJs = {
             return "";
         }
     },
+    /**
+     * Hiển thị Toast Messenger
+     * @param {String} msg 
+     * @param {*} type Loại Toast hiển thị
+     * Author: NVMANH (02/09/2022) 
+     */
+    showToast(msg, type) {
+        if (!type)
+            type = MISAEnum.MsgType.Info;
+
+        store.dispatch(SET_TOAST, { msg: msg, type: type });
+        setTimeout(function() {
+            store.dispatch(CLEAR_TOAST, {});
+        }, 5000)
+
+    },
+
+    /**
+     * Hiển thị cảnh báo
+     * Authror: NVMANH (16/08/2022)
+     */
+    showErrorMessenger() {
+        var payload = arguments;
+        var title = null;
+        var msg = [];
+        if (payload.length == 0) {
+            title = "Thông báo";
+            msg.push("Có lỗi xảy ra, vui lòng liên hệ MISA để được trợ giúp.");
+        } else if (payload.length == 1) {
+            msg.push(payload[0]);
+        } else {
+            title = payload[0].toString();
+            for (let index = 1; index < payload.length; index++) {
+                const item = payload[index];
+                if (typeof item === 'string' || item instanceof String || typeof item == 'number') {
+                    msg.push(item);
+                } else if (Array.isArray(item)) {
+                    for (const itemChild of item) {
+                        if (typeof itemChild === 'string' || itemChild instanceof String || typeof itemChild == 'number') {
+                            msg.push(itemChild);
+                        }
+                    }
+                }
+            }
+        }
+        store.dispatch(SET_ERROR_MSG, { title: title, msg: msg, type: MISAEnum.MsgType.Error });
+    },
+
+
+    /**
+     * Ẩn cảnh báo
+     * Authror: NVMANH (16/08/2022)
+     */
+    hideErrorMessenger() {
+        store.dispatch(CLEAR_ERROR_MSG);
+    },
+
+    showConfirm(msg, callback) {
+        commonJs.showMessenger({ title: "Xác nhận", msg: msg || "Bạn có chắc chắn muốn thực hiện hành động này?", type: MISAEnum.MsgType.Question, confirm: callback, showCancelButton: true });
+    },
+    hideConfirm() {
+        commonJs.hideMessenger();
+    },
+
+    showMessenger({ title, msg, type, confirm, showCancelButton }) {
+        store.dispatch(SET_ERROR_MSG, { title: title || "Thông báo", msg: msg || "Có lỗi xảy ra", type: type || MISAEnum.MsgType.Info, confirm: confirm, showCancelButton: showCancelButton | false });
+    },
+
+    hideMessenger() {
+        store.dispatch(CLEAR_ERROR_MSG);
+    },
+
+
+    showLoading() {
+        store.dispatch(SHOW_LOADING);
+    },
+    showLoadingEl(el) {
+        el.classlist.add("loading");
+    },
+    hideLoading() {
+        store.dispatch(HIDE_LOADING);
+    }
 }
 export default commonJs;

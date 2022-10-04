@@ -4,25 +4,25 @@
       >{{ label }}
       <span v-if="required">(<span class="required">*</span>)</span>:</label
     >
-    <input
-      :type="type"
+    <textarea
+      cols="15"
+      rows="3"
       ref="minput"
       :focus="focus"
       :required="required"
       v-model="value"
       @input="onInput"
       :disabled="disabled"
-      class="input"
+      class="text-area"
     />
   </div>
 </template>
-<script>
+  <script>
 export default {
   name: "MInput",
   props: {
     modelValue: { type: String, default: "", required: true },
     label: { type: String, default: null, required: false },
-    type: { type: String, default: "text", required: false },
     focus: { type: Boolean, default: false, required: false },
     required: { type: Boolean, default: false, required: false },
     disabled: { type: Boolean, default: false, required: false },
@@ -48,27 +48,31 @@ export default {
   },
 };
 </script>
-<style scoped>
-input[type="number"] {
-  text-align: right;
-  padding-right: 16px;
+  <style scoped>
+textarea {
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  outline: none;
+  padding: 8px 16px;
 }
 .required {
   color: #ff0000;
 }
 
 .input-wrapper {
+    display: flex;
+    flex-direction: column;
 }
 
-.input-wrapper input {
+.input-wrapper textarea {
   width: 100%;
   box-sizing: border-box;
 }
 
-.input-wrapper input:disabled {
+.input-wrapper textarea:disabled {
 }
 
-.input-wrapper label + input {
+.input-wrapper label + textarea {
   margin-top: 8px;
 }
 
@@ -76,3 +80,4 @@ input[type="number"] {
   margin-top: 16px;
 }
 </style>
+  

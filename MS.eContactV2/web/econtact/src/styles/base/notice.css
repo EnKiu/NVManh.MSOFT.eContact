@@ -1,0 +1,13 @@
+.notice {
+    display: flex;
+    align-items: center;
+}
+
+.notice__icon {
+    font-size: 32px;
+    margin-right: 10px;
+}
+
+.notice__icon.--error {
+    color: #ff0000;
+}

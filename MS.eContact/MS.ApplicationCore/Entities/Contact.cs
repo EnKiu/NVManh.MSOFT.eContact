@@ -11,6 +11,7 @@ namespace MS.ApplicationCore.Entities
         public Guid ContactId { get; set; }
         public string FirstName { get; set; }
         public string LastName { get; set; }
+        public string FullName { get; set; }
         public string MobileNumber { get; set; }
         public string PhoneNumber { get; set; }
         public string Address { get; set; }

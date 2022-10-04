@@ -1,6 +1,7 @@
 @import url(../assets/fonts/icofont/icofont.min.css);
 @import url(./base/button.css);
 @import url(./base/input.css);
+@import url(./base//notice.css);
 body {
     font-family: MFonts;
     font-size: 13px;

@@ -1,8 +1,13 @@
 <template>
   <div class="combobox-wrapper">
-    <label v-if="label" for="">{{ label }}</label>
+    <label v-if="label" for=""
+      >{{ label
+      }} <span v-if="required">(<span class="required">*</span>)</span>:</label
+    >
     <div class="combobox">
-      <span v-if="isShowClear" class="clear-button" @click="clearButtonOnClick"><i class="icofont-close"></i></span>
+      <span v-if="isShowClear" class="clear-button" @click="clearButtonOnClick"
+        ><i class="icofont-close"></i
+      ></span>
       <input
         type="text"
         class="input combobox__input"
@@ -151,7 +156,8 @@ export default {
     "propValue",
     "propText",
     "isLoadData",
-    "placeholder"
+    "placeholder",
+    "required",
   ],
   methods: {
     /**
@@ -305,7 +311,7 @@ export default {
         }
       }
     },
-    clearButtonOnClick(){
+    clearButtonOnClick() {
       this.textInput = null;
       this.isShowClear = false;
       this.indexItemSelected = null;
@@ -317,13 +323,13 @@ export default {
     modelValue: function (newValue, oldValue) {
       this.setTextForInput();
     },
-    textInput: function(newValue){
-       if(newValue){
+    textInput: function (newValue) {
+      if (newValue) {
         this.isShowClear = true;
-      }else{
+      } else {
         this.isShowClear = false;
       }
-    }
+    },
   },
   created() {
     this.loadData();
@@ -337,12 +343,15 @@ export default {
       indexItemFocus: null, // Index của item focus hiện tại
       indexItemSelected: null, // Index của item được selected
       showLoadingData: false,
-      isShowClear: false
+      isShowClear: false,
     };
   },
 };
 </script>
 <style scoped>
+.required {
+  color: #ff0000;
+}
 .combobox {
   position: relative;
   /* flex-direction: row; */
@@ -353,7 +362,7 @@ export default {
 .combobox__input,
 select {
   width: 100%;
-  height: 40px;
+  height: 36px;
   flex: 1;
   padding-right: 56px !important;
   padding-left: 16px;
@@ -383,8 +392,8 @@ select {
   top: 0px;
   border: 1px solid #bbbbbb;
   border-left: unset;
-  height: 40px;
-  width: 40px;
+  height: 36px;
+  width: 36px;
   border-radius: 0 4px 4px 0px;
   background-color: #fff;
   min-width: unset !important;
@@ -459,25 +468,25 @@ select {
 }
 
 .combobox-loading {
-    position: absolute;
-    top: 0;
-    left: 0;
-    bottom: 0;
-    right: 0;
-    background: linear-gradient(-45deg, #b7b7b7, #dddddd, #6d6d6d, #ffffff);
-    animation: gradient 4s alternate infinite;
-    border-radius: 4px;
-    -webkit-animation: gradient 4s alternate infinite;
-    -moz-animation: gradient 10s ease infinite;
-    background-size: 200%;
-    opacity: .7;
+  position: absolute;
+  top: 0;
+  left: 0;
+  bottom: 0;
+  right: 0;
+  background: linear-gradient(-45deg, #b7b7b7, #dddddd, #6d6d6d, #ffffff);
+  animation: gradient 4s alternate infinite;
+  border-radius: 4px;
+  -webkit-animation: gradient 4s alternate infinite;
+  -moz-animation: gradient 10s ease infinite;
+  background-size: 200%;
+  opacity: 0.7;
 }
-.clear-button{
+.clear-button {
   display: block;
   position: absolute;
   right: 36px;
   top: 50%;
-  transform: translate(-50%,-50%);
+  transform: translate(-50%, -50%);
   padding: 2px;
   line-height: 12px;
   font-size: 12px;
@@ -488,9 +497,9 @@ select {
   cursor: pointer;
 }
 @keyframes moveGradient {
-    50% {
-        background-position: 100% 50%;
-    }
+  50% {
+    background-position: 100% 50%;
+  }
 }
 
 @-webkit-keyframes gradient {

@@ -2,7 +2,7 @@
   <div class="dialog">
     <div class="dialog-wrapper">
       <button class="dialog__button-close" @click="onClose">
-        <i class="icofont-close-line"></i>
+        <i class="icofont-close"></i>
       </button>
       <div class="dialog__header">
         <div class="dialog__header--title">{{ title }}</div>
@@ -82,13 +82,17 @@ export default {
 
 .dialog__button-close {
   position: absolute;
-  top: 24px;
-  right: 24px;
-  border: none;
-  background-color: unset;
-  font-size: 24px;
-  cursor: pointer;
-  font-weight: 700;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    top: 24px;
+    right: 24px;
+    padding: unset;
+    border: none;
+    background-color: unset;
+    font-size: 24px;
+    cursor: pointer;
+    font-weight: 700;
 }
 
 .dialog__button-close:hover {

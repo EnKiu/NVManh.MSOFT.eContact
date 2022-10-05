@@ -35,4 +35,14 @@ namespace MS.ApplicationCore.Enums
         //Góa vợ
         Widower = 6
     }
+
+    /// <summary>
+    /// Trạng thái của đối tượng
+    /// </summary>
+    public enum EntityState
+    {
+        ADD = 1,
+        UPDATE = 2,
+        DELETE = 3,
+    }
 }

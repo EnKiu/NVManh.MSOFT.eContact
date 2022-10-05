@@ -1,4 +1,6 @@
 ﻿using Dapper;
+using MS.ApplicationCore.Entities;
+using MS.ApplicationCore.Exceptions;
 using MS.ApplicationCore.Interfaces;
 using MS.Infrastructure.UnitOfWork;
 using System;
@@ -8,7 +10,7 @@ using System.Threading.Tasks;
 
 namespace MS.Infrastructure.Data
 {
-    public class DapperRepository<TEntity> : IAsyncRepository<TEntity>, IRepository<TEntity> where TEntity: class
+    public class DapperRepository<TEntity> : IAsyncRepository<TEntity>, IRepository<TEntity> where TEntity: BaseEntity 
     {
         IUnitOfWork _unitOfWork = null;
         string _tableName = string.Empty;
@@ -28,11 +30,15 @@ namespace MS.Infrastructure.Data
                 rowAffects = _unitOfWork.Connection.Execute($"Proc_Insert{_tableName}", entity, commandType: System.Data.CommandType.StoredProcedure);
                 _unitOfWork.Commit();
             }
-            catch (Exception)
+            catch (Exception ex)
             {
                 _unitOfWork.Rollback();
+                throw new MISAException(System.Net.HttpStatusCode.InternalServerError, ex.Message);
             }
-            _unitOfWork.Connection.Close();
+            finally
+            {
+                _unitOfWork.Connection.Close();
+            }
             return rowAffects;
         }
 

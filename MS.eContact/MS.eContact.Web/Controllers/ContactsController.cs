@@ -19,15 +19,17 @@ namespace MS.eContact.Web.Controllers
     public class ContactsController : BaseController<Contact>
     {
         IRepository<Contact> _repository;
+        IBaseService<Contact> _baseService;
         IConfiguration _configuration;
         readonly IFileTransfer _fileTransfer;
         private readonly IWebHostEnvironment _env;
-        public ContactsController(IRepository<Contact> repository, IConfiguration configuration, IWebHostEnvironment env, IFileTransfer fileTransfer) : base(repository)
+        public ContactsController(IRepository<Contact> repository, IConfiguration configuration, IWebHostEnvironment env, IFileTransfer fileTransfer, IBaseService<Contact> baseService) : base(repository, baseService)
         {
             _configuration = configuration;
             _env = env;
             _repository = repository;
             _fileTransfer = fileTransfer;
+            _baseService = baseService;
         }
 
         public override async Task<IActionResult> Put(string id)

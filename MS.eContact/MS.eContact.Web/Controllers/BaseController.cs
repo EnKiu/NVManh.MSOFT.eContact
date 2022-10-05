@@ -14,9 +14,11 @@ namespace MS.eContact.Web.Controllers
     public class BaseController<TEntity> : ControllerBase where TEntity: class
     {
         IRepository<TEntity> _repository;
-        public BaseController(IRepository<TEntity> repository)
+        IBaseService<TEntity> _baseService;
+        public BaseController(IRepository<TEntity> repository, IBaseService<TEntity> baseService)
         {
             _repository = repository;
+            _baseService = baseService;
         }
         // GET: api/<BaseController>
         [HttpGet]
@@ -36,7 +38,7 @@ namespace MS.eContact.Web.Controllers
         [HttpPost]
         public int Post([FromBody] TEntity entity)
         {
-           return _repository.Add(entity);
+           return _baseService.Add(entity);
         }
 
         // PUT api/<BaseController>/5

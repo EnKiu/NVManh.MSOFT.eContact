@@ -5,7 +5,7 @@ using System.Threading.Tasks;
 
 namespace MS.ApplicationCore.Interfaces
 {
-    public interface IRepository<TEntity> where TEntity : class
+    public interface IRepository<TEntity>:IAsyncRepository<TEntity> where TEntity : class
     {
         IEnumerable<TEntity> All();
         IEnumerable<TEntity> GetData(string query, object parameters);

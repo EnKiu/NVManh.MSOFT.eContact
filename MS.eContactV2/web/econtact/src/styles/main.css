@@ -2,6 +2,7 @@
 @import url(./base/button.css);
 @import url(./base/input.css);
 @import url(./base//notice.css);
+@import url(./overrider.css);
 body {
     font-family: MFonts;
     font-size: 13px;
@@ -27,6 +28,10 @@ body {
 
 .--bold {
     font-weight: 700;
+}
+
+label+* {
+    margin-top: 4px;
 }
 
 ::-webkit-scrollbar {

@@ -21,14 +21,30 @@
         </m-combobox>
       </div>
       <div class="m-row">
-        <m-input label="Số người đính kèm" v-model="contact.NumberAccompanying" type="number" :required="true"></m-input>
+        <label for=""
+          >Số người đi kèm (<span class="--color-red">*</span>)</label
+        >
+        <div>
+          <el-input-number
+            label="Đính kèm"
+            v-model="contact.NumberAccompanying"
+            :min="0"
+            :max="10"
+            @change="handleChangeNumberAccompanying"
+          />
+        </div>
       </div>
       <div class="m-row">
-        <m-text-area label="Ghi chú/ đóng góp ý kiến"  v-model="contact.Note"></m-text-area>
+        <m-text-area
+          label="Ghi chú/ đóng góp ý kiến"
+          v-model="contact.Note"
+        ></m-text-area>
       </div>
     </template>
     <template v-slot:footer>
-      <button class="btn btn--default" @click="onRegister"><i class="icofont-ui-add"></i> Đăng ký</button>
+      <button class="btn btn--default" @click="onRegister">
+        <i class="icofont-ui-add"></i> Đăng ký
+      </button>
     </template>
   </m-dialog>
 </template>
@@ -47,14 +63,39 @@ export default {
      * Thực hiện đăng ký sự kiện
      * Author: NVMANH (04/10/2022)
      */
-    onRegister(){
+    onRegister() {
       // Thực hiện validate dữ liệu:
-      if(!this.contact.NumberAccompanying){
-        this.commonJs.showMessenger({title:"Lỗi",msg:"Vui lòng nhập số người đính kèm",type:this.Enum.MsgType.Error});
+      var msgErrors = [];
+      if (!this.contact.ContactId) {
+        msgErrors.push("Thông tin người đăng ký không được phép trống.");
+      }
+      if (this.contact.NumberAccompanying == null) {
+        msgErrors.push("Số người đính kèm không được để trống.");
+      }
+      if (msgErrors.length > 0) {
+        this.commonJs.showMessenger({
+          title: "Thiếu dữ liệu",
+          msg: msgErrors,
+          type: this.Enum.MsgType.Error,
+        });
+      } else {
+        this.api({
+          url: "/api/v1/EventDetails",
+          data: this.contact,
+          method: "POST",
+        })
+          .then(() => {
+            this.commonJs.showMessenger({
+              title: "Thành công",
+              msg: "Chúc mừng! bạn đã đăng ký tham gia sự kiện thành công!",
+              type: this.Enum.MsgType.Success,
+            });
+          })
       }
       // Thực hiện thêm đăng ký mới:
       this.contact.EventId = this.eventRegister.EventId;
     },
+    handleChangeNumberAccompanying() {},
     querySearch: function (queryString, cb) {
       var me = this;
       var contacts = this.contacts;
@@ -93,15 +134,14 @@ export default {
     return {
       state1: [],
       contacts: [],
-      contact: {},
+      contact: { NumberAccompanying: 0 },
       url: null,
     };
   },
 };
 </script>
 <style scoped>
-
-  .m-row+ .m-row{
-    margin-top: 10px;
-  }
+.m-row + .m-row {
+  margin-top: 10px;
+}
 </style>

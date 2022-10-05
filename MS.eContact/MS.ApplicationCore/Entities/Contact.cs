@@ -6,7 +6,7 @@ using System.Text;
 
 namespace MS.ApplicationCore.Entities
 {
-    public class Contact
+    public class Contact: BaseEntity
     {
         public Guid ContactId { get; set; }
         public string FirstName { get; set; }

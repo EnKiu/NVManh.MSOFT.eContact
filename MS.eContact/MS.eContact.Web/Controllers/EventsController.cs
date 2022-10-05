@@ -16,13 +16,16 @@ namespace MS.eContact.Web.Controllers
         IConfiguration _configuration;
         readonly IFileTransfer _fileTransfer;
         private readonly IWebHostEnvironment _env;
-        public EventsController(IConfiguration configuration, IWebHostEnvironment env, IFileTransfer fileTransfer, IEventRepository repository) : base(repository)
+        IBaseService<Event> _baseService;
+
+        public EventsController(IConfiguration configuration, IWebHostEnvironment env, IFileTransfer fileTransfer, IEventRepository repository, IBaseService<Event> baseService) : base(repository,baseService)
         {
             _configuration = configuration;
             _env = env;
             _repository = repository;
             _fileTransfer = fileTransfer;
             _repository = repository;
+            _baseService = baseService;
         }
 
         [HttpGet("contact-no-register")]

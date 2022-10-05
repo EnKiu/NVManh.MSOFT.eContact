@@ -4,7 +4,7 @@ using System.Text;
 
 namespace MS.ApplicationCore.Interfaces
 {
-    public interface IBaseService<TEntity>
+    public interface IBaseService<TEntity>:IAsyncService<TEntity>
     {
         IEnumerable<TEntity> All();
         IEnumerable<TEntity> GetData(string query, object parameters);

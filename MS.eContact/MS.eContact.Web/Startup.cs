@@ -9,6 +9,7 @@ using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
 using Microsoft.OpenApi.Models;
 using MS.ApplicationCore.Interfaces;
+using MS.ApplicationCore.Services;
 using MS.ApplicationCore.Utilities;
 using MS.Infrastructure;
 using MS.Infrastructure.Data;
@@ -57,8 +58,12 @@ namespace MS.eContact.Web
             services.AddScoped<IUnitOfWork, UnitOfWork>();
             services.AddScoped(typeof(IRepository<>), typeof(DapperRepository<>));
             services.AddScoped(typeof(IAsyncRepository<>), typeof(DapperRepository<>));
+            services.AddScoped(typeof(IAsyncService<>), typeof(BaseService<>));
+            services.AddScoped(typeof(IBaseService<>), typeof(BaseService<>));
             services.AddScoped<IFileTransfer, FileTransfer>();
             services.AddScoped<IEventRepository, EventRepository>();
+            services.AddScoped<IEventDetailService, EventDetailService>();
+            services.AddScoped<IEventDetailRepository, EventDetailRepository>();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.

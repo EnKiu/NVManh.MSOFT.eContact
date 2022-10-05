@@ -4,7 +4,7 @@ using System.Text;
 
 namespace MS.ApplicationCore.Entities
 {
-    public class Event
+    public class Event: BaseEntity
     {
         public int EventId { get; set; }
         public string EventName { get; set; }
@@ -33,25 +33,5 @@ namespace MS.ApplicationCore.Entities
         }
         public List<EventDetail> EventDetails { get; set; }
 
-    }
-
-    public class EventDetail
-    {
-        public Guid EventDetailId { get; set; }
-        public int EventId { get; set; }
-        public Guid ContactId { get; set; }
-        public string LastName { get; set; }
-        public string FirstName { get; set; }
-        public string FullName
-        {
-            get
-            {
-                return FirstName + ' ' + LastName;
-            }
-            set { }
-        }
-        public int NumberAccompanying { get; set; }
-        public string Note { get; set; }
-        public decimal SpendsTotal { get; set; }
     }
 }

@@ -31,5 +31,14 @@ namespace MS.Infrastructure.Data
             else
             return false;
         }
+
+        public async Task<IEnumerable<EventDetail>> GetRegisterEventByEventId(int eventId)
+        {
+            var storeName = "Proc_EventDetail_GetListRegisterEventByEventId";
+            var parameters = new DynamicParameters();
+            parameters.Add("@p_EventId", eventId);
+            var res = await _unitOfWork.Connection.QueryAsync<EventDetail>(storeName, param: parameters, transaction: _unitOfWork.Transaction, commandType: System.Data.CommandType.StoredProcedure);
+            return res;
+        }
     }
 }

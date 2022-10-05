@@ -50,14 +50,14 @@
       </button>
     </div>
 
-    <div v-if="item.IsCancel == false" class="event__joinned-number">Có {{item.JoinnedNumber}} đã tham gia <i class="icofont-swoosh-right"></i> Xem chi tiết</div>
+    <div v-if="item.IsCancel == false" class="event__joinned-number">Có {{item.JoinnedNumber}} đã tham gia <i class="icofont-swoosh-right"></i> <a class="show-list-registers" @click="onShowList">Xem chi tiết</a></div>
   </div>
 </template>
 <script>
 export default {
   name: "EventItem",
   props: ["item"],
-  emits: ["onRegister"],
+  emits: ["onRegister","onShowList"],
   computed: {
     eventDateFormat: function () {
       var eventDate = this.item.EventDate;
@@ -90,6 +90,9 @@ export default {
     this.interValTime();
   },
   methods: {
+    onShowList(){
+      this.$emit("onShowList",this.item);
+    },
     onRegister(){
       this.$emit("onRegister",this.item);
     },
@@ -243,5 +246,15 @@ export default {
 .event__joinned-number{
     margin-top: 10px;
     font-style: italic;
+}
+
+.show-list-registers{
+  color: #3395ff;
+  font-weight: 700;
+  cursor: pointer;
+}
+
+.show-list-registers:hover{
+  text-decoration: underline;
 }
 </style>

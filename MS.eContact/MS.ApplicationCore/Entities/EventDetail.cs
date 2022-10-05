@@ -11,14 +11,7 @@ namespace MS.ApplicationCore.Entities
         public Guid ContactId { get; set; }
         public string LastName { get; set; }
         public string FirstName { get; set; }
-        public string FullName
-        {
-            get
-            {
-                return FirstName + ' ' + LastName;
-            }
-            set { }
-        }
+        public string FullName { get; set; }
         public int? NumberAccompanying { get; set; }
         public string? Note { get; set; }
         public decimal? SpendsTotal { get; set; }

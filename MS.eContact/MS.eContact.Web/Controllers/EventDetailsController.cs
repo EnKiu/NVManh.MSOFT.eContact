@@ -2,6 +2,8 @@
 using Microsoft.AspNetCore.Mvc;
 using MS.ApplicationCore.Entities;
 using MS.ApplicationCore.Interfaces;
+using System;
+using System.Threading.Tasks;
 
 namespace MS.eContact.Web.Controllers
 {
@@ -15,6 +17,13 @@ namespace MS.eContact.Web.Controllers
         {
             _service = service;
             _repository = repository;
+        }
+
+        [HttpGet("registers")]
+        public async Task<IActionResult> GetListRegisterEvent(int eventId)
+        {
+            var data = await _repository.GetRegisterEventByEventId(eventId);
+            return Ok(data);
         }
     }
 }

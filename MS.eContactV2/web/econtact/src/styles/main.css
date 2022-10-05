@@ -3,6 +3,7 @@
 @import url(./base/input.css);
 @import url(./base//notice.css);
 @import url(./overrider.css);
+@import url(./base/table.css);
 body {
     font-family: MFonts;
     font-size: 13px;

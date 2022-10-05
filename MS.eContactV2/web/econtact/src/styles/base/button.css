@@ -17,6 +17,11 @@
     background-color: #ccc !important;
 }
 
+.btn--table:hover {
+    background-color: #ff0000 !important;
+    color: #fff;
+}
+
 .dialog__button--cancel {
     background-color: #ff0000 !important;
     color: #fff !important;

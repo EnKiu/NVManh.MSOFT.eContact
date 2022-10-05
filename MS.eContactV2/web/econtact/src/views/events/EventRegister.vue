@@ -66,6 +66,7 @@ export default {
     onRegister() {
       // Thực hiện validate dữ liệu:
       var msgErrors = [];
+      this.contact.EventId = this.eventRegister.EventId;
       if (!this.contact.ContactId) {
         msgErrors.push("Thông tin người đăng ký không được phép trống.");
       }
@@ -90,6 +91,7 @@ export default {
               msg: "Chúc mừng! bạn đã đăng ký tham gia sự kiện thành công!",
               type: this.Enum.MsgType.Success,
             });
+            this.$emit("onClose");
           })
       }
       // Thực hiện thêm đăng ký mới:

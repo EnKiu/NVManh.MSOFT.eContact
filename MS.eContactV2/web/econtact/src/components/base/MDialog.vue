@@ -55,6 +55,7 @@ export default {
 <style scoped>
 .dialog {
   position: fixed;
+  max-width: 100%;
   display: flex;
   align-items: center;
   justify-content: center;
@@ -63,11 +64,13 @@ export default {
   left: 0;
   right: 0;
   bottom: 0;
+  padding: 24px;
 }
 .dialog-wrapper {
   position: relative;
   background-color: #fff;
   border-radius: 4px;
+  max-width: 100%;
 }
 
 .dialog__content {

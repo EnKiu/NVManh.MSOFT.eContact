@@ -70,6 +70,6 @@ export default {
 </script>
 <style scoped>
 .container {
-  padding: 24px;
+  box-sizing: border-box;
 }
 </style>

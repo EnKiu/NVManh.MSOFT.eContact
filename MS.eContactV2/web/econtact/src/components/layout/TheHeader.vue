@@ -53,7 +53,7 @@ export default {};
 }
 .navbar-item{
  height: 100%;
- padding: 0 24px;
+ padding: 0 16px;
  display: flex;
  align-items: center;
  justify-content: center;

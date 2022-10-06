@@ -20,6 +20,7 @@ import 'element-plus/es/components/date-picker/style/css'
 import locale from 'element-plus/lib/locale/lang/vi'
 import ElementPlus from 'element-plus'
 import CKEditor from '@ckeditor/ckeditor5-vue'
+import { ElTable, ElTableColumn } from 'element-plus'
 
 const app = createApp(App);
 app.component("MInput", MInput);
@@ -31,6 +32,9 @@ app.component("MButtonFontIcon", MButtonFontIcon);
 app.component("MDialog", MDialog);
 app.component("MToast", MToast);
 app.component("MLoading", MLoading);
+app.component("MTable", ElTable);
+app.component("MColumn", ElTableColumn);
+
 app.config.globalProperties.commonJs = commonJs;
 app.config.globalProperties.api = api;
 app.config.globalProperties.Enum = Enum;

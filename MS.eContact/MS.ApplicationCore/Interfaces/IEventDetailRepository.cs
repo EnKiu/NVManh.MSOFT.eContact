@@ -10,5 +10,6 @@ namespace MS.ApplicationCore.Interfaces
     {
         public Task<bool> CheckRegisted(EventDetail eventDetail);
         public Task<IEnumerable<EventDetail>> GetRegisterEventByEventId(int eventId);
+        Task<int> DeleteEventDetailByEventIdAndContactId(int eventId, Guid contactId);
     }
 }

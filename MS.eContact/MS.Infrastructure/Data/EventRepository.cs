@@ -20,7 +20,8 @@ namespace MS.Infrastructure.Data
         }
         public override IEnumerable<Event> All()
         {
-            return _unitOfWork.Connection.Query<Event>($"SELECT * FROM Event Order By EventDate DESC", _unitOfWork.Transaction, commandType: System.Data.CommandType.Text);
+            var storeName = "Proc_Event_GetEventInfo";
+            return _unitOfWork.Connection.Query<Event>(storeName, _unitOfWork.Transaction, commandType: System.Data.CommandType.StoredProcedure);
         }
         public async override Task<IEnumerable<Event>> AllAsync()
         {

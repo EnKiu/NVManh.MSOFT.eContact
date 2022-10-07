@@ -157,9 +157,25 @@ namespace MS.Infrastructure.Data
             throw new NotImplementedException();
         }
 
-        public async Task RemoveAsync(object key)
+        public async Task<int> RemoveAsync(object key)
         {
-            throw new NotImplementedException();
+            var rowAffects = 0;
+            var sql = $"DELETE FROM {_tableName} WHERE {_tableName}Id = @Id";
+            _unitOfWork.Connection.Open();
+            _unitOfWork.Begin();
+            try
+            {
+                var parameters = new DynamicParameters();
+                parameters.Add("@Id", key);
+                rowAffects = await _unitOfWork.Connection.ExecuteAsync(sql, parameters, commandType: System.Data.CommandType.Text);
+                _unitOfWork.Commit();
+            }
+            catch (Exception)
+            {
+                _unitOfWork.Rollback();
+            }
+            _unitOfWork.Connection.Close();
+            return rowAffects;
         }
         #endregion
 

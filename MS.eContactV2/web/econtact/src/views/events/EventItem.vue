@@ -24,7 +24,9 @@
       <div class="event__text">{{ eventDateFormat }}</div>
     </div>
     <div class="event-info event__time">
-      <div class="event__label"><i class="icofont-ui-alarm"></i> Thời gian bắt đầu:</div>
+      <div class="event__label">
+        <i class="icofont-ui-alarm"></i> Thời gian bắt đầu:
+      </div>
       <div class="event__text">
         {{ timeStartFormat }}
       </div>
@@ -46,18 +48,30 @@
     >
       <button class="btn btn--default" @click="onRegister">
         <div>Đăng ký tham gia ngay</div>
-        <div>(Còn <span class="--color-red --bold">{{ timeLeftInfo }}</span>)</div>
+        <div>
+          (Còn <span class="--color-red --bold">{{ timeLeftInfo }}</span
+          >)
+        </div>
       </button>
     </div>
 
-    <div v-if="item.IsCancel == false" class="event__joinned-number">Có {{item.JoinnedNumber}} đã tham gia <i class="icofont-swoosh-right"></i> <a class="show-list-registers" @click="onShowList">Xem chi tiết</a></div>
+    <div v-if="item.IsCancel == false" class="event__joinned-number">
+      <div v-if="(item.TotalMember) > 0">
+        Có <b>{{ item.TotalMember }}</b> người đã tham gia.
+        <i class="icofont-swoosh-right"></i>
+        <a class="show-list-registers" @click="onShowList"
+          >Xem danh sách chi tiết</a
+        >
+      </div>
+      <span v-else>Không có ai tham gia.</span>
+    </div>
   </div>
 </template>
 <script>
 export default {
   name: "EventItem",
   props: ["item"],
-  emits: ["onRegister","onShowList"],
+  emits: ["onRegister", "onShowList"],
   computed: {
     eventDateFormat: function () {
       var eventDate = this.item.EventDate;
@@ -90,11 +104,11 @@ export default {
     this.interValTime();
   },
   methods: {
-    onShowList(){
-      this.$emit("onShowList",this.item);
+    onShowList() {
+      this.$emit("onShowList", this.item);
     },
-    onRegister(){
-      this.$emit("onRegister",this.item);
+    onRegister() {
+      this.$emit("onRegister", this.item);
     },
     interValTime() {
       this.calculatorTimeInfo();
@@ -187,9 +201,9 @@ export default {
   color: #ff0000;
 }
 
-.event__title{
-    font-size: 20px;
-    padding-top: unset !important;
+.event__title {
+  font-size: 20px;
+  padding-top: unset !important;
 }
 .event__text.--cancel {
   text-decoration: line-through;
@@ -215,9 +229,9 @@ export default {
   align-items: center;
 }
 
-.event__label i{
-    font-size: 16px;
-    margin-right: 10px;
+.event__label i {
+  font-size: 16px;
+  margin-right: 10px;
 }
 .event__title {
   font-weight: 700;
@@ -239,22 +253,22 @@ export default {
   align-items: center;
   justify-content: flex-end;
 }
-.btn{
-    height: 50px;
+.btn {
+  height: 50px;
 }
 
-.event__joinned-number{
-    margin-top: 10px;
-    font-style: italic;
+.event__joinned-number {
+  margin-top: 10px;
+  font-style: italic;
 }
 
-.show-list-registers{
+.show-list-registers {
   color: #3395ff;
   font-weight: 700;
   cursor: pointer;
 }
 
-.show-list-registers:hover{
+.show-list-registers:hover {
   text-decoration: underline;
 }
 </style>

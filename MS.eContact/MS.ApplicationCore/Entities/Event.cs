@@ -32,6 +32,8 @@ namespace MS.ApplicationCore.Entities
             }
         }
         public List<EventDetail> EventDetails { get; set; }
+        public int? TotalMember { get; set; }
+        public int? TotalAccompanying { get; set; }
 
     }
 }

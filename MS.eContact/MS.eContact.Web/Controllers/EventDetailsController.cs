@@ -2,7 +2,9 @@
 using Microsoft.AspNetCore.Mvc;
 using MS.ApplicationCore.Entities;
 using MS.ApplicationCore.Interfaces;
+using Newtonsoft.Json;
 using System;
+using System.Linq;
 using System.Threading.Tasks;
 
 namespace MS.eContact.Web.Controllers
@@ -25,5 +27,12 @@ namespace MS.eContact.Web.Controllers
             var data = await _repository.GetRegisterEventByEventId(eventId);
             return Ok(data);
         }
+
+        //public override async Task<IActionResult> Delete(object id)
+        //{
+        //    var httpRequest = HttpContext.Request;
+        //    var eventDetail = JsonConvert.DeserializeObject<EventDetail>(httpRequest.Form["EventDetail"].First());
+        //    return Ok(await _repository.DeleteEventDetailByEventIdAndContactId(eventDetail.EventId, eventDetail.ContactId));
+        //}
     }
 }

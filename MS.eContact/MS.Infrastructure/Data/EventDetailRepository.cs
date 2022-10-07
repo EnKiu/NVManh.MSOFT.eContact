@@ -32,6 +32,16 @@ namespace MS.Infrastructure.Data
             return false;
         }
 
+        public async Task<int> DeleteEventDetailByEventIdAndContactId(int eventId, Guid contactId)
+        {
+            var sql = "DELETE FROM EventDetail e WHERE e.EventId = @EventId AND e.ContactId = @ContactId";
+            var parameters = new DynamicParameters();
+            parameters.Add("@EventId", eventId);
+            parameters.Add("@ContactId", contactId);
+            var res = await _unitOfWork.Connection.ExecuteAsync(sql, param: parameters, transaction: _unitOfWork.Transaction, commandType: System.Data.CommandType.Text);
+            return res;
+        }
+
         public async Task<IEnumerable<EventDetail>> GetRegisterEventByEventId(int eventId)
         {
             var storeName = "Proc_EventDetail_GetListRegisterEventByEventId";

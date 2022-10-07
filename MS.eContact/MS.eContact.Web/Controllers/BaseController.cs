@@ -51,8 +51,9 @@ namespace MS.eContact.Web.Controllers
 
         // DELETE api/<BaseController>/5
         [HttpDelete("{id}")]
-        public void Delete(int id)
+        public virtual async Task<IActionResult> Delete(string id)
         {
+            return Ok(await _repository.RemoveAsync(id));
         }
     }
 }

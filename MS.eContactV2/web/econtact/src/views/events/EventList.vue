@@ -7,7 +7,7 @@
         :key="index"
         :item="item"
         @onRegister="onRegister(item)"
-         @onShowList="onShowList(item)"
+        @onShowList="onShowList(item)"
       ></event-item>
     </div>
     <event-register
@@ -15,7 +15,12 @@
       @onClose="onCloseRegister"
       :eventRegister="eventRegister"
     ></event-register>
-    <event-detail v-if="showDetail" @onCloseDetail="onCloseDetail" :eventItem="eventDetailSelected"></event-detail>
+    <event-detail
+      v-if="showDetail"
+      @onCloseDetail="onCloseDetail"
+      @afterCancelRegisterSuccess="onCancelRegisterSuccess(eventDetail)"
+      :eventItem="eventDetailSelected"
+    ></event-detail>
   </div>
 </template>
 <script>
@@ -31,7 +36,7 @@ export default {
     this.loadData();
   },
   methods: {
-    onShowList(event){
+    onShowList(event) {
       this.eventDetailSelected = event;
       this.showDetail = true;
     },
@@ -39,12 +44,24 @@ export default {
       this.showRegister = true;
       this.eventRegister = currentEvent;
     },
-    onCloseRegister() {
+    onCloseRegister(contactRegister,eventRegister) {
+      console.log(contactRegister);
+      console.log(eventRegister);
+      // Load lại dữ liệu:
+      
+      // Đóng form đăng ký
       this.showRegister = false;
+      // Hiển thị form chi tiết danh sách đăng ký
+      this.eventDetailSelected = eventRegister;
+      this.showDetail = true;
+    },
+    onCancelRegisterSuccess(){
+      this.loadData();
     },
     onCloseDetail() {
       this.showDetail = false;
     },
+
     loadData() {
       var baseUrl = process.env.VUE_APP_BASE_URL;
       fetch(baseUrl + "/api/v1/events")
@@ -61,7 +78,7 @@ export default {
     return {
       events: [],
       eventRegister: {},
-      eventDetailSelected:null,
+      eventDetailSelected: null,
       showDetail: false,
       showRegister: false,
     };

@@ -19,6 +19,11 @@ body {
     src: url(../assets/fonts/nunito-sans/nunito-sans.regular.ttf);
 }
 
+.flex {
+    display: flex;
+    align-items: center;
+}
+
 .bg-yellow {
     background-color: yellow;
 }

@@ -91,7 +91,7 @@ export default {
               msg: "Chúc mừng! bạn đã đăng ký tham gia sự kiện thành công!",
               type: this.Enum.MsgType.Success,
             });
-            this.$emit("onClose");
+            this.$emit("onClose", this.contact,this.eventRegister);
           })
       }
       // Thực hiện thêm đăng ký mới:

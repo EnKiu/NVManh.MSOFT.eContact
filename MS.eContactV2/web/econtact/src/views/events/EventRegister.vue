@@ -1,5 +1,5 @@
 <template>
-  <m-dialog title="Đăng ký" @onClose="onClose">
+  <m-dialog title="Đăng ký">
     <template v-slot:content>
       <!-- <el-autocomplete
         v-model="state1"
@@ -21,9 +21,7 @@
         </m-combobox>
       </div>
       <div class="m-row">
-        <label for=""
-          >Số người đi kèm (<span class="--color-red">*</span>)</label
-        >
+        <label for="">Số người đi kèm (<span class="--color-red">*</span>)</label>
         <div>
           <el-input-number
             label="Đính kèm"
@@ -52,10 +50,9 @@
 export default {
   name: "EventRegister",
   props: ["eventRegister"],
+  emits: ["onRegisterSuccess", "update:TotalAccompanying", "update:TotalMember"],
   created() {
-    this.url =
-      "/api/v1/events/contact-no-register?eventId=" +
-      this.eventRegister.EventId;
+    this.url = "/api/v1/events/contact-no-register?eventId=" + this.eventRegister.EventId;
     // this.loadData();
   },
   methods: {
@@ -84,15 +81,20 @@ export default {
           url: "/api/v1/EventDetails",
           data: this.contact,
           method: "POST",
-        })
-          .then(() => {
-            this.commonJs.showMessenger({
-              title: "Thành công",
-              msg: "Chúc mừng! bạn đã đăng ký tham gia sự kiện thành công!",
-              type: this.Enum.MsgType.Success,
-            });
-            this.$emit("onClose", this.contact,this.eventRegister);
-          })
+        }).then(() => {
+          this.commonJs.showMessenger({
+            title: "Thành công",
+            msg: "Chúc mừng! bạn đã đăng ký tham gia sự kiện thành công!",
+            type: this.Enum.MsgType.Success,
+          });
+          // Cập nhật lại thông tin sự kiện (số người đăng ký và đi kèm)
+          var totalAccomanying =
+            this.eventRegister.TotalAccompanying + this.contact.NumberAccompanying;
+          var totalMember = this.eventRegister.TotalMember + 1;
+          this.$emit("update:TotalAccompanying", totalAccomanying);
+          this.$emit("update:TotalMember", totalMember);
+          this.$emit("onRegisterSuccess", this.contact, this.eventRegister);
+        });
       }
       // Thực hiện thêm đăng ký mới:
       this.contact.EventId = this.eventRegister.EventId;
@@ -109,10 +111,7 @@ export default {
     },
     createFilter(queryString) {
       return (contact) => {
-        return (
-          contact.FirstName.toLowerCase().indexOf(queryString.toLowerCase()) ===
-          0
-        );
+        return contact.FirstName.toLowerCase().indexOf(queryString.toLowerCase()) === 0;
       };
     },
     handleSelect: (item) => {
@@ -127,9 +126,6 @@ export default {
           this.contacts = res;
         })
         .catch((res) => console.log(res));
-    },
-    onClose() {
-      this.$emit("onClose");
     },
   },
   data() {

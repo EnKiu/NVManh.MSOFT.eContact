@@ -17,7 +17,6 @@
         </div>
         <div class="register__list">
           <m-table
-            @row-dblclick="rowDblClick"
             ref="tbListDocument"
             :data="registers"
             empty-text="Không có dữ liệu"
@@ -47,16 +46,16 @@
                   >
                   <div class="flex" v-if="scope.row.Note">
                     <span>- Ý kiến:</span>
-                    <div class="show-note" :title="scope.row.Note">
+                    <div class="show-note" :title="scope.row.Note" @click="commentSelected=scope.row.Note;fullNameComment=scope.row.FullName">
                       {{ scope.row.Note }}
                     </div>
                   </div>
                 </div>
               </template>
             </m-column>
-            <m-column label="Hủy đăng ký" width="120">
+            <m-column v-if="eventOutTime==false" label="Hủy đăng ký" width="120">
               <template #header>
-                <button class="btn btn--default">Đăng ký thêm</button>
+                <button class="btn btn--default" @click="onRegister">Đăng ký thêm</button>
               </template>
               <template #default="scope">
                 <button
@@ -78,14 +77,21 @@
       </button>
     </template>
   </m-dialog>
+  <event-comment v-if="commentSelected!=null" v-model:comment="commentSelected" :fullName="fullNameComment"></event-comment>
 </template>
 <script>
+import EventComment from './EventComment.vue'
 export default {
   name: "EventDetail",
-  components: {},
-  emits: ["onCloseDetail"],
+  components: {EventComment},
+  emits: ["onCloseDetail","onRegisterFromDetail","afterCancelRegisterSuccess"],
   props: ["eventItem"],
   created() {
+    console.log(this.eventItem);
+    var eventDate = new Date(this.eventItem.EventDate);
+    if(eventDate && eventDate< new Date()){
+      this.eventOutTime = true;
+    }
     this.eventDetail = this.eventItem;
     this.loadRegisters();
   },
@@ -102,6 +108,10 @@ export default {
     onClose() {
       this.$emit("onCloseDetail");
     },
+    onRegister(){
+      this.$emit("onCloseDetail");
+      this.$emit("onRegisterFromDetail",this.eventItem);
+    },
     onCancelRegister(register) {
       var me = this;
       this.commonJs.showConfirm(
@@ -115,7 +125,7 @@ export default {
             this.eventDetail.TotalAccompanying-=register.NumberAccompanying;
             this.eventDetail.TotalMember-=1;
             this.loadRegisters();
-            me.$emit("@afterCancelRegisterSuccess", register);
+            me.$emit("afterCancelRegisterSuccess", register);
           });
         }
       );
@@ -125,6 +135,9 @@ export default {
     return {
       registers: [],
       eventDetail: {},
+      commentSelected:null,
+      fullNameComment: null,
+      eventOutTime: false
     };
   },
 };

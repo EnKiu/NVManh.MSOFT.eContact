@@ -57,7 +57,7 @@
 
     <div v-if="item.IsCancel == false" class="event__joinned-number">
       <div v-if="(item.TotalMember) > 0">
-        Có <b>{{ item.TotalMember }}</b> người đã tham gia.
+        Có <b>{{ item.TotalMember }}</b> thành viên đăng ký.
         <i class="icofont-swoosh-right"></i>
         <a class="show-list-registers" @click="onShowList"
           >Xem danh sách chi tiết</a

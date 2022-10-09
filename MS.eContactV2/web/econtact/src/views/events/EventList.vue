@@ -12,12 +12,16 @@
     </div>
     <event-register
       v-if="showRegister"
-      @onClose="onCloseRegister"
+      @onClose="showRegister = false"
+      @onRegisterSuccess="onCloseRegister"
+      v-model:TotalAccompanying="eventRegister.TotalAccompanying"
+      v-model:TotalMember="eventRegister.TotalMember"
       :eventRegister="eventRegister"
     ></event-register>
     <event-detail
       v-if="showDetail"
       @onCloseDetail="onCloseDetail"
+      @onRegisterFromDetail="onRegister"
       @afterCancelRegisterSuccess="onCancelRegisterSuccess(eventDetail)"
       :eventItem="eventDetailSelected"
     ></event-detail>
@@ -37,6 +41,7 @@ export default {
   },
   methods: {
     onShowList(event) {
+      console.log(event);
       this.eventDetailSelected = event;
       this.showDetail = true;
     },
@@ -44,18 +49,16 @@ export default {
       this.showRegister = true;
       this.eventRegister = currentEvent;
     },
-    onCloseRegister(contactRegister,eventRegister) {
-      console.log(contactRegister);
-      console.log(eventRegister);
-      // Load lại dữ liệu:
-      
+    async onCloseRegister(contactRegister, eventRegister) {
+      // Cập nhật lại thông tin event đăng ký:
+      this.eventRegister = eventRegister;
       // Đóng form đăng ký
       this.showRegister = false;
       // Hiển thị form chi tiết danh sách đăng ký
       this.eventDetailSelected = eventRegister;
       this.showDetail = true;
     },
-    onCancelRegisterSuccess(){
+    onCancelRegisterSuccess() {
       this.loadData();
     },
     onCloseDetail() {

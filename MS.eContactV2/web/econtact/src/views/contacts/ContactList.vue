@@ -186,42 +186,5 @@ export default {
   height: calc(100% - 40px);
   overflow-y: auto;
 }
-thead {
-}
-thead th {
-  position: sticky;
-  top: -1px;
-  background-color: #fff;
-}
-.th-avatar {
-  margin-left: auto !important;
-  margin-right: auto !important;
-  width: 100% !important;
-}
 
-td img {
-  width: 150px;
-}
-
-table {
-  border-collapse: collapse;
-  width: 100%;
-  border: unset;
-}
-
-table td,
-th {
-  white-space: nowrap;
-  padding: 0 16px;
-  border-bottom: 1px solid #ccc;
-  text-align: left;
-}
-table tr {
-  height: 48px;
-  cursor: pointer;
-}
-
-table tr:hover {
-  background-color: #dedede;
-}
 </style>

@@ -13,7 +13,19 @@
       @input="onInput"
       :disabled="disabled"
       class="input"
+      :class="{ 'input--invalid': inValid }"
     />
+    <div v-if="inValid" class="validate-error">
+      <div class="error__content">
+        Thông tin
+        <span v-if="label"
+          ><b>{{ label.toLowerCase() }}</b></span
+        ><span v-else>này</span> không được phép để trống.
+      </div>
+      <div class="error__arrow">
+        <div class="arrow"></div>
+      </div>
+    </div>
   </div>
 </template>
 <script>
@@ -26,10 +38,27 @@ export default {
     focus: { type: Boolean, default: false, required: false },
     required: { type: Boolean, default: false, required: false },
     disabled: { type: Boolean, default: false, required: false },
+    validated: { type: Boolean, default: false, required: false },
   },
-  emits: ["update:modelValue"],
+  emits: ["update:modelValue", "onValidate", "update:validated"],
   created() {
     this.value = this.modelValue;
+    this.selfValidated = this.validated;
+  },
+  computed: {
+    inValid: function () {
+      if (
+        (this.validated || this.selfValidated) &&
+        this.required &&
+        (this.modelValue == "" ||
+          this.modelValue == undefined ||
+          this.modelValue == null)
+      ) {
+        return true;
+      } else {
+        return false;
+      }
+    },
   },
   methods: {
     onInput() {
@@ -37,13 +66,31 @@ export default {
     },
   },
   watch: {
+    validated: function (newValue) {
+      console.log(newValue);
+      if (newValue == true) {
+        this.selfValidated = true;
+        if (this.modelValue == "" || this.modelValue == undefined || this.modelValue == null) {
+          this.$emit("onValidate", false);
+        } else {
+          this.$emit("onValidate", true);
+        }
+      }
+    },
     modelValue: function (newValue) {
       this.value = newValue;
+      this.selfValidated = true;
+      if (this.value == "" || this.value == undefined || this.value == null) {
+        this.$emit("onValidate", false);
+      } else {
+        this.$emit("onValidate", true);
+      }
     },
   },
   data() {
     return {
       value: null,
+      selfValidated: false,
     };
   },
 };
@@ -58,6 +105,7 @@ input[type="number"] {
 }
 
 .input-wrapper {
+  position: relative;
 }
 
 .input-wrapper input {
@@ -74,5 +122,36 @@ input[type="number"] {
 
 .input-wrapper + .input-wrapper {
   margin-top: 16px;
+}
+
+.validate-error {
+  position: absolute;
+  bottom: calc(100% - 22px);
+  right: 0px;
+  background-color: #ff0000;
+  padding: 5px 10px;
+  border-radius: 4px;
+  color: #fff;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  justify-content: center;
+}
+
+.error__arrow {
+  position: absolute;
+  top: calc(100% + 4px);
+  width: 100%;
+  height: 0px;
+  display: flex;
+  align-items: flex-end;
+  justify-content: center;
+}
+
+.arrow {
+  width: 10px;
+  height: 10px;
+  background-color: #ff0000;
+  transform: rotate(45deg);
 }
 </style>

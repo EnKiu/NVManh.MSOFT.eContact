@@ -36,7 +36,7 @@ namespace MS.eContact.Web.Controllers
 
         // POST api/<BaseController>
         [HttpPost]
-        public int Post([FromBody] TEntity entity)
+        public virtual int Post([FromBody] TEntity entity)
         {
            return _baseService.Add(entity);
         }

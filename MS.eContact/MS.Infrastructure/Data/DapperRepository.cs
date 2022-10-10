@@ -20,7 +20,7 @@ namespace MS.Infrastructure.Data
             _unitOfWork = unitOfWork;
         }
         #region Add
-        public int Add(TEntity entity)
+        public virtual int Add(TEntity entity)
         {
             var rowAffects = 0;
             _unitOfWork.Connection.Open();
@@ -42,12 +42,12 @@ namespace MS.Infrastructure.Data
             return rowAffects;
         }
 
-        public int Add(IEnumerable<TEntity> entities)
+        public virtual int Add(IEnumerable<TEntity> entities)
         {
             throw new NotImplementedException();
         }
 
-        public async Task<int> AddAsync(TEntity entity)
+        public virtual async Task<int> AddAsync(TEntity entity)
         {
             var rowAffects = 0;
             _unitOfWork.Connection.Open();

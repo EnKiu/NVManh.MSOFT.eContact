@@ -9,6 +9,9 @@
         "src/*"
       ]
     },
+    "vueCompilerOptions":{
+      "experimentalDisableTemplateSupport": true
+    },
     "lib": [
       "esnext",
       "dom",

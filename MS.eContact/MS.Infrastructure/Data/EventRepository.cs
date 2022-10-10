@@ -36,5 +36,46 @@ namespace MS.Infrastructure.Data
             var data = await _unitOfWork.Connection.QueryAsync<Contact>(storeName, parameters,transaction: _unitOfWork.Transaction, commandType: System.Data.CommandType.StoredProcedure);
             return data;
         }
+        public override int Add(Event entity)
+        {
+            // Cập nhật thông tin ngày bắt đầu:
+            entity.EventDate = entity.StartTime;
+
+            var rowAffects = 0;
+            _unitOfWork.Connection.Open();
+            _unitOfWork.Begin();
+            try
+            {
+                rowAffects = _unitOfWork.Connection.Execute($"Proc_Event_InsertEvent", entity, commandType: System.Data.CommandType.StoredProcedure);
+                _unitOfWork.Commit();
+            }
+            catch (Exception)
+            {
+                _unitOfWork.Rollback();
+            }
+            _unitOfWork.Connection.Close();
+            return rowAffects;
+        }
+
+        public async override Task<int> AddAsync(Event entity)
+        {
+            // Cập nhật thông tin ngày bắt đầu:
+            entity.EventDate = entity.StartTime;
+
+            var rowAffects = 0;
+            _unitOfWork.Connection.Open();
+            _unitOfWork.Begin();
+            try
+            {
+                rowAffects = await _unitOfWork.Connection.ExecuteAsync($"Proc_Event_InsertEvent", entity, commandType: System.Data.CommandType.StoredProcedure);
+                _unitOfWork.Commit();
+            }
+            catch (Exception)
+            {
+                _unitOfWork.Rollback();
+            }
+            _unitOfWork.Connection.Close();
+            return rowAffects;
+        }
     }
 }

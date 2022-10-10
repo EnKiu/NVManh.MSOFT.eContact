@@ -1,190 +1,292 @@
 <template>
-  <m-dialog title="Danh sách đăng ký tham dự" @onClose="onClose">
+  <m-dialog title="Thêm mới sự kiện" @onClose="$emit('onClose')">
     <template v-slot:content>
-      <div class="registers">
-        <div class="register__header">
-          <div class="register_number">
-            Tổng số có
-            <b>{{ eventDetail.TotalMember + eventDetail.TotalAccompanying }}</b>
-            người tham dự.
+      <div class="event">
+        <div class="event--info">
+          <div class="event__title">
+            <m-input
+              label="Tiêu đề sự kiện"
+              :required="true"
+              :validated="validated"
+              @onValidate="setValidOnInputRequired"
+              v-model="event.EventName"
+            ></m-input>
           </div>
-          <div class="register_number">
-            - Có {{ eventDetail.TotalMember }} thành viên.
+          <div class="event__date">
+            <label for="">Thời gian tổ chức:</label>
+            <el-date-picker
+              v-model="event.StartTime"
+              type="datetime"
+              format="DD-MM-YYYY HH:mm:ss"
+              placeholder="Chọn ngày giờ tổ chức"
+            />
           </div>
-          <div class="register_number">
-            - Có {{ eventDetail.TotalAccompanying }} khách đi kèm.
+          <div class="event__expire-date">
+            <label for="">Hạn đăng ký:</label>
+            <el-date-picker
+              v-model="event.ExpireRegisterDate"
+              type="datetime"
+              format="DD-MM-YYYY HH:mm:ss"
+              placeholder="Chọn ngày giờ hết hạn"
+            />
+          </div>
+          <div class="event__place">
+            <m-input label="Địa điểm" v-model="event.EventPlace"></m-input>
+          </div>
+          <div class="event__spend">
+            <m-input
+              label="Kinh phí dự kiến/người"
+              v-model="event.Spends"
+            ></m-input>
           </div>
         </div>
-        <div class="register__list">
-          <m-table
-            ref="tbListDocument"
-            :data="registers"
-            empty-text="Không có dữ liệu"
-            width="100%"
-            height="100%"
-          >
-            <!-- <m-column prop="FullName" type="expand">
-              <template #default="scope">
-                <div class="cell__row">{{ scope.row.FullName }}</div>
-                <div class="cell__row --mini">
-                  (Đi kèm: {{ scope.row.NumberAccompanying }}) -
-                  <span class="show-note">Có ý kiến</span>
-                </div>
-              </template>
-            </m-column> -->
-            <el-table-column label="#" type="index" width="30" />
-
-            <m-column prop="FullName" label="Họ và tên">
-              <template #default="scope">
-                <div class="cell__row">{{ scope.row.FullName }}</div>
-                <div
-                  v-if="scope.row.NumberAccompanying > 0 || scope.row.Note"
-                  class="cell__row --mini flex"
-                >
-                  <span v-if="scope.row.NumberAccompanying > 0"
-                    >(Đi kèm: {{ scope.row.NumberAccompanying }})</span
-                  >
-                  <div class="flex" v-if="scope.row.Note">
-                    <span>- Ý kiến:</span>
-                    <div class="show-note" :title="scope.row.Note" @click="commentSelected=scope.row.Note;fullNameComment=scope.row.FullName">
-                      {{ scope.row.Note }}
-                    </div>
-                  </div>
-                </div>
-              </template>
-            </m-column>
-            <m-column v-if="eventOutTime==false" label="Hủy đăng ký" width="120">
-              <template #header>
-                <button class="btn btn--default" @click="onRegister">Đăng ký thêm</button>
-              </template>
-              <template #default="scope">
+        <div class="event--content">
+          <button id="show-content" @click="onShowEditorContent">
+            <i class="icofont-swoosh-right"></i> Nhập nội dung sự kiện
+          </button>
+          <div v-if="showContenEditor" class="content-editor">
+            <div class="editor">
+              <button
+                class="close-editor"
+                @click="onCloseEditorContent"
+                title="Đóng Form"
+              >
+                <i class="icofont-close"></i>
+              </button>
+              <ckeditor
+                :editor="editor"
+                v-model="event.EventContent"
+                :config="editorConfig"
+              ></ckeditor>
+              <div class="editor__button">
                 <button
-                  class="btn btn--table --color-red"
-                  :title="scope.row.FullName"
-                  @click="onCancelRegister(scope.row)"
+                  id="save-editor"
+                  class="btn btn--default"
+                  @click="showContenEditor = false"
                 >
-                  Hủy đăng ký
+                  <i class="icofont-check"></i> Lưu
                 </button>
-              </template>
-            </m-column>
-          </m-table>
+              </div>
+            </div>
+          </div>
         </div>
       </div>
     </template>
     <template v-slot:footer>
-      <button class="btn btn--default" @click="onClose">
-        <i class="icofont-ui-close"></i> Đóng
-      </button>
+      <div class="footer-button">
+        <button id="btn-save" class="btn btn--default" @click="onSave">
+          <i class="icofont-check"></i> Lưu
+        </button>
+        <button class="btn dialog__button--cancel" @click="$emit('onClose')">
+          <i class="icofont-ui-close"></i> Đóng
+        </button>
+      </div>
     </template>
   </m-dialog>
-  <event-comment v-if="commentSelected!=null" v-model:comment="commentSelected" :fullName="fullNameComment"></event-comment>
 </template>
 <script>
-import EventComment from './EventComment.vue'
+import ClassicEditor from "@ckeditor/ckeditor5-build-classic";
+import Enum from "@/scripts/enum";
 export default {
   name: "EventDetail",
-  components: {EventComment},
-  emits: ["onCloseDetail","onRegisterFromDetail","afterCancelRegisterSuccess"],
-  props: ["eventItem"],
-  created() {
-    console.log(this.eventItem);
-    var eventDate = new Date(this.eventItem.EventDate);
-    if(eventDate && eventDate< new Date()){
-      this.eventOutTime = true;
-    }
-    this.eventDetail = this.eventItem;
-    this.loadRegisters();
-  },
+  components: {},
+  props: [],
+  emits: ["onClose"],
+  created() {},
   methods: {
-    loadRegisters() {
-      // Lấy danh sách đăng ký:
-      this.api({
-        url: "/api/v1/EventDetails/registers?eventId=" + this.eventItem.EventId,
-        method: "GET",
-      }).then((res) => {
-        this.registers = res;
-      });
+    onSave() {
+      this.isValid = this.doValidate();
+      if (!this.isValid) return;
+      else {
+        this.api({
+          url: "/api/v1/events",
+          data: this.event,
+          method: "POST",
+        }).then(() => {
+          this.$emit("onAddSuccess");
+        });
+      }
     },
-    onClose() {
-      this.$emit("onCloseDetail");
+    setValidOnInputRequired(isValid) {
+      this.isValid = isValid;
     },
-    onRegister(){
-      this.$emit("onCloseDetail");
-      this.$emit("onRegisterFromDetail",this.eventItem);
+    doValidate() {
+      this.validated = true;
+      if (!this.event.EventName) {
+        this.commonJs.showMessenger({
+          title: "Dữ liệu không hợp lệ",
+          msg: "Tên sự kiện không được phép trống, vui lòng kiểm tra lại.",
+          type: Enum.MsgType.Error,
+        });
+        return false;
+      }else{
+        return true;
+      }
     },
-    onCancelRegister(register) {
-      var me = this;
-      this.commonJs.showConfirm(
-        `Bạn có chắc chắn muốn hủy đăng ký ${register.FullName} tham gia sự kiện này?`,
-        () => {
-          this.api({
-            url: `/api/v1/EventDetails/${register.EventDetailId}`,
-            method: "DELETE",
-          }).then((res) => {
-            console.log(res);
-            this.eventDetail.TotalAccompanying-=register.NumberAccompanying;
-            this.eventDetail.TotalMember-=1;
-            this.loadRegisters();
-            me.$emit("afterCancelRegisterSuccess", register);
-          });
-        }
-      );
+    /**
+     * Hiển thị form nhập nội dung sự kiện
+     * Author: NVMANH (11/10/2022)
+     */
+    onShowEditorContent() {
+      this.showContenEditor = true;
+      this.eventContentOrginal = this.event.EventContent;
+    },
+
+    /**
+     * Kiểm tra sự thay đổi của nội dung trước khi đóng form
+     * Author: NVMANH (11/10/2022)
+     */
+    onCloseEditorContent() {
+      if (this.eventContentOrginal != this.event.EventContent) {
+        this.commonJs.showConfirm(
+          "Nội dung sự kiện đã bị thay đổi, bạn có chắc chắn muốn hủy thay đổi?",
+          () => {
+            this.eventContentOrginal = this.event.EventContent;
+            this.showContenEditor = false;
+          }
+        );
+      } else {
+        this.showContenEditor = false;
+      }
     },
   },
   data() {
     return {
-      registers: [],
-      eventDetail: {},
-      commentSelected:null,
-      fullNameComment: null,
-      eventOutTime: false
+      isValid: true,
+      validated: false,
+      event: {},
+      editor: ClassicEditor,
+      editorData: "<p>Content of the editor.</p>",
+      editorConfig: {
+        // The configuration of the editor.
+        language: "vn",
+        toolbar: {
+          items: [
+            "heading",
+            "|",
+            "bold",
+            "italic",
+            "|",
+            "link",
+            "|",
+            "bulletedList",
+            "numberedList",
+            "|",
+            "insertTable",
+            "|",
+            // "uploadImage",
+            "blockQuote",
+            "|",
+            "undo",
+            "redo",
+          ],
+        },
+      },
+      showContenEditor: false,
+      eventContentOrginal: "",
     };
   },
 };
 </script>
 <style scoped>
-.register__header {
-  border: 1px solid #dedede;
-  border-radius: 4px;
-  padding: 10px;
-  margin-bottom: 10px;
+.ck.ck-editor__main > .ck-editor__editable {
+  height: 500px !important;
 }
-.register__list {
+.event {
+  position: relative;
   max-width: 400px;
-  height: 250px;
-  overflow-y: auto;
+  width: 100%;
   box-sizing: border-box;
 }
+.event--info {
+  display: grid;
+  row-gap: 16px;
+  width: 100%;
+  border-radius: 4px;
+  box-sizing: border-box;
+  clear: both;
+}
 
-.show-note {
+.event--content {
+  width: 100%;
+  float: left;
+  box-sizing: border-box;
+  text-align: right;
+  padding: 24px;
+  box-sizing: border-box;
+}
+.content-editor {
+  max-width: 100%;
+  padding: 24px 30px;
+}
+.footer-button {
+  display: flex;
+}
+#btn-save {
+  display: flex;
+  align-items: center;
+  order: 1;
+  margin-left: 10px;
+}
+#btn-save i {
+  font-size: 24px;
+}
+#show-content {
   color: #3395ff;
   cursor: pointer;
-  white-space: nowrap;
-  overflow: hidden;
-  text-overflow: ellipsis;
-  max-width: 100px;
-  margin-left: 4px;
+  border: unset;
+  background: none;
 }
 
-.show-note:hover {
+#show-content:hover {
   text-decoration: underline;
 }
-
-.btn--table {
-  height: 30px;
-}
-.cell--action {
+.editor__button {
+  width: 100%;
+  margin-top: 10px;
   display: flex;
-  flex-direction: column;
+  justify-content: flex-end;
+}
+#save-editor {
+  display: flex;
+  align-items: center;
+}
+#save-editor i {
+  font-size: 24px;
+}
+.content-editor {
+  position: fixed;
+  top: 0;
+  left: 0;
+  bottom: 0;
+  right: 0;
+  background-color: #0000003c;
+  display: flex;
   align-items: center;
   justify-content: center;
 }
-
-.--mini {
-  font-size: 11px;
+.editor {
+  max-width: 100%;
+  position: relative;
+  padding: 24px;
+  background-color: #fff;
+  border-radius: 4px;
 }
-
-.el-table__header button {
-  height: 30px !important;
+button.close-editor {
+  position: absolute;
+  top: -10px;
+  right: -10px;
+  border-radius: 50%;
+  width: 30px;
+  height: 30px;
+  font-size: 24px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  color: #ff0000;
+  border-color: #ff0000;
+  outline: none;
+  border-style: solid;
 }
 </style>

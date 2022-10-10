@@ -28,10 +28,16 @@ namespace MS.eContact.Web.Controllers
             _baseService = baseService;
         }
 
+
         [HttpGet("contact-no-register")]
         public async Task<IActionResult> GetContactNotYetRegisterEvent(int eventId)
         {
             return Ok( await _repository.GetContactNotYetRegisterEventByEventId(eventId));
+        }
+
+        public override int Post([FromBody] Event entity)
+        {
+            return _repository.Add(entity);
         }
     }
 }

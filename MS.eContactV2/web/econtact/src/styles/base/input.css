@@ -29,3 +29,7 @@ input:focus {
     color: #fff;
     font-weight: 700;
 }
+
+.input--invalid {
+    border: 1px solid #ff0000 !important
+}

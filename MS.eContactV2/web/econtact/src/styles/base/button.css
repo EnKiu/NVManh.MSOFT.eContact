@@ -27,6 +27,11 @@
     color: #fff !important;
 }
 
+.dialog__button--cancel:hover,
+.dialog__button--cancel:focus {
+    background-color: #b80000 !important;
+}
+
 .btn:hover {
     background-color: #3395FF;
 }

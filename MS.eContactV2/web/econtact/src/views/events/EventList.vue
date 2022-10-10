@@ -1,6 +1,10 @@
 <template>
   <div class="container">
-    <div class="toolbar"></div>
+    <div class="toolbar">
+      <button class="btn btn--default" @click="addNewEvent"><i class="icofont-ui-add"></i> Thêm sự kiện</button>
+    </div>
+
+    <!-- DANH SÁCH SỰ KIỆN -->
     <div class="event-list">
       <event-item
         v-for="(item, index) in events"
@@ -10,6 +14,8 @@
         @onShowList="onShowList(item)"
       ></event-item>
     </div>
+
+    <!-- ĐĂNG KÝ SỰ KIỆN -->
     <event-register
       v-if="showRegister"
       @onClose="showRegister = false"
@@ -18,32 +24,48 @@
       v-model:TotalMember="eventRegister.TotalMember"
       :eventRegister="eventRegister"
     ></event-register>
-    <event-detail
-      v-if="showDetail"
+
+    <!-- DANH SÁCH CHI TIẾT THAM GIA SỰ KIỆN -->
+    <event-detail-list
+      v-if="showDetailList"
       @onCloseDetail="onCloseDetail"
       @onRegisterFromDetail="onRegister"
       @afterCancelRegisterSuccess="onCancelRegisterSuccess(eventDetail)"
       :eventItem="eventDetailSelected"
+    ></event-detail-list>
+
+    <!-- CHI TIẾT SỰ KIỆN -->
+    <event-detail
+    v-if="showDetail"
+    @onClose="showDetail=false"
+    @onAddSuccess="onAddEventSuccess"
     ></event-detail>
   </div>
 </template>
 <script>
 import EventItem from "./EventItem.vue";
 import EventRegister from "./EventRegister.vue";
-import EventDetail from "./EventDetail.vue";
+import EventDetail from './EventDetail.vue'
+import EventDetailList from "./EventDetailList.vue";
 export default {
   name: "EventList",
-  components: { EventItem, EventRegister, EventDetail },
+  components: { EventItem, EventRegister, EventDetailList,EventDetail },
   emits: [],
   props: [],
   created() {
     this.loadData();
   },
   methods: {
+    addNewEvent(){
+      this.showDetail = true;
+    },
+    onAddEventSuccess(){
+      this.loadData();
+    },
     onShowList(event) {
       console.log(event);
       this.eventDetailSelected = event;
-      this.showDetail = true;
+      this.showDetailList = true;
     },
     onRegister(currentEvent) {
       this.showRegister = true;
@@ -56,13 +78,13 @@ export default {
       this.showRegister = false;
       // Hiển thị form chi tiết danh sách đăng ký
       this.eventDetailSelected = eventRegister;
-      this.showDetail = true;
+      this.showDetailList = true;
     },
     onCancelRegisterSuccess() {
       this.loadData();
     },
     onCloseDetail() {
-      this.showDetail = false;
+      this.showDetailList = false;
     },
 
     loadData() {
@@ -84,6 +106,7 @@ export default {
       eventDetailSelected: null,
       showDetail: false,
       showRegister: false,
+      showDetailList:false
     };
   },
 };
@@ -91,5 +114,16 @@ export default {
 <style scoped>
 .container {
   box-sizing: border-box;
+}
+
+.toolbar{
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+}
+
+.event-list{
+  margin-top: 10px;
 }
 </style>

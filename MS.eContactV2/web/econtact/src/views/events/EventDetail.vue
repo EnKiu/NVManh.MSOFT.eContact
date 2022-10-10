@@ -96,6 +96,7 @@ export default {
   methods: {
     onSave() {
       this.isValid = this.doValidate();
+      console.log(`Ngày bắt đầu: `, this.event.StartTime);
       if (!this.isValid) return;
       else {
         this.api({

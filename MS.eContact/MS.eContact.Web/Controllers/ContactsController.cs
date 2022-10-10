@@ -32,7 +32,8 @@ namespace MS.eContact.Web.Controllers
             _baseService = baseService;
         }
 
-        public override async Task<IActionResult> Put(string id)
+        [HttpPut]
+        public async Task<IActionResult> Put(string id)
         {
             var httpRequest = HttpContext.Request;
             Guid? contactId;
@@ -120,7 +121,7 @@ namespace MS.eContact.Web.Controllers
                 contact.AvatarLink = await _fileTransfer.UploadFile(newFile, "avatars", contact.ContactId.ToString());
             }
             // Cập nhật các thông tin khác:
-            var rowAffects = _repository.Update(contact, id);
+            var rowAffects = await _repository.UpdateAsync(contact, id);
             if (rowAffects > 0)
                 return Ok(contact);
             else

@@ -39,7 +39,7 @@ namespace MS.Infrastructure.Data
         public override int Add(Event entity)
         {
             // Cập nhật thông tin ngày bắt đầu:
-            entity.EventDate = entity.StartTime;
+            entity.EventDate = (DateTime)entity.StartTime;
 
             var rowAffects = 0;
             _unitOfWork.Connection.Open();
@@ -60,7 +60,7 @@ namespace MS.Infrastructure.Data
         public async override Task<int> AddAsync(Event entity)
         {
             // Cập nhật thông tin ngày bắt đầu:
-            entity.EventDate = entity.StartTime;
+            entity.EventDate = (DateTime)entity.StartTime;
 
             var rowAffects = 0;
             _unitOfWork.Connection.Open();

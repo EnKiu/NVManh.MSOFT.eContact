@@ -1,7 +1,9 @@
 <template>
   <div class="container">
     <div class="toolbar">
-      <button class="btn btn--default" @click="addNewEvent"><i class="icofont-ui-add"></i> Thêm sự kiện</button>
+      <button class="btn btn--default" @click="addNewEvent">
+        <i class="icofont-ui-add"></i> Thêm sự kiện
+      </button>
     </div>
 
     <!-- DANH SÁCH SỰ KIỆN -->
@@ -12,6 +14,7 @@
         :item="item"
         @onRegister="onRegister(item)"
         @onShowList="onShowList(item)"
+        @onShowContentDetail="onShowContentDetail(item)"
       ></event-item>
     </div>
 
@@ -36,30 +39,43 @@
 
     <!-- CHI TIẾT SỰ KIỆN -->
     <event-detail
-    v-if="showDetail"
-    @onClose="showDetail=false"
-    @onAddSuccess="onAddEventSuccess"
+      v-if="showDetail"
+      @onClose="showDetail = false"
+      @onAddSuccess="onAddEventSuccess"
     ></event-detail>
+
+    <EventItemContent
+      v-if="showContentDetail"
+      :eventSelected="eventDetailSelected"
+      @onCloseEventDetailContent="showContentDetail = false"
+    ></EventItemContent>
   </div>
 </template>
 <script>
 import EventItem from "./EventItem.vue";
 import EventRegister from "./EventRegister.vue";
-import EventDetail from './EventDetail.vue'
+import EventDetail from "./EventDetail.vue";
 import EventDetailList from "./EventDetailList.vue";
+import EventItemContent from "./EventItemContent.vue";
 export default {
   name: "EventList",
-  components: { EventItem, EventRegister, EventDetailList,EventDetail },
+  components: {
+    EventItem,
+    EventRegister,
+    EventDetailList,
+    EventDetail,
+    EventItemContent,
+  },
   emits: [],
   props: [],
   created() {
     this.loadData();
   },
   methods: {
-    addNewEvent(){
+    addNewEvent() {
       this.showDetail = true;
     },
-    onAddEventSuccess(){
+    onAddEventSuccess() {
       this.loadData();
     },
     onShowList(event) {
@@ -70,6 +86,10 @@ export default {
     onRegister(currentEvent) {
       this.showRegister = true;
       this.eventRegister = currentEvent;
+    },
+    onShowContentDetail(event) {
+      this.showContentDetail = true;
+      this.eventDetailSelected = event;
     },
     async onCloseRegister(contactRegister, eventRegister) {
       // Cập nhật lại thông tin event đăng ký:
@@ -106,7 +126,8 @@ export default {
       eventDetailSelected: null,
       showDetail: false,
       showRegister: false,
-      showDetailList:false
+      showDetailList: false,
+      showContentDetail: false,
     };
   },
 };
@@ -116,14 +137,14 @@ export default {
   box-sizing: border-box;
 }
 
-.toolbar{
+.toolbar {
   position: relative;
   display: flex;
   align-items: center;
   justify-content: flex-end;
 }
 
-.event-list{
+.event-list {
   margin-top: 10px;
 }
 </style>

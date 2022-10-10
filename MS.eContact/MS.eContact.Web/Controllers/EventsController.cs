@@ -16,16 +16,16 @@ namespace MS.eContact.Web.Controllers
         IConfiguration _configuration;
         readonly IFileTransfer _fileTransfer;
         private readonly IWebHostEnvironment _env;
-        IBaseService<Event> _baseService;
+        IEventService _service;
 
-        public EventsController(IConfiguration configuration, IWebHostEnvironment env, IFileTransfer fileTransfer, IEventRepository repository, IBaseService<Event> baseService) : base(repository,baseService)
+        public EventsController(IConfiguration configuration, IWebHostEnvironment env, IFileTransfer fileTransfer, IEventRepository repository, IEventService service) : base(repository, service)
         {
             _configuration = configuration;
             _env = env;
             _repository = repository;
             _fileTransfer = fileTransfer;
             _repository = repository;
-            _baseService = baseService;
+            _service = service;
         }
 
 
@@ -35,9 +35,14 @@ namespace MS.eContact.Web.Controllers
             return Ok( await _repository.GetContactNotYetRegisterEventByEventId(eventId));
         }
 
-        public override int Post([FromBody] Event entity)
+        public async override Task<IActionResult> Post([FromBody] Event entity)
         {
-            return _repository.Add(entity);
+            var res = await _service.AddAsync(entity);
+            if (res > 0)
+                return StatusCode(201, res);
+            else
+                return StatusCode(500, res);
         }
+
     }
 }

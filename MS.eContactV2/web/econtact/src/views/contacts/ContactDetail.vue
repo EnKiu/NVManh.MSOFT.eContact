@@ -178,9 +178,9 @@ export default {
       formData.append("contact", JSON.stringify(this.contact));
 
       var baseUrl = process.env.VUE_APP_BASE_URL;
-      var contactId = this.contact.ContactId;
+      // var contactId = this.contact.ContactId;
       // gọi api save dữ liệu:
-      fetch(baseUrl + "/api/v1/contacts/" + contactId, {
+      fetch(baseUrl + "/api/v1/contacts", {
         method: "PUT",
         // headers: {
         //   "Content-Type": "application/json",

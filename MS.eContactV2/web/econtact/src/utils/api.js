@@ -56,14 +56,23 @@ const apiCall = ({ url, data, method }) =>
                         if (response.errors.ValidErrors) {
                             commonJs.showErrorMessenger("Dữ liệu không hợp lệ.", response.errors.ValidErrors)
                         } else {
-                            console.log(res.response.data.errors);
-                            commonJs.showErrorMessenger("Dữ liệu không hợp lệ.", "Hệ thống không thể xử lý dữ liệu, vui lòng thử lại hoặc liên hệ MISA để được trợ giúp.");
+                            var error = response.errors;
+                            var errorsMsg = [];
+                            for (const key in error) {
+                                if (Object.hasOwnProperty.call(error, key)) {
+                                    const errorsArray = error[key];
+                                    for (const msg of errorsArray) {
+                                        errorsMsg.push(msg);
+                                    }
+                                }
+                            }
+                            commonJs.showErrorMessenger("Dữ liệu không hợp lệ.", errorsMsg);
                         }
                         reject(response);
                     } else {
                         if (statusCode == 500) {
                             res.devMsg = res.message;
-                            res.message = "Có lỗi xảy ra khi thực hiện xử lý yêu cầu, vui lòng thử lại hoặc liên hệ MISA để được trợ giúp."
+                            res.message = "Có lỗi xảy ra khi thực hiện xử lý yêu cầu, vui lòng thử lại hoặc liên hệ Quản trị viên để được trợ giúp."
                             commonJs.showErrorMessenger("Lỗi máy chủ", res.message)
 
                         }

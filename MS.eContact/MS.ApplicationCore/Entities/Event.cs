@@ -10,8 +10,9 @@ namespace MS.ApplicationCore.Entities
         public string EventName { get; set; }
         public string EventContent { get; set; }
         public DateTime EventDate { get; set; }
-        public DateTime StartTime { get; set; }
-        public DateTime EndTime { get; set; }
+        public DateTime? StartTime { get; set; }
+        public DateTime? EndTime { get; set; }
+        public DateTime? ExpireRegisterDate { get; set; }
         public string EventPlace { get; set; }
         public string EventAddress { get; set; }
         public decimal Spends { get; set; }

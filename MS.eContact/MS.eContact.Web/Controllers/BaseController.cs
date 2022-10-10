@@ -3,6 +3,7 @@ using MS.ApplicationCore.Interfaces;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Net;
 using System.Threading.Tasks;
 
 // For more information on enabling Web API for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
@@ -22,31 +23,39 @@ namespace MS.eContact.Web.Controllers
         }
         // GET: api/<BaseController>
         [HttpGet]
-        public IEnumerable<TEntity> Get()
+        public IActionResult Get()
         {
-            return _repository.All();
+            var data = _repository.All();
+            return Ok(data);
         }
 
         // GET api/<BaseController>/5
         [HttpGet("{id}")]
-        public string Get(int id)
+        public IActionResult Get(string id)
         {
-            return "value";
+            return Ok(_repository.Find(id));
         }
 
         // POST api/<BaseController>
         [HttpPost]
-        public virtual int Post([FromBody] TEntity entity)
+        public async virtual Task<IActionResult> Post([FromBody] TEntity entity)
         {
-           return _baseService.Add(entity);
+            var res = await _baseService.AddAsync(entity);
+            if (res > 0)
+                return Ok();
+            else
+                return StatusCode((int)HttpStatusCode.InternalServerError, res);
         }
 
         // PUT api/<BaseController>/5
         [HttpPut("{id}")]
-        public virtual async Task<IActionResult> Put(string id)
+        public virtual async Task<IActionResult> Put(string id, [FromBody] TEntity entity)
         {
-           
-            return await Task.FromResult(Ok());
+            var res = await _baseService.UpdateAsync(entity,id);
+            if (res > 0)
+                return Ok();
+            else
+                return StatusCode((int)HttpStatusCode.InternalServerError, res);
         }
 
         // DELETE api/<BaseController>/5

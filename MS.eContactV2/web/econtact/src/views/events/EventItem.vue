@@ -6,15 +6,11 @@
       </div>
     </div>
     <div class="event-info event__status">
-      <span
-        v-if="timeLeftInfo != null && item.IsCancel == false"
-        class="time--left"
-        >Đăng ký kết thúc sau
+      <span v-if="timeLeftInfo != null && item.IsCancel == false" class="time--left"
+        >Hạn đăng ký:
         <span class="time--left-text">{{ timeLeftInfo }}</span></span
       >
-      <span
-        v-if="timeLeftInfo == null && item.IsCancel == false"
-        class="time--ended"
+      <span v-if="timeLeftInfo == null && item.IsCancel == false" class="time--ended"
         >Đã kết thúc</span
       >
       <span v-if="item.IsCancel == true" class="--cancel">Đã hủy bỏ</span>
@@ -24,9 +20,7 @@
       <div class="event__text">{{ eventDateFormat }}</div>
     </div>
     <div class="event-info event__time">
-      <div class="event__label">
-        <i class="icofont-ui-alarm"></i> Thời gian bắt đầu:
-      </div>
+      <div class="event__label"><i class="icofont-ui-alarm"></i> Thời gian bắt đầu:</div>
       <div class="event__text">
         {{ timeStartFormat }}
       </div>
@@ -40,12 +34,11 @@
       <div class="event__text">{{ moneyFormat }}</div>
     </div>
     <div class="event-info event__content">
-      {{ item.EventContent }}
+      <button class="link--show-content" @click="onShowContentDetail">
+        <i class="icofont-swoosh-right"></i>Xem nội dung sự kiện
+      </button>
     </div>
-    <div
-      v-if="timeLeftInfo != null && item.IsCancel == false"
-      class="event__button"
-    >
+    <div v-if="timeLeftInfo != null && item.IsCancel == false" class="event__button">
       <button class="btn btn--default" @click="onRegister">
         <div>Đăng ký tham gia ngay</div>
         <div>
@@ -56,22 +49,23 @@
     </div>
 
     <div v-if="item.IsCancel == false" class="event__joinned-number">
-      <div v-if="(item.TotalMember) > 0">
+      <div v-if="item.TotalMember > 0">
         Có <b>{{ item.TotalMember }}</b> thành viên đăng ký.
         <i class="icofont-swoosh-right"></i>
-        <a class="show-list-registers" @click="onShowList"
-          >Xem danh sách chi tiết</a
-        >
+        <a class="show-list-registers" @click="onShowList">Xem danh sách chi tiết</a>
       </div>
       <span v-else>Không có ai tham gia.</span>
     </div>
   </div>
+  
 </template>
 <script>
+
 export default {
   name: "EventItem",
+  components:{},
   props: ["item"],
-  emits: ["onRegister", "onShowList"],
+  emits: ["onRegister", "onShowList","onShowContentDetail"],
   computed: {
     eventDateFormat: function () {
       var eventDate = this.item.EventDate;
@@ -109,6 +103,9 @@ export default {
     },
     onRegister() {
       this.$emit("onRegister", this.item);
+    },
+    onShowContentDetail(){
+      this.$emit("onShowContentDetail", this.item);
     },
     interValTime() {
       this.calculatorTimeInfo();
@@ -217,6 +214,7 @@ export default {
 .event + .event {
   margin-top: 10px;
 }
+
 .event-info {
   display: flex;
   align-items: center;
@@ -268,7 +266,18 @@ export default {
   cursor: pointer;
 }
 
-.show-list-registers:hover {
+.show-list-registers:hover,
+.show-list-registers:focus,
+.link--show-content:hover,
+.link--show-content:focus {
   text-decoration: underline;
+}
+
+.link--show-content {
+  border: unset;
+  background: unset;
+  color: #3395ff;
+  font-weight: 700;
+  cursor: pointer;
 }
 </style>

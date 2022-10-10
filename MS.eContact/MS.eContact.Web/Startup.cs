@@ -11,6 +11,7 @@ using Microsoft.OpenApi.Models;
 using MS.ApplicationCore.Interfaces;
 using MS.ApplicationCore.Services;
 using MS.ApplicationCore.Utilities;
+using MS.eContact.Web.Middware;
 using MS.Infrastructure;
 using MS.Infrastructure.Data;
 using MS.Infrastructure.UnitOfWork;
@@ -62,6 +63,7 @@ namespace MS.eContact.Web
             services.AddScoped(typeof(IBaseService<>), typeof(BaseService<>));
             services.AddScoped<IFileTransfer, FileTransfer>();
             services.AddScoped<IEventRepository, EventRepository>();
+            services.AddScoped<IEventService, EventService>();
             services.AddScoped<IEventDetailService, EventDetailService>();
             services.AddScoped<IEventDetailRepository, EventDetailRepository>();
         }
@@ -76,6 +78,7 @@ namespace MS.eContact.Web
                 app.UseSwaggerUI(c => c.SwaggerEndpoint("/swagger/v1/swagger.json", "MS.eContact.Web v1"));
             }
             app.UseCors(o => o.AllowAnyHeader().AllowAnyMethod().AllowAnyOrigin());
+            app.UseMiddleware<ErrorHandlerMiddleware>();
             app.UseHttpsRedirection();
 
             app.UseRouting();

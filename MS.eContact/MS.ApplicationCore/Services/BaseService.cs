@@ -36,6 +36,7 @@ namespace MS.ApplicationCore.Services
 
         public async Task<int> AddAsync(TEntity entity)
         {
+            ValidateObject(entity);
             if (Errors.Count == 0)
                 return await _repository.AddAsync(entity);
             else
@@ -110,6 +111,10 @@ namespace MS.ApplicationCore.Services
         }
 
         protected virtual void ValidateObject(TEntity entity)
+        {
+
+        }
+        protected virtual void ValidateObjectCustom(TEntity entity)
         {
 
         }

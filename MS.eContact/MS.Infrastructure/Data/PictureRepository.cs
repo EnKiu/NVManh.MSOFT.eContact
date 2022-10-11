@@ -19,10 +19,10 @@ namespace MS.Infrastructure.Data
         public async override Task<int> AddAsync(Picture entity)
         {
             var parameters = new DynamicParameters();
-            parameters.Add("@PictureId", entity.PictureId);
+            parameters.Add("@PictureId", entity.PictureId.ToString());
             parameters.Add("@Description", entity.Description);
             parameters.Add("@UrlPath", entity.UrlPath);
-            parameters.Add("@AlbumId", entity.AlbumId);
+            parameters.Add("@AlbumId", entity.AlbumId.ToString());
             var rowAffects = await _unitOfWork.Connection.ExecuteAsync($"Proc_Picture_Insert", param: parameters, transaction: _unitOfWork.Transaction, commandType: System.Data.CommandType.StoredProcedure);
             return rowAffects;
         }

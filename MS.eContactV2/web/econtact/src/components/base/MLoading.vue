@@ -1,14 +1,17 @@
 <template>
   <div class="loading">
     <div class="loading-wrapper">
-      <div class="loading__icon"></div>
+      <div class="loading__icon"><i class="icofont-spinner-alt-1"></i></div>
       <div class="loading__text">Đang xử lý, vui lòng đợi...</div>
     </div>
   </div>
 </template>
 <style scoped>
-.loading {
-  position: absolute;
+/* .loading {
+  position: fixed;
+  display: flex;
+  align-items: center;
+  justify-content: center;
   top: 0;
   left: 0;
   right: 0;
@@ -18,8 +21,8 @@
 }
 
 .loading-wrapper {
-  width: 100%;
-  height: 100%;
+  width: 200px;
+  height: 200px;
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -27,15 +30,18 @@
 }
 
 .loading__icon {
-  width: 24px;
-  height: 24px;
-  border-top: 8px solid #0062CC;
-  border-right: 8px solid #0062CC;
-  border-left: 8px solid #ffffff;
-  border-bottom: 8px solid #ffffff;
-  border-radius: 50%;
-  -webkit-animation: spin 500ms linear infinite;
-  animation: spin 500ms linear infinite;
+  width: 50px;
+  height: 50px;
+  padding-top: 1.1px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 42px;
+  background: -webkit-linear-gradient(rgb(255, 128, 0), #0084ff);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  animation: spin 1000ms infinite linear;
+  -webkit-animation: spin 1000ms infinite linear;
 }
 
 .loading__text {
@@ -59,5 +65,5 @@
   100% {
     transform: rotate(360deg);
   }
-}
+} */
 </style>

@@ -46,7 +46,7 @@ namespace MS.Infrastructure.Data
             _unitOfWork.Begin();
             try
             {
-                rowAffects = _unitOfWork.Connection.Execute($"Proc_Event_InsertEvent", entity, commandType: System.Data.CommandType.StoredProcedure);
+                rowAffects = _unitOfWork.Connection.Execute($"Proc_Event_InsertEvent", entity, transaction: _unitOfWork.Transaction, commandType: System.Data.CommandType.StoredProcedure);
                 _unitOfWork.Commit();
             }
             catch (Exception)
@@ -67,7 +67,7 @@ namespace MS.Infrastructure.Data
             _unitOfWork.Begin();
             try
             {
-                rowAffects = await _unitOfWork.Connection.ExecuteAsync($"Proc_Event_InsertEvent", entity, commandType: System.Data.CommandType.StoredProcedure);
+                rowAffects = await _unitOfWork.Connection.ExecuteAsync($"Proc_Event_InsertEvent", entity, transaction: _unitOfWork.Transaction, commandType: System.Data.CommandType.StoredProcedure);
                 _unitOfWork.Commit();
             }
             catch (Exception)

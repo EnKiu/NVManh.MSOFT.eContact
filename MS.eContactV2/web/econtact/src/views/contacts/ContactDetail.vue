@@ -3,7 +3,11 @@
     <template v-slot:content>
       <div class="contact-info">
         <div class="contact--general">
-          <div class="contact__avatar" :class="{'edit-able':formMode!=3}" @click="avatarOnClick">
+          <div
+            class="contact__avatar"
+            :class="{ 'edit-able': formMode != 3 }"
+            @click="avatarOnClick"
+          >
             <img :src="contact.AvatarFullPath" alt="" />
           </div>
           <div class="contact__info">
@@ -105,7 +109,7 @@
         Hủy bỏ
       </button>
       <button class="btn btn--default" v-if="formMode == 3" @click="onChangeEditMode">
-        Sửa thông tin
+        <i class="icofont-edit-alt"></i> Sửa thông tin
       </button>
       <button
         v-if="formMode != 3"
@@ -132,14 +136,12 @@
     @change="fileAvatarOnChange"
     id="fileAvatar"
   />
-  <div v-if="loading" class="loading">
-    <div class="loading__icon"></div>
-  </div>
 </template>
 <script>
 export default {
   name: "BaseDialog",
-  components: { },
+  components: {},
+  emits:["afterSave","update:formMode"],
   props: {
     title: {
       type: String,
@@ -161,12 +163,10 @@ export default {
   },
   created() {
     this.contact = this.contactInput;
-    console.log(this.contact);
     this.originalContact = JSON.stringify(this.contactInput);
   },
   methods: {
     onSubmit() {
-      this.loading = true;
       var formData = new FormData();
 
       var file = this.$refs.fileAvatar.files[0];
@@ -177,27 +177,37 @@ export default {
       formData.append("contactId", this.contact.ContactId);
       formData.append("contact", JSON.stringify(this.contact));
 
-      var baseUrl = process.env.VUE_APP_BASE_URL;
+      // var baseUrl = process.env.VUE_APP_BASE_URL;
       // var contactId = this.contact.ContactId;
       // gọi api save dữ liệu:
-      fetch(baseUrl + "/api/v1/contacts", {
+      this.api({
+        url: "/api/v1/contacts",
+        data: formData,
         method: "PUT",
-        // headers: {
-        //   "Content-Type": "application/json",
-        // },
-        body: formData,
       })
-        .then((res) => res.json())
         .then((res) => {
-          console.log(res);
           this.$emit("afterSave", res);
-          this.loading = false;
         })
         .catch((res) => {
           console.log(res);
           this.$emit("afterSave", res);
-          this.loading = false;
         });
+      // fetch(baseUrl + "/api/v1/contacts", {
+      //   method: "PUT",
+      //   // headers: {
+      //   //   "Content-Type": "application/json",
+      //   // },
+      //   body: formData,
+      // })
+      //   .then((res) => res.json())
+      //   .then((res) => {
+      //     console.log(res);
+      //     this.$emit("afterSave", res);
+      //   })
+      //   .catch((res) => {
+      //     console.log(res);
+      //     this.$emit("afterSave", res);
+      //   });
     },
     onChangeEditMode() {
       this.$emit("update:formMode", this.Enum.FormMode.UPDATE);
@@ -235,7 +245,6 @@ export default {
         Company: "Công ty cổ phần MISA",
         Address: "SN 11A, ngõ 109 Lê Lợi, TP Bắc Giang",
       },
-      loading: false,
     };
   },
 };
@@ -360,7 +369,7 @@ export default {
 button + button {
   margin-left: 16px;
 }
-.edit-able{
+.edit-able {
   border: 1px solid #0094ff;
   cursor: pointer;
   pointer-events: all !important;

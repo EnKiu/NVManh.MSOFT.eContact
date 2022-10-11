@@ -1,10 +1,10 @@
 ﻿using Microsoft.Extensions.Configuration;
-using MySql.Data.MySqlClient;
 using System;
 using System.Collections.Generic;
 using System.Data;
 using System.Text;
 using MS.ApplicationCore.Interfaces;
+using MySqlConnector;
 
 namespace MS.Infrastructure.UnitOfWork
 {
@@ -57,6 +57,10 @@ namespace MS.Infrastructure.UnitOfWork
             if (_transaction != null)
                 _transaction.Dispose();
             _transaction = null;
+            if(_connection.State == ConnectionState.Open)
+            {
+                _connection.Close();
+            }
         }
     }
 }

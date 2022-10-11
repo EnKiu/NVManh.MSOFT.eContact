@@ -23,17 +23,18 @@ namespace MS.eContact.Web.Controllers
         }
         // GET: api/<BaseController>
         [HttpGet]
-        public IActionResult Get()
+        public async Task<IActionResult> Get()
         {
-            var data = _repository.All();
+            var data = await _repository.AllAsync();
             return Ok(data);
         }
 
         // GET api/<BaseController>/5
         [HttpGet("{id}")]
-        public IActionResult Get(string id)
+        public async virtual Task<IActionResult> Get(string id)
         {
-            return Ok(_repository.Find(id));
+            var data = await _repository.FindAsync(id);
+            return Ok(data);
         }
 
         // POST api/<BaseController>

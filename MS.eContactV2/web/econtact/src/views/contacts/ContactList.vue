@@ -44,9 +44,6 @@
       </table>
     </div>
   </div>
-  <div v-if="loading" class="loading">
-    <div class="loading__icon"></div>
-  </div>
   <contact-detail
     v-if="detailFormMode != null"
     v-model:formMode="detailFormMode"
@@ -72,18 +69,15 @@ export default {
   methods: {
     loadData() {
       // Lấy danh sách liên hệ
-      this.loading = true;
-      var baseUrl = process.env.VUE_APP_BASE_URL;
-      fetch(baseUrl + "/api/v1/contacts")
-        .then((res) => res.json())
+       this.api({
+        url: "/api/v1/contacts"
+      })
         .then((res) => {
-          this.contacts = res;
+           this.contacts = res;
           this.contactsFilter = res;
-          this.loading = false;
         })
         .catch((res) => {
           console.log(res);
-          this.loading = false;
         });
     },
     /**
@@ -119,7 +113,6 @@ export default {
       contactsFilter: [],
       contacts: [],
       textSearch: "",
-      loading: false,
       detailFormMode: null,
       contactSelected: {},
     };
@@ -169,7 +162,7 @@ export default {
   height: 20px;
   font-size: 16px;
   position: absolute;
-  z-index: 999;
+  z-index: 900;
   background-color: #dedede;
   color: #fff;
   border-radius: 50%;

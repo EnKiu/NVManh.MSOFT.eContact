@@ -6,6 +6,7 @@ using System;
 using System.Collections.Generic;
 using System.Text;
 using System.Threading.Tasks;
+using static Dapper.SqlMapper;
 
 namespace MS.Infrastructure.Data
 {
@@ -15,6 +16,12 @@ namespace MS.Infrastructure.Data
         public AlbumRepository(IUnitOfWork unitOfWork) : base(unitOfWork)
         {
             _unitOfWork = unitOfWork;
+        }
+        public async override Task<IEnumerable<Album>> AllAsync()
+        {
+            var storeName = "Proc_Album_GetAll";
+            var albums = await _unitOfWork.Connection.QueryAsync<Album>(storeName,transaction: _unitOfWork.Transaction, commandType: System.Data.CommandType.StoredProcedure);
+            return albums;
         }
         public async override Task<int> AddAsync(Album entity)
         {
@@ -26,6 +33,14 @@ namespace MS.Infrastructure.Data
             parameters.Add("@AuthId", entity.AuthId);
             var rowAffects = await _unitOfWork.Connection.ExecuteAsync($"Proc_Album_InsertAlbum", param: parameters, transaction: _unitOfWork.Transaction, commandType: System.Data.CommandType.StoredProcedure);
             return rowAffects;
+        }
+
+        public async Task<IEnumerable<Picture>> GetPicturesByAlbumId(Guid albumId)
+        {
+            var parameters = new DynamicParameters();
+            parameters.Add("@p_AlbumId", albumId);
+            var pictures = await _unitOfWork.Connection.QueryAsync<Picture>($"Proc_Picture_GetPicturesByAlbumId", param: parameters, transaction: _unitOfWork.Transaction, commandType: System.Data.CommandType.StoredProcedure);
+            return pictures;
         }
     }
 }

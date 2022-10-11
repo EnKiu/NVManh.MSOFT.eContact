@@ -12,7 +12,7 @@
       </div>
       <div class="toolbar">
         <button id="ADD-PICTURE" class="btn btn--default" @click="onAddPicture">
-          <i class="icofont-ui-add"></i> Thêm ảnh
+          <i class="icofont-image"></i> Thêm ảnh
         </button>
         <input
           hidden
@@ -37,7 +37,7 @@
     </template>
     <template v-slot:footer>
       <button class="btn btn--default" @click="onAddAlbum">
-        <i class="icofont-ui-add"></i> Lưu Album
+        <i class="icofont-verification-check"></i> Lưu Album
       </button>
     </template>
   </m-dialog>
@@ -45,7 +45,7 @@
 <script>
 export default {
   name: "PictureDetail",
-  emits: [],
+  emits: ["onCloseAddNewDialog","afterAddAlbum"],
   props: [],
   computed: {},
   methods: {
@@ -56,7 +56,6 @@ export default {
       if (isValid) {
         var formData = new FormData();
         formData.append("album", JSON.stringify(this.album));
-
         for (let i = 0; i < this.pictures.length; i++) {
           formData.append(`file_${i}`, this.pictures[i]);
         }
@@ -68,6 +67,7 @@ export default {
           })
           .then((res) => {
             console.log(res);
+            this.$emit("afterAddAlbum");
           });
       }
     },

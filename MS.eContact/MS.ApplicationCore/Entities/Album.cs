@@ -18,6 +18,7 @@ namespace MS.ApplicationCore.Entities
         public string? ModifiedBy { get; set; }
         public IFormFileCollection? PictureFiles { get; set; }
         public IList<Picture> Pictures { get; set; }
-
+        public int TotalPictures { get; set; }
+        public int TotalViews { get; set; }
     }
 }

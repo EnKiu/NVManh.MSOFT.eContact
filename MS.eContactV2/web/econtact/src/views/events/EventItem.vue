@@ -208,7 +208,7 @@ export default {
 .event {
   padding: 24px;
   border-radius: 4px;
-  box-shadow: 0 3px 6px #ccc;
+  box-shadow: 0 3px 6px #404040;
 }
 
 .event + .event {

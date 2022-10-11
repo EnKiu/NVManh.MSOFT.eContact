@@ -10,7 +10,7 @@ using System.Threading.Tasks;
 
 namespace MS.Infrastructure.Data
 {
-    public class DapperRepository<TEntity> : IAsyncRepository<TEntity>, IRepository<TEntity> where TEntity: BaseEntity 
+    public class DapperRepository<TEntity> : IAsyncRepository<TEntity>, IRepository<TEntity> where TEntity : BaseEntity
     {
         IUnitOfWork _unitOfWork = null;
         string _tableName = string.Empty;
@@ -27,7 +27,7 @@ namespace MS.Infrastructure.Data
             _unitOfWork.Begin();
             try
             {
-                rowAffects = _unitOfWork.Connection.Execute($"Proc_Insert{_tableName}", entity, commandType: System.Data.CommandType.StoredProcedure);
+                rowAffects = _unitOfWork.Connection.Execute($"Proc_Insert{_tableName}", entity, _unitOfWork.Transaction, commandType: System.Data.CommandType.StoredProcedure);
                 _unitOfWork.Commit();
             }
             catch (Exception ex)
@@ -50,11 +50,15 @@ namespace MS.Infrastructure.Data
         public virtual async Task<int> AddAsync(TEntity entity)
         {
             var rowAffects = 0;
+            if (_unitOfWork.Connection.State == System.Data.ConnectionState.Connecting)
+            {
+                _unitOfWork.Connection.Close();
+            }
             _unitOfWork.Connection.Open();
             _unitOfWork.Begin();
             try
             {
-                rowAffects = await _unitOfWork.Connection.ExecuteAsync($"Proc_Insert{_tableName}", entity, commandType: System.Data.CommandType.StoredProcedure);
+                rowAffects = await _unitOfWork.Connection.ExecuteAsync($"Proc_Insert{_tableName}", entity, _unitOfWork.Transaction, commandType: System.Data.CommandType.StoredProcedure);
                 _unitOfWork.Commit();
             }
             catch (Exception)
@@ -74,7 +78,7 @@ namespace MS.Infrastructure.Data
         #region GET
         public virtual IEnumerable<TEntity> All()
         {
-            return _unitOfWork.Connection.Query<TEntity>($"SELECT * FROM {_tableName}",_unitOfWork.Transaction, commandType: System.Data.CommandType.Text);
+            return _unitOfWork.Connection.Query<TEntity>($"SELECT * FROM {_tableName}", _unitOfWork.Transaction, commandType: System.Data.CommandType.Text);
         }
 
         public virtual async Task<IEnumerable<TEntity>> AllAsync()
@@ -121,7 +125,7 @@ namespace MS.Infrastructure.Data
             _unitOfWork.Begin();
             try
             {
-                rowAffects = _unitOfWork.Connection.Execute($"Proc_Update{_tableName}", entity, commandType: System.Data.CommandType.StoredProcedure);
+                rowAffects = _unitOfWork.Connection.Execute($"Proc_Update{_tableName}", entity, transaction: _unitOfWork.Transaction, commandType: System.Data.CommandType.StoredProcedure);
                 _unitOfWork.Commit();
             }
             catch (Exception)
@@ -139,7 +143,7 @@ namespace MS.Infrastructure.Data
             _unitOfWork.Begin();
             try
             {
-                rowAffects = await _unitOfWork.Connection.ExecuteAsync($"Proc_Update{_tableName}", entity, commandType: System.Data.CommandType.StoredProcedure);
+                rowAffects = await _unitOfWork.Connection.ExecuteAsync($"Proc_Update{_tableName}", entity, transaction: _unitOfWork.Transaction, commandType: System.Data.CommandType.StoredProcedure);
                 _unitOfWork.Commit();
             }
             catch (Exception)
@@ -167,7 +171,7 @@ namespace MS.Infrastructure.Data
             {
                 var parameters = new DynamicParameters();
                 parameters.Add("@Id", key);
-                rowAffects = await _unitOfWork.Connection.ExecuteAsync(sql, parameters, commandType: System.Data.CommandType.Text);
+                rowAffects = await _unitOfWork.Connection.ExecuteAsync(sql, parameters, transaction: _unitOfWork.Transaction, commandType: System.Data.CommandType.Text);
                 _unitOfWork.Commit();
             }
             catch (Exception)

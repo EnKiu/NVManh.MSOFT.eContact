@@ -77,7 +77,7 @@ namespace MS.Infrastructure
             var ext = file.FileName[file.FileName.LastIndexOf('.')..].ToLower();
             var fileNameWithExt = String.Format("{0}{1}", fileName, ext);
             var subPath = String.Format("/{0}/{1}", folderName, fileNameWithExt);
-            var fullPath = $"/{_serverFilePath}/{subPath}";
+            var fullPath = $"/{_serverFilePath}{subPath}";
             // Thực hiện upload file sang server files:
             var uploadUrl = String.Format("{0}{1}", _ftpHost, fullPath);
 
@@ -145,7 +145,8 @@ namespace MS.Infrastructure
         /// CreatedBy: NVMANH (30/08/2022)
         public bool MakeFolderInFileServer(string folderName)
         {
-            var directoryPath = String.Format("{0}/{1}", _ftpHost, folderName);
+            
+            var directoryPath = String.Format("{0}/{1}/{2}", _ftpHost, _serverFilePath, folderName);
             var request = (FtpWebRequest)WebRequest.Create(directoryPath);
 
             // Khởi tạo request mới và tạo thư mục:  

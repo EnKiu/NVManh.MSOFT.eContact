@@ -2,7 +2,7 @@ import { createRouter, createWebHistory } from 'vue-router'
 import ContactList from '../views/contacts/ContactList.vue'
 import EventList from '../views/events/EventList.vue'
 // import NewList from '../views/news/NewList.vue'
-import PictureList from '../views/pictures/PictureList.vue'
+import AlbumList from '../views/pictures/AlbumList.vue'
 const routes = [{
         path: '/',
         name: 'ContactList',
@@ -20,8 +20,8 @@ const routes = [{
     },
     {
         path: '/pictures',
-        name: 'PictureList',
-        component: PictureList
+        name: 'AlbumList',
+        component: AlbumList
     }
 ]
 

@@ -44,9 +44,10 @@ namespace MS.eContact.Web
                     options.SerializerSettings.ContractResolver = new DefaultContractResolver();
                 }); ;
 
-            SqlMapper.AddTypeHandler(new MySqlGuidTypeHandler());
-            SqlMapper.RemoveTypeMap(typeof(Guid));
-            SqlMapper.RemoveTypeMap(typeof(Guid?));
+            //SqlMapper.AddTypeHandler(new MySqlGuidTypeHandler());
+            //SqlMapper.AddTypeHandler(new MySqlGuidWithNullTypeHandler());
+            //SqlMapper.RemoveTypeMap(typeof(Guid));
+            //SqlMapper.RemoveTypeMap(typeof(Guid?));
             services.AddCors();
             //services.AddDbContext<DataContex>(options =>
             //              options.UseMySql(

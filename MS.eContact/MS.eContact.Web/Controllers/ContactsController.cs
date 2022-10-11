@@ -84,7 +84,7 @@ namespace MS.eContact.Web.Controllers
 
                     // Upload file sang server files -> bắt đầu từ 03/10/2022 thì file được upload sang server riêng:
                     // Thông tin server file xem trong appsetting.json:
-                    contact.AvatarLink = await _fileTransfer.UploadFile(file, "avatars", id);
+                    contact.AvatarLink = await _fileTransfer.UploadFile(file, "avatars", contact.ContactId.ToString());
 
                     // Đoạn dưới này là upload file trực tiếp vào máy chủ chứa mã nguồn - bỏ đi từ 03/10/2022
                     //// Đường dẫn chứa file trên máy chủ:

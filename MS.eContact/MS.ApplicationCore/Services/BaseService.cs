@@ -34,7 +34,7 @@ namespace MS.ApplicationCore.Services
                 throw new MISAException(System.Net.HttpStatusCode.BadRequest, Errors);
         }
 
-        public async Task<int> AddAsync(TEntity entity)
+        public virtual async Task<int> AddAsync(TEntity entity)
         {
             ValidateObject(entity);
             if (Errors.Count == 0)

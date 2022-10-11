@@ -1,0 +1,34 @@
+﻿using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Mvc;
+using MS.ApplicationCore.Entities;
+using MS.ApplicationCore.Interfaces;
+using Newtonsoft.Json;
+using System.Linq;
+using System.Threading.Tasks;
+
+namespace MS.eContact.Web.Controllers
+{
+
+    public class AlbumsController : BaseController<Album>
+    {
+        IAlbumService _service;
+        public AlbumsController(IAlbumRepository repository, IAlbumService service) : base(repository, service)
+        {
+            _service= service;
+        }
+
+        public async override Task<IActionResult> Post([FromForm] Album entity)
+        {
+            var httpRequest = HttpContext.Request;
+            Album album = new Album();
+            if (httpRequest.Form["album"].FirstOrDefault() != null)
+            {
+                album = JsonConvert.DeserializeObject<Album>(httpRequest.Form["album"].First());
+            }
+            var files = httpRequest.Form.Files;
+            album.PictureFiles = files;
+            var res = await _service.AddAsync(album);
+            return Ok(res);
+        }
+    }
+}

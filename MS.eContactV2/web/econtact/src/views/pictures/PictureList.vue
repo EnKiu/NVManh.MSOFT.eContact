@@ -5,7 +5,7 @@
        </div>
        <div class="album__list"></div>
     </div>
-    <picture-detail></picture-detail>
+    <picture-detail v-if="showAddNew" @onCloseAddNewDialog="showAddNew = false"></picture-detail>
 </template>
 <script>
 import PictureDetail from './PictureDetail.vue'
@@ -16,12 +16,12 @@ export default {
     emits:[],
     methods: {
         onAddNewAlbum(){
-
+            this.showAddNew = true;
         }
     },
     data() {
         return {
-            showAddNew: false
+            showAddNew: true
         }
     },
 }

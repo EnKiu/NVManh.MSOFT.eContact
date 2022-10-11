@@ -1,4 +1,5 @@
 ﻿using MS.ApplicationCore.Entities;
+using MS.ApplicationCore.Interfaces;
 using MS.Infrastructure.UnitOfWork;
 using System;
 using System.Collections.Generic;

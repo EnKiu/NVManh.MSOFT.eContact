@@ -66,6 +66,11 @@ namespace MS.eContact.Web
             services.AddScoped<IEventService, EventService>();
             services.AddScoped<IEventDetailService, EventDetailService>();
             services.AddScoped<IEventDetailRepository, EventDetailRepository>();
+            services.AddScoped<IPictureService, PictureService>();
+            services.AddScoped<IPictureRepository, PictureRepository>();
+            services.AddScoped<IAlbumService, AlbumService>();
+            services.AddScoped<IAlbumRepository, AlbumRepository>();
+
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.

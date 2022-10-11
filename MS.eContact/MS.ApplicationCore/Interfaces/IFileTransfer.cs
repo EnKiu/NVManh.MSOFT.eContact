@@ -26,5 +26,7 @@ namespace MS.ApplicationCore.Interfaces
         /// <param name="fileName">Tên file sẽ xóa</param>
         /// <returns></returns>
         Task<bool> DeleteFile(string filePath);
+
+        bool MakeFolderInFileServer(string folderName);
     }
 }

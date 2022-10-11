@@ -3,9 +3,9 @@ using System.Collections.Generic;
 using System.Data;
 using System.Text;
 
-namespace MS.Infrastructure.UnitOfWork
+namespace MS.ApplicationCore.Interfaces
 {
-    public interface IUnitOfWorkTest: IDisposable
+    public interface IUnitOfWork: IDisposable
     {
         Guid Id { get; }
         IDbConnection Connection { get; }

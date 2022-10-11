@@ -143,7 +143,7 @@ namespace MS.Infrastructure
         /// <param name="folderName">Tên thư mục muốn tạo</param>
         /// <returns>true- nếu thành công; false - nếu không thành công</returns>
         /// CreatedBy: NVMANH (30/08/2022)
-        private bool MakeFolderInFileServer(string folderName)
+        public bool MakeFolderInFileServer(string folderName)
         {
             var directoryPath = String.Format("{0}/{1}", _ftpHost, folderName);
             var request = (FtpWebRequest)WebRequest.Create(directoryPath);

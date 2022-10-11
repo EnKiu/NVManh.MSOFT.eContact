@@ -4,10 +4,11 @@ using System;
 using System.Collections.Generic;
 using System.Data;
 using System.Text;
+using MS.ApplicationCore.Interfaces;
 
 namespace MS.Infrastructure.UnitOfWork
 {
-    public class UnitOfWork:IUnitOfWork
+    public class UnitOfWork: IUnitOfWork
     {
         IDbConnection _connection = null;
         IDbTransaction _transaction = null;
@@ -21,15 +22,15 @@ namespace MS.Infrastructure.UnitOfWork
             _connection = new MySqlConnection(_configuration.GetConnectionString("DefaultConnection"));
         }
 
-        IDbConnection IUnitOfWork.Connection
+        public IDbConnection Connection
         {
             get { return _connection; }
         }
-        IDbTransaction IUnitOfWork.Transaction
+        public IDbTransaction Transaction
         {
             get { return _transaction; }
         }
-        Guid IUnitOfWork.Id
+        public Guid Id
         {
             get { return _id; }
         }

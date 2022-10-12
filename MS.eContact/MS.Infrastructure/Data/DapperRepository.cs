@@ -24,7 +24,7 @@ namespace MS.Infrastructure.Data
         {
             var rowAffects = 0;
             UnitOfWork.Connection.Open();
-            UnitOfWork.Begin();
+            UnitOfWork.BeginTransaction();
             try
             {
                 rowAffects = UnitOfWork.Connection.Execute($"Proc_Insert{_tableName}", entity, UnitOfWork.Transaction, commandType: System.Data.CommandType.StoredProcedure);
@@ -55,7 +55,7 @@ namespace MS.Infrastructure.Data
                 UnitOfWork.Connection.Close();
             }
             UnitOfWork.Connection.Open();
-            UnitOfWork.Begin();
+            UnitOfWork.BeginTransaction();
             try
             {
                 rowAffects = await UnitOfWork.Connection.ExecuteAsync($"Proc_Insert{_tableName}", entity, UnitOfWork.Transaction, commandType: System.Data.CommandType.StoredProcedure);
@@ -122,7 +122,7 @@ namespace MS.Infrastructure.Data
         {
             var rowAffects = 0;
             UnitOfWork.Connection.Open();
-            UnitOfWork.Begin();
+            UnitOfWork.BeginTransaction();
             try
             {
                 rowAffects = UnitOfWork.Connection.Execute($"Proc_Update{_tableName}", entity, transaction: UnitOfWork.Transaction, commandType: System.Data.CommandType.StoredProcedure);
@@ -140,7 +140,7 @@ namespace MS.Infrastructure.Data
         {
             var rowAffects = 0;
             UnitOfWork.Connection.Open();
-            UnitOfWork.Begin();
+            UnitOfWork.BeginTransaction();
             try
             {
                 rowAffects = await UnitOfWork.Connection.ExecuteAsync($"Proc_Update{_tableName}", entity, transaction: UnitOfWork.Transaction, commandType: System.Data.CommandType.StoredProcedure);
@@ -166,7 +166,7 @@ namespace MS.Infrastructure.Data
             var rowAffects = 0;
             var sql = $"DELETE FROM {_tableName} WHERE {_tableName}Id = @Id";
             UnitOfWork.Connection.Open();
-            UnitOfWork.Begin();
+            UnitOfWork.BeginTransaction();
             try
             {
                 var parameters = new DynamicParameters();

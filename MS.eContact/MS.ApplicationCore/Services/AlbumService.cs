@@ -34,7 +34,7 @@ namespace MS.ApplicationCore.Services
             }
             // Thêm Album vào database:
             _unitOfWork.Connection.Open();
-            _unitOfWork.Begin();
+            _unitOfWork.BeginTransaction();
             var addAlbumResult = await _repository.AddAsync(entity);
             if (addAlbumResult > 0)
             {

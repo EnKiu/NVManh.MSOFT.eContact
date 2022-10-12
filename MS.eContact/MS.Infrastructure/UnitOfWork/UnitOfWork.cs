@@ -22,7 +22,12 @@ namespace MS.Infrastructure.UnitOfWork
         IDbTransaction _transaction = null;
         Guid _id = Guid.Empty;
         IConfiguration _configuration;
-        public UnitOfWork(IConfiguration configuration, IAlbumRepository albums, IEventDetailRepository eventDetails, IEventRepository events, IPictureRepository pictures, IUserRepository users)
+        public UnitOfWork(IConfiguration configuration, 
+            IAlbumRepository albums, 
+            IEventDetailRepository eventDetails, 
+            IEventRepository events, 
+            IPictureRepository pictures, 
+            IUserRepository users)
         {
             _configuration = configuration;
 
@@ -48,7 +53,7 @@ namespace MS.Infrastructure.UnitOfWork
             get { return _id; }
         }
 
-        public void Begin()
+        public void BeginTransaction()
         {
             _transaction = _connection.BeginTransaction();
         }

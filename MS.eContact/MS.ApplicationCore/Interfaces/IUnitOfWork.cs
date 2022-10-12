@@ -10,7 +10,7 @@ namespace MS.ApplicationCore.Interfaces
         Guid Id { get; }
         IDbConnection Connection { get; }
         IDbTransaction Transaction { get; }
-        void Begin();
+        void BeginTransaction();
         void Commit();
         void Rollback();
         IAlbumRepository Albums { get; }

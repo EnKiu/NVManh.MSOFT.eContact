@@ -18,8 +18,8 @@ namespace MS.eContact.Web
             service.AddTransient<IUnitOfWork, UnitOfWork>();
             service.AddTransient(typeof(IRepository<>), typeof(DapperRepository<>));
             service.AddTransient(typeof(IAsyncRepository<>), typeof(DapperRepository<>));
-            //service.AddScoped(typeof(IAsyncService<>), typeof(BaseService<>));
             service.AddTransient(typeof(IBaseService<>), typeof(BaseService<>));
+            //service.AddScoped(typeof(IAsyncService<>), typeof(BaseService<>));
             service.AddTransient<IFileTransfer, FileTransfer>();
             service.AddTransient<IEventRepository, EventRepository>();
             service.AddTransient<IEventService, EventService>();

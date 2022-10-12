@@ -11,21 +11,20 @@ namespace MS.Infrastructure.Data
 {
     public class EventRepository: DapperRepository<Event>, IEventRepository
     {
-        IUnitOfWork _unitOfWork = null;
         string _tableName = string.Empty;
         public EventRepository(IUnitOfWork unitOfWork) : base(unitOfWork)
         {
             _tableName = typeof(Event).Name;
-            _unitOfWork = unitOfWork;
+            UnitOfWork = unitOfWork;
         }
         public override IEnumerable<Event> All()
         {
             var storeName = "Proc_Event_GetEventInfo";
-            return _unitOfWork.Connection.Query<Event>(storeName, _unitOfWork.Transaction, commandType: System.Data.CommandType.StoredProcedure);
+            return UnitOfWork.Connection.Query<Event>(storeName, UnitOfWork.Transaction, commandType: System.Data.CommandType.StoredProcedure);
         }
         public async override Task<IEnumerable<Event>> AllAsync()
         {
-            return await _unitOfWork.Connection.QueryAsync<Event>($"SELECT * FROM Event Order By EventDate DESC", _unitOfWork.Transaction, commandType: System.Data.CommandType.Text);
+            return await UnitOfWork.Connection.QueryAsync<Event>($"SELECT * FROM Event Order By EventDate DESC", UnitOfWork.Transaction, commandType: System.Data.CommandType.Text);
         }
 
         public async Task<IEnumerable<Contact>> GetContactNotYetRegisterEventByEventId(int eventId)
@@ -33,7 +32,7 @@ namespace MS.Infrastructure.Data
             var storeName = "Proc_Contact_GetContactNotRegisterEventByEventId";
             var parameters = new DynamicParameters();
             parameters.Add("@p_EventId", eventId);
-            var data = await _unitOfWork.Connection.QueryAsync<Contact>(storeName, parameters,transaction: _unitOfWork.Transaction, commandType: System.Data.CommandType.StoredProcedure);
+            var data = await UnitOfWork.Connection.QueryAsync<Contact>(storeName, parameters,transaction: UnitOfWork.Transaction, commandType: System.Data.CommandType.StoredProcedure);
             return data;
         }
         public override int Add(Event entity)
@@ -42,18 +41,18 @@ namespace MS.Infrastructure.Data
             entity.EventDate = (DateTime)entity.StartTime;
 
             var rowAffects = 0;
-            _unitOfWork.Connection.Open();
-            _unitOfWork.Begin();
+            UnitOfWork.Connection.Open();
+            UnitOfWork.BeginTransaction();
             try
             {
-                rowAffects = _unitOfWork.Connection.Execute($"Proc_Event_InsertEvent", entity, transaction: _unitOfWork.Transaction, commandType: System.Data.CommandType.StoredProcedure);
-                _unitOfWork.Commit();
+                rowAffects = UnitOfWork.Connection.Execute($"Proc_Event_InsertEvent", entity, transaction: UnitOfWork.Transaction, commandType: System.Data.CommandType.StoredProcedure);
+                UnitOfWork.Commit();
             }
             catch (Exception)
             {
-                _unitOfWork.Rollback();
+                UnitOfWork.Rollback();
             }
-            _unitOfWork.Connection.Close();
+            UnitOfWork.Connection.Close();
             return rowAffects;
         }
 
@@ -63,18 +62,18 @@ namespace MS.Infrastructure.Data
             entity.EventDate = (DateTime)entity.StartTime;
 
             var rowAffects = 0;
-            _unitOfWork.Connection.Open();
-            _unitOfWork.Begin();
+            UnitOfWork.Connection.Open();
+            UnitOfWork.BeginTransaction();
             try
             {
-                rowAffects = await _unitOfWork.Connection.ExecuteAsync($"Proc_Event_InsertEvent", entity, transaction: _unitOfWork.Transaction, commandType: System.Data.CommandType.StoredProcedure);
-                _unitOfWork.Commit();
+                rowAffects = await UnitOfWork.Connection.ExecuteAsync($"Proc_Event_InsertEvent", entity, transaction: UnitOfWork.Transaction, commandType: System.Data.CommandType.StoredProcedure);
+                UnitOfWork.Commit();
             }
             catch (Exception)
             {
-                _unitOfWork.Rollback();
+                UnitOfWork.Rollback();
             }
-            _unitOfWork.Connection.Close();
+            UnitOfWork.Connection.Close();
             return rowAffects;
         }
     }

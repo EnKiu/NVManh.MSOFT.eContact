@@ -46,7 +46,7 @@ namespace MS.eContact.Web
         {
             //CommonConst.ServerFileUrl = Configuration["ServerFiles"];
             CommonConst.ServerFileUrl = String.Format("{0}/{1}", Configuration["ServerFiles"], Configuration["ServerFilePath"]);
-            services.AddApplication();
+            
             // Adding Authentication
             services.AddAuthentication(options =>
             {
@@ -111,7 +111,7 @@ namespace MS.eContact.Web
                                                               .AllowCredentials();
                                       });
             });
-
+            services.AddApplication();
             services.AddControllers()
                .AddNewtonsoftJson(options =>
                {

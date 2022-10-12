@@ -9,12 +9,10 @@ namespace MS.Infrastructure.Data
 {
     public class ContactRepository:DapperRepository<Contact>
     {
-        IUnitOfWork _unitOfWork = null;
         string _tableName = string.Empty;
         public ContactRepository(IUnitOfWork unitOfWork):base(unitOfWork)
         {
             _tableName = typeof(Contact).Name;
-            _unitOfWork = unitOfWork;
         }
     }
 }

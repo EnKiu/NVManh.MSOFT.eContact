@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace MS.ApplicationCore.Interfaces
 {
-    public interface IUserRepository:IRepository<AspNetUsers>,IAsyncRepository<AspNetUsers>
+    public interface IUserRepository:IRepository<AspNetUsers>
     {
         /// <summary>
         /// Đăng ký User mới

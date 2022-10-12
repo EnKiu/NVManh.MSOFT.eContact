@@ -5,7 +5,7 @@ import { AUTH_LOGOUT } from "@/store/actions/auth";
 import commonJs from '@/scripts/common';
 import MISAEnum from '@/scripts/enum';
 
-const apiCall = ({ url, data, method }) =>
+const apiCall = ({ url, data, method, showToast }) =>
     new Promise((resolve, reject) => {
         try {
             axios.defaults.baseURL = process.env.VUE_APP_BASE_URL;
@@ -32,8 +32,10 @@ const apiCall = ({ url, data, method }) =>
                             default:
                                 break;
                         }
-                        console.log(method);
-                        if (window.location.pathname != "/login")
+                        if (showToast == undefined) {
+                            showToast = true;
+                        }
+                        if (window.location.pathname != "/login" && showToast)
                             commonJs.showToast(`${actionName} thành công!`, MISAEnum.MsgType.Success);
                     }
                     commonJs.hideLoading();

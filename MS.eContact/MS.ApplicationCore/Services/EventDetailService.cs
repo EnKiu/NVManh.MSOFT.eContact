@@ -10,7 +10,7 @@ namespace MS.ApplicationCore.Services
     public class EventDetailService : BaseService<EventDetail>, IEventDetailService
     {
         IEventDetailRepository _repository;
-        public EventDetailService(IEventDetailRepository repository) : base(repository)
+        public EventDetailService(IEventDetailRepository repository,IUnitOfWork unitOfWork) : base(repository, unitOfWork)
         {
             _repository = repository;
         }

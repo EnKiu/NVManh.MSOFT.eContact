@@ -9,5 +9,6 @@ namespace MS.ApplicationCore.Interfaces
     public interface IAlbumRepository:IRepository<Album>
     {
         Task<IEnumerable<Picture>> GetPicturesByAlbumId(Guid albumId);
+        Task<int> UpdateTotalViewAlbum(Guid albumId);
     }
 }

@@ -9,9 +9,9 @@ namespace MS.ApplicationCore.Services
     public class PictureService:BaseService<Picture>,IPictureService
     {
         IPictureRepository _pictureRepository;
-        public PictureService(IPictureRepository pictureRepository) : base(pictureRepository)
+        public PictureService(IPictureRepository repository, IUnitOfWork unitOfWork) : base(repository, unitOfWork)
         {
-            _pictureRepository = pictureRepository;
+            _pictureRepository = repository;
         }
     }
 }

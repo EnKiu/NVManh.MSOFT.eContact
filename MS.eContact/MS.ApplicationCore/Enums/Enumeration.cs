@@ -45,4 +45,16 @@ namespace MS.ApplicationCore.Enums
         UPDATE = 2,
         DELETE = 3,
     }
+    public enum Role
+    {
+        Administrator = 1,
+        Management = 5,
+        Employee = 10,
+        Teacher = 15,
+        Advisor = 20,
+        HRIntern = 21,
+        Fresher = 25,
+        Intern = 30,
+        Newbie = 35
+    }
 }

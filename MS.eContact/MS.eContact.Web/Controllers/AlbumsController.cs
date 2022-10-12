@@ -40,5 +40,12 @@ namespace MS.eContact.Web.Controllers
             var pictures = await _repository.GetPicturesByAlbumId(albumId);
             return Ok(pictures);
         }
+
+        [HttpPut("{id}/total-views")]
+        public async Task<IActionResult> Put(Guid id)
+        {
+            var res = await _repository.UpdateTotalViewAlbum(id);
+            return Ok(res);
+        }
     }
 }

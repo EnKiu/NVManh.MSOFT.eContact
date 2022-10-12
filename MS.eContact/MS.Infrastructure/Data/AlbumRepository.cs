@@ -42,5 +42,14 @@ namespace MS.Infrastructure.Data
             var pictures = await _unitOfWork.Connection.QueryAsync<Picture>($"Proc_Picture_GetPicturesByAlbumId", param: parameters, transaction: _unitOfWork.Transaction, commandType: System.Data.CommandType.StoredProcedure);
             return pictures;
         }
+
+        public async Task<int> UpdateTotalViewAlbum(Guid albumId)
+        {
+            var sql = "UPDATE Album a SET a.TotalViews = IFNULL(a.TotalViews,0)+1 WHERE a.AlbumId = @AlbumId";
+            var parameters = new DynamicParameters();
+            parameters.Add("@AlbumId", albumId);
+            var res = await _unitOfWork.Connection.ExecuteAsync(sql, param: parameters, transaction: _unitOfWork.Transaction, commandType: System.Data.CommandType.Text);
+            return res;
+        }
     }
 }

@@ -12,32 +12,32 @@ namespace MS.Infrastructure.Data
 {
     public class DapperRepository<TEntity> : IAsyncRepository<TEntity>, IRepository<TEntity> where TEntity : BaseEntity
     {
-        IUnitOfWork _unitOfWork = null;
+        protected IUnitOfWork UnitOfWork = null;
         string _tableName = string.Empty;
         public DapperRepository(IUnitOfWork unitOfWork)
         {
             _tableName = typeof(TEntity).Name;
-            _unitOfWork = unitOfWork;
+            UnitOfWork = unitOfWork;
         }
         #region Add
         public virtual int Add(TEntity entity)
         {
             var rowAffects = 0;
-            _unitOfWork.Connection.Open();
-            _unitOfWork.Begin();
+            UnitOfWork.Connection.Open();
+            UnitOfWork.Begin();
             try
             {
-                rowAffects = _unitOfWork.Connection.Execute($"Proc_Insert{_tableName}", entity, _unitOfWork.Transaction, commandType: System.Data.CommandType.StoredProcedure);
-                _unitOfWork.Commit();
+                rowAffects = UnitOfWork.Connection.Execute($"Proc_Insert{_tableName}", entity, UnitOfWork.Transaction, commandType: System.Data.CommandType.StoredProcedure);
+                UnitOfWork.Commit();
             }
             catch (Exception ex)
             {
-                _unitOfWork.Rollback();
+                UnitOfWork.Rollback();
                 throw new MISAException(System.Net.HttpStatusCode.InternalServerError, ex.Message);
             }
             finally
             {
-                _unitOfWork.Connection.Close();
+                UnitOfWork.Connection.Close();
             }
             return rowAffects;
         }
@@ -50,22 +50,22 @@ namespace MS.Infrastructure.Data
         public virtual async Task<int> AddAsync(TEntity entity)
         {
             var rowAffects = 0;
-            if (_unitOfWork.Connection.State == System.Data.ConnectionState.Connecting)
+            if (UnitOfWork.Connection.State == System.Data.ConnectionState.Connecting)
             {
-                _unitOfWork.Connection.Close();
+                UnitOfWork.Connection.Close();
             }
-            _unitOfWork.Connection.Open();
-            _unitOfWork.Begin();
+            UnitOfWork.Connection.Open();
+            UnitOfWork.Begin();
             try
             {
-                rowAffects = await _unitOfWork.Connection.ExecuteAsync($"Proc_Insert{_tableName}", entity, _unitOfWork.Transaction, commandType: System.Data.CommandType.StoredProcedure);
-                _unitOfWork.Commit();
+                rowAffects = await UnitOfWork.Connection.ExecuteAsync($"Proc_Insert{_tableName}", entity, UnitOfWork.Transaction, commandType: System.Data.CommandType.StoredProcedure);
+                UnitOfWork.Commit();
             }
             catch (Exception)
             {
-                _unitOfWork.Rollback();
+                UnitOfWork.Rollback();
             }
-            _unitOfWork.Connection.Close();
+            UnitOfWork.Connection.Close();
             return rowAffects;
         }
 
@@ -78,12 +78,12 @@ namespace MS.Infrastructure.Data
         #region GET
         public virtual IEnumerable<TEntity> All()
         {
-            return _unitOfWork.Connection.Query<TEntity>($"SELECT * FROM {_tableName}", _unitOfWork.Transaction, commandType: System.Data.CommandType.Text);
+            return UnitOfWork.Connection.Query<TEntity>($"SELECT * FROM {_tableName}", UnitOfWork.Transaction, commandType: System.Data.CommandType.Text);
         }
 
         public virtual async Task<IEnumerable<TEntity>> AllAsync()
         {
-            return await _unitOfWork.Connection.QueryAsync<TEntity>($"SELECT * FROM {_tableName}", _unitOfWork.Transaction, commandType: System.Data.CommandType.Text);
+            return await UnitOfWork.Connection.QueryAsync<TEntity>($"SELECT * FROM {_tableName}", UnitOfWork.Transaction, commandType: System.Data.CommandType.Text);
         }
 
         public TEntity Find(object pksFields)
@@ -91,7 +91,7 @@ namespace MS.Infrastructure.Data
             throw new NotImplementedException();
         }
 
-        public async Task<TEntity> FindAsync(object pksFields)
+        public virtual async Task<TEntity> FindAsync(object pksFields)
         {
             throw new NotImplementedException();
         }
@@ -121,36 +121,36 @@ namespace MS.Infrastructure.Data
         public int Update(TEntity entity, object pks)
         {
             var rowAffects = 0;
-            _unitOfWork.Connection.Open();
-            _unitOfWork.Begin();
+            UnitOfWork.Connection.Open();
+            UnitOfWork.Begin();
             try
             {
-                rowAffects = _unitOfWork.Connection.Execute($"Proc_Update{_tableName}", entity, transaction: _unitOfWork.Transaction, commandType: System.Data.CommandType.StoredProcedure);
-                _unitOfWork.Commit();
+                rowAffects = UnitOfWork.Connection.Execute($"Proc_Update{_tableName}", entity, transaction: UnitOfWork.Transaction, commandType: System.Data.CommandType.StoredProcedure);
+                UnitOfWork.Commit();
             }
             catch (Exception)
             {
-                _unitOfWork.Rollback();
+                UnitOfWork.Rollback();
             }
-            _unitOfWork.Connection.Close();
+            UnitOfWork.Connection.Close();
             return rowAffects;
         }
 
         public async Task<int> UpdateAsync(TEntity entity, object pks)
         {
             var rowAffects = 0;
-            _unitOfWork.Connection.Open();
-            _unitOfWork.Begin();
+            UnitOfWork.Connection.Open();
+            UnitOfWork.Begin();
             try
             {
-                rowAffects = await _unitOfWork.Connection.ExecuteAsync($"Proc_Update{_tableName}", entity, transaction: _unitOfWork.Transaction, commandType: System.Data.CommandType.StoredProcedure);
-                _unitOfWork.Commit();
+                rowAffects = await UnitOfWork.Connection.ExecuteAsync($"Proc_Update{_tableName}", entity, transaction: UnitOfWork.Transaction, commandType: System.Data.CommandType.StoredProcedure);
+                UnitOfWork.Commit();
             }
             catch (Exception)
             {
-                _unitOfWork.Rollback();
+                UnitOfWork.Rollback();
             }
-            _unitOfWork.Connection.Close();
+            UnitOfWork.Connection.Close();
             return rowAffects;
         }
         #endregion
@@ -165,20 +165,20 @@ namespace MS.Infrastructure.Data
         {
             var rowAffects = 0;
             var sql = $"DELETE FROM {_tableName} WHERE {_tableName}Id = @Id";
-            _unitOfWork.Connection.Open();
-            _unitOfWork.Begin();
+            UnitOfWork.Connection.Open();
+            UnitOfWork.Begin();
             try
             {
                 var parameters = new DynamicParameters();
                 parameters.Add("@Id", key);
-                rowAffects = await _unitOfWork.Connection.ExecuteAsync(sql, parameters, transaction: _unitOfWork.Transaction, commandType: System.Data.CommandType.Text);
-                _unitOfWork.Commit();
+                rowAffects = await UnitOfWork.Connection.ExecuteAsync(sql, parameters, transaction: UnitOfWork.Transaction, commandType: System.Data.CommandType.Text);
+                UnitOfWork.Commit();
             }
             catch (Exception)
             {
-                _unitOfWork.Rollback();
+                UnitOfWork.Rollback();
             }
-            _unitOfWork.Connection.Close();
+            UnitOfWork.Connection.Close();
             return rowAffects;
         }
         #endregion

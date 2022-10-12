@@ -8,18 +8,31 @@ using MySqlConnector;
 
 namespace MS.Infrastructure.UnitOfWork
 {
-    public class UnitOfWork: IUnitOfWork
+    public class UnitOfWork : IUnitOfWork
     {
+        #region Properties
+        public IAlbumRepository Albums { get; }
+        public IEventDetailRepository EventDetails { get; }
+        public IEventRepository Events { get; }
+        public IPictureRepository Pictures { get; }
+        public IUserRepository Users { get; }
+        #endregion
+
         IDbConnection _connection = null;
         IDbTransaction _transaction = null;
         Guid _id = Guid.Empty;
         IConfiguration _configuration;
-        public UnitOfWork(IConfiguration configuration)
+        public UnitOfWork(IConfiguration configuration, IAlbumRepository albums, IEventDetailRepository eventDetails, IEventRepository events, IPictureRepository pictures, IUserRepository users)
         {
             _configuration = configuration;
-            
+
             _id = Guid.NewGuid();
             _connection = new MySqlConnection(_configuration.GetConnectionString("DefaultConnection"));
+            Albums = albums;
+            EventDetails = eventDetails;
+            Events = events;
+            Pictures = pictures;
+            Users = users;
         }
 
         public IDbConnection Connection
@@ -57,7 +70,7 @@ namespace MS.Infrastructure.UnitOfWork
             if (_transaction != null)
                 _transaction.Dispose();
             _transaction = null;
-            if(_connection.State == ConnectionState.Open)
+            if (_connection.State == ConnectionState.Open)
             {
                 _connection.Close();
             }

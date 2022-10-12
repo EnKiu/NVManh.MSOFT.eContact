@@ -13,9 +13,11 @@ namespace MS.ApplicationCore.Services
     {
         IRepository<TEntity> _repository;
         protected Dictionary<string, List<string>> Errors = new Dictionary<string,List<string>>();
-        public BaseService(IRepository<TEntity> repository)
+        protected IUnitOfWork UnitOfWork;
+        public BaseService(IRepository<TEntity> repository, IUnitOfWork unitOfWork)
         {
             _repository = repository;
+            UnitOfWork = unitOfWork;
         }
         public int Add(TEntity entity)
         {

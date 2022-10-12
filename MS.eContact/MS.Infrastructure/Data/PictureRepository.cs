@@ -26,5 +26,14 @@ namespace MS.Infrastructure.Data
             var rowAffects = await _unitOfWork.Connection.ExecuteAsync($"Proc_Picture_Insert", param: parameters, transaction: _unitOfWork.Transaction, commandType: System.Data.CommandType.StoredProcedure);
             return rowAffects;
         }
+
+        public async Task<int> UpdateTotalViewPicture(Guid pictureId)
+        {
+            var sql = "UPDATE Picture p SET TotalViews = IFNULL(TotalViews,0)+1 WHERE PictureId = @PictureId";
+            var parameters = new DynamicParameters();
+            parameters.Add("@PictureId", pictureId);
+            var res = await _unitOfWork.Connection.ExecuteAsync(sql, param: parameters, transaction: _unitOfWork.Transaction, commandType: System.Data.CommandType.Text);
+            return res;
+        }
     }
 }

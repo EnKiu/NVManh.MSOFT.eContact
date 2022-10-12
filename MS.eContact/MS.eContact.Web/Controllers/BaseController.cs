@@ -1,4 +1,6 @@
 ﻿using Microsoft.AspNetCore.Mvc;
+using MS.ApplicationCore.Authorization;
+using MS.ApplicationCore.Enums;
 using MS.ApplicationCore.Interfaces;
 using System;
 using System.Collections.Generic;
@@ -10,6 +12,7 @@ using System.Threading.Tasks;
 
 namespace MS.eContact.Web.Controllers
 {
+    [Authorize(Role.Administrator)]
     [Route("/api/v1/[controller]")]
     [ApiController]
     public class BaseController<TEntity> : ControllerBase where TEntity: class

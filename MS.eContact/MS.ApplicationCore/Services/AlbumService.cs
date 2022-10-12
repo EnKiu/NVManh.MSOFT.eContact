@@ -14,7 +14,7 @@ namespace MS.ApplicationCore.Services
         IPictureRepository _pictureRepository;
         IFileTransfer _fileTransfer;
         IUnitOfWork _unitOfWork;
-        public AlbumService(IAlbumRepository repository, IFileTransfer fileTransfer, IPictureRepository pictureRepository, IUnitOfWork unitOfWork) : base(repository)
+        public AlbumService(IAlbumRepository repository, IFileTransfer fileTransfer, IPictureRepository pictureRepository, IUnitOfWork unitOfWork) : base(repository, unitOfWork)
         {
             _repository = repository;
             _fileTransfer = fileTransfer;

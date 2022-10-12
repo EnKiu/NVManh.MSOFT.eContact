@@ -13,5 +13,11 @@ namespace MS.ApplicationCore.Interfaces
         void Begin();
         void Commit();
         void Rollback();
+        IAlbumRepository Albums { get; }
+        IEventDetailRepository EventDetails { get; }
+        IEventRepository Events { get; }
+        IPictureRepository Pictures { get; }
+        IUserRepository Users { get; }
+
     }
 }

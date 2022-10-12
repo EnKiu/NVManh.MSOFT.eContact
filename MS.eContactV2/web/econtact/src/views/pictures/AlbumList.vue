@@ -6,13 +6,25 @@
       </button>
     </div>
     <div class="album__list">
-      <div class="album-item" v-for="(album, index) in albums" :key="index" @click="showDetailAlbum(album)">
+      <div
+        class="album-item"
+        v-for="(album, index) in albums"
+        :key="index"
+        @click="showDetailAlbum(album)"
+      >
+        <button class="btn--remove-item" @click="onRemoveAlbum(album,index)" title="Xóa Album">
+          <i class="icofont-ui-remove"></i>
+        </button>
         <div class="album__title">{{ album.AlbumName }}</div>
         <div class="album__date">
           Ngày tạo: {{ commonJs.formatDate(album.CreatedDate) }}
         </div>
-        <div class="album__total-pictures">Tổng số ảnh: {{ album.TotalPictures }}</div>
-        <div class="album__total-view">Tổng số lượt xem: {{ album.TotalViews }}</div>
+        <div class="album__total-pictures">
+          Tổng số ảnh: {{ album.TotalPictures }}
+        </div>
+        <div class="album__total-view">
+          Tổng số lượt xem: {{ album.TotalViews }}
+        </div>
       </div>
     </div>
   </div>
@@ -21,14 +33,20 @@
     @onCloseAddNewDialog="showAddNew = false"
     @afterAddAlbum="onAfterAddAlbum"
   ></album-item>
-  <album-detail v-if="albumSelected" :album="albumSelected" @onCloseAlbumDetail="albumSelected=null"></album-detail>
+  <album-detail
+    v-if="albumSelected"
+    :album="albumSelected"
+    @onCloseAlbumDetail="albumSelected = null"
+    v-model:totalViews="albumSelected.TotalViews"
+    :key="albumSelected.AlbumId"
+  ></album-detail>
 </template>
 <script>
 import AlbumItem from "./AlbumItem.vue";
-import AlbumDetail from './AlbumDetail.vue'
+import AlbumDetail from "./AlbumDetail.vue";
 export default {
   name: "AlbumList",
-  components: { AlbumItem,AlbumDetail },
+  components: { AlbumItem, AlbumDetail },
   props: [],
   emits: [],
   created() {
@@ -42,7 +60,11 @@ export default {
       this.showAddNew = false;
       this.loadAlbum();
     },
-    showDetailAlbum(album){
+    onRemoveAlbum(album,index){
+      console.log(album);
+      console.log("album-index:",index);
+    },
+    showDetailAlbum(album) {
       this.albumSelected = album;
     },
     loadAlbum() {
@@ -58,7 +80,7 @@ export default {
     return {
       showAddNew: false,
       albums: [],
-      albumSelected:null
+      albumSelected: null,
     };
   },
 };
@@ -73,7 +95,7 @@ export default {
 .album * {
   box-sizing: border-box;
 }
-.album__toolbar{
+.album__toolbar {
   padding: 0 10px;
 }
 .album__list {
@@ -81,6 +103,7 @@ export default {
   flex-wrap: wrap;
 }
 .album-item {
+  position: relative;
   min-width: 300px;
   float: left;
   max-width: 100%;
@@ -90,6 +113,16 @@ export default {
   padding: 16px;
   margin: 10px;
   cursor: pointer;
+}
+.album-item .btn--remove-item{
+  display: none;
+  color: #ff0000;
+  border-color: #ff0000;
+  border-style: solid;
+  border:none
+}
+.album-item:hover .btn--remove-item{
+  display: flex;
 }
 
 .album__title {

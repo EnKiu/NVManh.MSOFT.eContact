@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using MS.ApplicationCore.Authorization;
 using MS.ApplicationCore.Entities;
 using MS.ApplicationCore.Interfaces;
 using Newtonsoft.Json;
@@ -41,6 +42,7 @@ namespace MS.eContact.Web.Controllers
             return Ok(pictures);
         }
 
+        [AllowAnonymous]
         [HttpPut("{id}/total-views")]
         public async Task<IActionResult> Put(Guid id)
         {

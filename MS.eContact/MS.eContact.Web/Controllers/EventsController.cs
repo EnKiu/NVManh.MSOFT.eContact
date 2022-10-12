@@ -2,6 +2,7 @@
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Configuration;
+using MS.ApplicationCore.Authorization;
 using MS.ApplicationCore.Entities;
 using MS.ApplicationCore.Interfaces;
 using System.Threading.Tasks;
@@ -28,7 +29,7 @@ namespace MS.eContact.Web.Controllers
             _service = service;
         }
 
-
+        [AllowAnonymous]
         [HttpGet("contact-no-register")]
         public async Task<IActionResult> GetContactNotYetRegisterEvent(int eventId)
         {

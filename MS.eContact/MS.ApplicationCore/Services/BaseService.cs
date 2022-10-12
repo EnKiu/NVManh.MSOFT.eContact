@@ -11,8 +11,8 @@ namespace MS.ApplicationCore.Services
 {
     public class BaseService<TEntity> : IBaseService<TEntity> where TEntity: BaseEntity
     {
-        IRepository<TEntity> _repository;
-        protected Dictionary<string, List<string>> Errors = new Dictionary<string,List<string>>();
+        readonly IRepository<TEntity> _repository;
+        protected Dictionary<string, List<string>> Errors = new();
         protected IUnitOfWork UnitOfWork;
         public BaseService(IRepository<TEntity> repository, IUnitOfWork unitOfWork)
         {

@@ -25,8 +25,9 @@ namespace MS.eContact.Web.Controllers
             _baseService = baseService;
         }
         // GET: api/<BaseController>
+        [AllowAnonymous]
         [HttpGet]
-        public async Task<IActionResult> Get()
+        public async virtual Task<IActionResult> Get()
         {
             var data = await _repository.AllAsync();
             return Ok(data);
@@ -34,6 +35,7 @@ namespace MS.eContact.Web.Controllers
 
         // GET api/<BaseController>/5
         [HttpGet("{id}")]
+        [AllowAnonymous]
         public async virtual Task<IActionResult> Get(string id)
         {
             var data = await _repository.FindAsync(id);

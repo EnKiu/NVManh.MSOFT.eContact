@@ -13,6 +13,7 @@ using System.Net.Http;
 using System.Net;
 using System.Threading.Tasks;
 using MS.ApplicationCore.Utilities;
+using MS.ApplicationCore.Authorization;
 
 namespace MS.eContact.Web.Controllers
 {
@@ -31,7 +32,11 @@ namespace MS.eContact.Web.Controllers
             _fileTransfer = fileTransfer;
             _baseService = baseService;
         }
-
+        [AllowAnonymous]
+        public async override Task<IActionResult> Get()
+        {
+            return await base.Get();
+        }
         [HttpPut]
         public async Task<IActionResult> Put(string id)
         {

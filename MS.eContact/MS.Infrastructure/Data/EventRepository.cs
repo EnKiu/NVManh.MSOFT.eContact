@@ -12,19 +12,20 @@ namespace MS.Infrastructure.Data
     public class EventRepository: DapperRepository<Event>, IEventRepository
     {
         string _tableName = string.Empty;
-        public EventRepository(IUnitOfWork unitOfWork) : base(unitOfWork)
+        public EventRepository(MySqlDbContext dbContext) : base(dbContext)
         {
             _tableName = typeof(Event).Name;
-            UnitOfWork = unitOfWork;
         }
         public override IEnumerable<Event> All()
         {
             var storeName = "Proc_Event_GetEventInfo";
-            return UnitOfWork.Connection.Query<Event>(storeName, UnitOfWork.Transaction, commandType: System.Data.CommandType.StoredProcedure);
+            return DbContext.Connection.Query<Event>(storeName, DbContext.Transaction, commandType: System.Data.CommandType.StoredProcedure);
         }
         public async override Task<IEnumerable<Event>> AllAsync()
         {
-            return await UnitOfWork.Connection.QueryAsync<Event>($"SELECT * FROM Event Order By EventDate DESC", UnitOfWork.Transaction, commandType: System.Data.CommandType.Text);
+            var storeName = "Proc_Event_GetEventInfo";
+            return await DbContext.Connection.QueryAsync<Event>(storeName, DbContext.Transaction, commandType: System.Data.CommandType.StoredProcedure);
+            //return await DbContext.Connection.QueryAsync<Event>($"SELECT * FROM Event Order By EventDate DESC", DbContext.Transaction, commandType: System.Data.CommandType.Text);
         }
 
         public async Task<IEnumerable<Contact>> GetContactNotYetRegisterEventByEventId(int eventId)
@@ -32,7 +33,7 @@ namespace MS.Infrastructure.Data
             var storeName = "Proc_Contact_GetContactNotRegisterEventByEventId";
             var parameters = new DynamicParameters();
             parameters.Add("@p_EventId", eventId);
-            var data = await UnitOfWork.Connection.QueryAsync<Contact>(storeName, parameters,transaction: UnitOfWork.Transaction, commandType: System.Data.CommandType.StoredProcedure);
+            var data = await DbContext.Connection.QueryAsync<Contact>(storeName, parameters,transaction: DbContext.Transaction, commandType: System.Data.CommandType.StoredProcedure);
             return data;
         }
         public override int Add(Event entity)
@@ -41,18 +42,18 @@ namespace MS.Infrastructure.Data
             entity.EventDate = (DateTime)entity.StartTime;
 
             var rowAffects = 0;
-            UnitOfWork.Connection.Open();
-            UnitOfWork.BeginTransaction();
+            DbContext.Connection.Open();
+            DbContext.Connection.BeginTransaction();
             try
             {
-                rowAffects = UnitOfWork.Connection.Execute($"Proc_Event_InsertEvent", entity, transaction: UnitOfWork.Transaction, commandType: System.Data.CommandType.StoredProcedure);
-                UnitOfWork.Commit();
+                rowAffects = DbContext.Connection.Execute($"Proc_Event_InsertEvent", entity, transaction: DbContext.Transaction, commandType: System.Data.CommandType.StoredProcedure);
+                DbContext.Transaction.Commit();
             }
             catch (Exception)
             {
-                UnitOfWork.Rollback();
+                DbContext.Transaction.Rollback();
             }
-            UnitOfWork.Connection.Close();
+            DbContext.Connection.Close();
             return rowAffects;
         }
 
@@ -62,18 +63,17 @@ namespace MS.Infrastructure.Data
             entity.EventDate = (DateTime)entity.StartTime;
 
             var rowAffects = 0;
-            UnitOfWork.Connection.Open();
-            UnitOfWork.BeginTransaction();
+            DbContext.Connection.Open();
             try
             {
-                rowAffects = await UnitOfWork.Connection.ExecuteAsync($"Proc_Event_InsertEvent", entity, transaction: UnitOfWork.Transaction, commandType: System.Data.CommandType.StoredProcedure);
-                UnitOfWork.Commit();
+                rowAffects = await DbContext.Connection.ExecuteAsync($"Proc_Event_InsertEvent", entity, transaction: DbContext.Transaction, commandType: System.Data.CommandType.StoredProcedure);
+                DbContext.Transaction.Commit();
             }
             catch (Exception)
             {
-                UnitOfWork.Rollback();
+                DbContext.Transaction.Rollback();
             }
-            UnitOfWork.Connection.Close();
+            DbContext.Connection.Close();
             return rowAffects;
         }
     }

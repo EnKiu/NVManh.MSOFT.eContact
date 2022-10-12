@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using MS.ApplicationCore.Authorization;
 using MS.ApplicationCore.Entities;
 using MS.ApplicationCore.Interfaces;
 using Newtonsoft.Json;
@@ -21,6 +22,7 @@ namespace MS.eContact.Web.Controllers
             _repository = repository;
         }
 
+        [AllowAnonymous]
         [HttpGet("registers")]
         public async Task<IActionResult> GetListRegisterEvent(int eventId)
         {
@@ -28,6 +30,11 @@ namespace MS.eContact.Web.Controllers
             return Ok(data);
         }
 
+        [AllowAnonymous]
+        public override Task<IActionResult> Post([FromBody] EventDetail entity)
+        {
+            return base.Post(entity);
+        }
         //public override async Task<IActionResult> Delete(object id)
         //{
         //    var httpRequest = HttpContext.Request;

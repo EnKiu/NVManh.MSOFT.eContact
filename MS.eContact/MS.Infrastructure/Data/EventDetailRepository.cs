@@ -11,11 +11,8 @@ namespace MS.Infrastructure.Data
 {
     public class EventDetailRepository:DapperRepository<EventDetail>, IEventDetailRepository
     {
-        string _tableName = string.Empty;
-        public EventDetailRepository(IUnitOfWork unitOfWork) : base(unitOfWork)
+        public EventDetailRepository(MySqlDbContext dbContext) : base(dbContext)
         {
-            _tableName = typeof(Event).Name;
-            UnitOfWork = unitOfWork;
         }
 
         public async Task<bool> CheckRegisted(EventDetail eventDetail)
@@ -24,7 +21,7 @@ namespace MS.Infrastructure.Data
             var parameters = new DynamicParameters();
             parameters.Add("@ContactId", eventDetail.ContactId);
             parameters.Add("@EventId", eventDetail.EventId);
-            var res = await UnitOfWork.Connection.QueryFirstOrDefaultAsync<EventDetail>(sqlCheck, param: parameters, transaction: UnitOfWork.Transaction, commandType: System.Data.CommandType.Text);
+            var res = await DbContext.Connection.QueryFirstOrDefaultAsync<EventDetail>(sqlCheck, param: parameters, transaction: DbContext.Transaction, commandType: System.Data.CommandType.Text);
             if (res!=null)
                 return true;
             else
@@ -37,7 +34,7 @@ namespace MS.Infrastructure.Data
             var parameters = new DynamicParameters();
             parameters.Add("@EventId", eventId);
             parameters.Add("@ContactId", contactId);
-            var res = await UnitOfWork.Connection.ExecuteAsync(sql, param: parameters, transaction: UnitOfWork.Transaction, commandType: System.Data.CommandType.Text);
+            var res = await DbContext.Connection.ExecuteAsync(sql, param: parameters, transaction: DbContext.Transaction, commandType: System.Data.CommandType.Text);
             return res;
         }
 
@@ -46,7 +43,7 @@ namespace MS.Infrastructure.Data
             var storeName = "Proc_EventDetail_GetListRegisterEventByEventId";
             var parameters = new DynamicParameters();
             parameters.Add("@p_EventId", eventId);
-            var res = await UnitOfWork.Connection.QueryAsync<EventDetail>(storeName, param: parameters, transaction: UnitOfWork.Transaction, commandType: System.Data.CommandType.StoredProcedure);
+            var res = await DbContext.Connection.QueryAsync<EventDetail>(storeName, param: parameters, transaction: DbContext.Transaction, commandType: System.Data.CommandType.StoredProcedure);
             return res;
         }
     }

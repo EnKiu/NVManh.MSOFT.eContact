@@ -33,7 +33,7 @@
 <script>
 import TheHeader from './components/layout/TheHeader.vue'
 import TheMain from './components/layout/TheMain.vue'
-// import { USER_REQUEST } from "./store/actions/user";
+import { USER_REQUEST } from "./store/actions/user";
 import { mapGetters, mapState } from "vuex";
 import MDialogNotification from "./components/base/MDialogNotification.vue";
 import MToast from "./components/base/MToast.vue";
@@ -63,6 +63,11 @@ export default {
       authLoading: (state) => state.auth.status === "loading",
       name: (state) => `${state.user.profile.title} ${state.user.profile.name}`,
     }),
+  },
+  async created() {
+    if (this.$store.getters.isAuthenticated) {
+      await this.$store.dispatch(USER_REQUEST);
+    }
   },
   methods: {
     hideNotice() {

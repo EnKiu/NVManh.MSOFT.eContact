@@ -10,7 +10,7 @@ namespace MS.Infrastructure.Data
     public class ContactRepository:DapperRepository<Contact>
     {
         string _tableName = string.Empty;
-        public ContactRepository(IUnitOfWork unitOfWork):base(unitOfWork)
+        public ContactRepository(MySqlDbContext dbContext):base(dbContext)
         {
             _tableName = typeof(Contact).Name;
         }

@@ -1,4 +1,5 @@
 ﻿using MS.ApplicationCore.Entities;
+using MS.ApplicationCore.Exceptions;
 using MS.ApplicationCore.Interfaces;
 using System;
 using System.Collections.Generic;
@@ -9,17 +10,22 @@ namespace MS.ApplicationCore.Services
 {
     public class EventDetailService : BaseService<EventDetail>, IEventDetailService
     {
-        IEventDetailRepository _repository;
         public EventDetailService(IEventDetailRepository repository,IUnitOfWork unitOfWork) : base(repository, unitOfWork)
         {
-            _repository = repository;
         }
-
-        protected override async void ValidateObject(EventDetail entity)
+        public override async Task<int> AddAsync(EventDetail entity)
+        {
+            await Validate(entity);
+            if (Errors.Count == 0)
+                return await UnitOfWork.EventDetails.AddAsync(entity);
+            else
+                throw new MISAException(System.Net.HttpStatusCode.BadRequest, Errors);
+        }
+        protected async Task Validate(EventDetail entity)
         {
             var validateErrors = new List<string>();
             // Kiểm tra xem người đăng ký hiện tại đã đăng ký chưa?
-            var res = await _repository.CheckRegisted(entity);
+            var res = await UnitOfWork.EventDetails.CheckRegisted(entity);
             if (res == true)
             {
                 validateErrors.Add("Thành viên đã đăng ký tham gia sự kiện.");

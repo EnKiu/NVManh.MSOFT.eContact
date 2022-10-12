@@ -2,6 +2,7 @@
 using MS.ApplicationCore.Entities;
 using MS.ApplicationCore.Entities.Auth;
 using MS.ApplicationCore.Interfaces;
+using MS.Infrastructure.UnitOfWork;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -12,7 +13,7 @@ namespace MS.Infrastructure.Data
 {
     public class UserRepository : DapperRepository<AspNetUsers>, IUserRepository
     {
-        public UserRepository(IUnitOfWork unitOfWork) : base(unitOfWork)
+        public UserRepository(MySqlDbContext mySqlDbContext) : base(mySqlDbContext)
         {
         }
         public async Task<AspNetUsers> GetUserAuthenticate(string userName, string password)
@@ -22,7 +23,7 @@ namespace MS.Infrastructure.Data
             var parameters = new DynamicParameters();
             parameters.Add("@UserName", userName);
             parameters.Add("@Password", password);
-            var user = await UnitOfWork.Connection.QueryFirstOrDefaultAsync<AspNetUsers>(sql, param: parameters, transaction: UnitOfWork.Transaction);
+            var user = await DbContext.Connection.QueryFirstOrDefaultAsync<AspNetUsers>(sql, param: parameters, transaction: DbContext.Transaction);
 
             // get roles:
             if (user == null)
@@ -31,7 +32,7 @@ namespace MS.Infrastructure.Data
             }
             var sqlRoles = "SELECT a.Id,a.Name,a.RoleValue, b.UserId FROM AspNetRoles a INNER JOIN AspNetUserRoles b ON a.Id = b.RoleId WHERE b.UserId = @UserId";
             parameters.Add("@UserId", user.Id);
-            user.Roles = await UnitOfWork.Connection.QueryAsync<AspNetRoles>(sqlRoles, param: parameters, transaction: UnitOfWork.Transaction);
+            user.Roles = await DbContext.Connection.QueryAsync<AspNetRoles>(sqlRoles, param: parameters, transaction: DbContext.Transaction);
 
             return user;
         }
@@ -46,10 +47,10 @@ namespace MS.Infrastructure.Data
             var sqlSelectEmployeeInfo = "SELECT * FROM View_Employee e WHERE e.UserId = @UserId";
             var parameters = new DynamicParameters();
             parameters.Add($"@UserID", id);
-            var user = await UnitOfWork.Connection.QueryFirstOrDefaultAsync<AspNetUsers>(sqlCommand, param: parameters, transaction: UnitOfWork.Transaction);
+            var user = await DbContext.Connection.QueryFirstOrDefaultAsync<AspNetUsers>(sqlCommand, param: parameters, transaction: DbContext.Transaction);
             if (user != null)
             {
-                user.Roles = await UnitOfWork.Connection.QueryAsync<AspNetRoles>(sqlSelectRoles, param: parameters, transaction: UnitOfWork.Transaction);
+                user.Roles = await DbContext.Connection.QueryAsync<AspNetRoles>(sqlSelectRoles, param: parameters, transaction: DbContext.Transaction);
                 //user.Employee = await UnitOfWork.Connection.QueryFirstOrDefaultAsync<Employee>(sqlSelectEmployeeInfo, param: parameters, transaction: UnitOfWork.Transaction);
 
             }
@@ -66,10 +67,10 @@ namespace MS.Infrastructure.Data
             var sqlSelectEmployeeInfo = "SELECT * FROM View_Employee e WHERE e.UserId = @UserId";
             var parameters = new DynamicParameters();
             parameters.Add($"@UserID", id);
-            var user = UnitOfWork.Connection.QueryFirstOrDefault<AspNetUsers>(sqlCommand, param: parameters, transaction: UnitOfWork.Transaction);
+            var user = DbContext.Connection.QueryFirstOrDefault<AspNetUsers>(sqlCommand, param: parameters, transaction: DbContext.Transaction);
             if (user != null)
             {
-                user.Roles = UnitOfWork.Connection.Query<AspNetRoles>(sqlSelectRoles, param: parameters, transaction: UnitOfWork.Transaction);
+                user.Roles = DbContext.Connection.Query<AspNetRoles>(sqlSelectRoles, param: parameters, transaction: DbContext.Transaction);
                 //user.Employee = UnitOfWork.Connection.QueryFirstOrDefault<Employee>(sqlSelectEmployeeInfo, param: parameters, transaction: UnitOfWork.Transaction);
 
             }
@@ -88,7 +89,7 @@ namespace MS.Infrastructure.Data
             var sql = "SELECT Email FROM AspNetUsers WHERE (Email IS NOT NULL AND Email = @Email)";
             var parameters = new DynamicParameters();
             parameters.Add("@Email", email);
-            var res = await UnitOfWork.Connection.QueryFirstOrDefaultAsync<AspNetUsers>(sql, param: parameters, transaction: UnitOfWork.Transaction);
+            var res = await DbContext.Connection.QueryFirstOrDefaultAsync<AspNetUsers>(sql, param: parameters, transaction: DbContext.Transaction);
             if (res == null)
                 return false;
             return true;
@@ -100,7 +101,7 @@ namespace MS.Infrastructure.Data
             var sql = "SELECT PhoneNumber FROM AspNetUsers WHERE (PhoneNumber IS NOT NULL AND PhoneNumber = @PhoneNumber)";
             var parameters = new DynamicParameters();
             parameters.Add("@PhoneNumber", phone);
-            var res = await UnitOfWork.Connection.QueryFirstOrDefaultAsync<AspNetUsers>(sql, param: parameters, transaction: UnitOfWork.Transaction);
+            var res = await DbContext.Connection.QueryFirstOrDefaultAsync<AspNetUsers>(sql, param: parameters, transaction: DbContext.Transaction);
             if (res == null)
                 return false;
             return true;
@@ -112,7 +113,7 @@ namespace MS.Infrastructure.Data
             var sql = "SELECT UserName FROM AspNetUsers WHERE (UserName IS NOT NULL AND UserName = @UserName)";
             var parameters = new DynamicParameters();
             parameters.Add("@UserName", userName);
-            var res = await UnitOfWork.Connection.QueryFirstOrDefaultAsync<AspNetRoles>(sql, param: parameters, transaction: UnitOfWork.Transaction);
+            var res = await DbContext.Connection.QueryFirstOrDefaultAsync<AspNetRoles>(sql, param: parameters, transaction: DbContext.Transaction);
             if (res == null)
                 return false;
             return true;
@@ -123,7 +124,7 @@ namespace MS.Infrastructure.Data
             var sql = "Proc_GetRolesByUserName";
             var parameters = new DynamicParameters();
             parameters.Add("@p_UserName", user.UserName);
-            var data = await UnitOfWork.Connection.QueryAsync<string>(sql, param: parameters, commandType: System.Data.CommandType.StoredProcedure);
+            var data = await DbContext.Connection.QueryAsync<string>(sql, param: parameters, commandType: System.Data.CommandType.StoredProcedure);
             return data.ToList();
         }
 
@@ -133,7 +134,7 @@ namespace MS.Infrastructure.Data
             var sql = "SELECT * FROM AspNetUsers WHERE (UserName = @UserName OR Email = @UserName OR PhoneNumber = @UserName)";
             var parameters = new DynamicParameters();
             parameters.Add("@UserName", userName);
-            var data = await UnitOfWork.Connection.QueryFirstOrDefaultAsync<AspNetUsers>(sql, param: parameters, transaction: UnitOfWork.Transaction);
+            var data = await DbContext.Connection.QueryFirstOrDefaultAsync<AspNetUsers>(sql, param: parameters, transaction: DbContext.Transaction);
             return data;
         }
 
@@ -156,7 +157,7 @@ namespace MS.Infrastructure.Data
                 var sql = "SELECT * FROM UserTokenConfirm WHERE UserName = @UserName";
                 var parameters = new DynamicParameters();
                 parameters.Add("@UserName", userTokenConfirm.UserName);
-                var useToken = await UnitOfWork.Connection.QueryFirstOrDefaultAsync<UserTokenConfirm>(sql, param: parameters, transaction: UnitOfWork.Transaction);
+                var useToken = await DbContext.Connection.QueryFirstOrDefaultAsync<UserTokenConfirm>(sql, param: parameters, transaction: DbContext.Transaction);
                 if (useToken.TokenCode == userTokenConfirm.TokenCode)
                 {
 
@@ -164,7 +165,7 @@ namespace MS.Infrastructure.Data
                     var sqlUpdateConfirm = "UPDATE AspNetUsers anu SET anu.EmailConfirmed = 1 WHERE anu.Id = @UserId;" +
                         "DELETE FROM UserTokenConfirm WHERE UserId = @UserId";
                     parameters.Add("@UserId", useToken.UserId);
-                    var res = await UnitOfWork.Connection.ExecuteAsync(sqlUpdateConfirm, param: parameters, transaction: UnitOfWork.Transaction);
+                    var res = await DbContext.Connection.ExecuteAsync(sqlUpdateConfirm, param: parameters, transaction: DbContext.Transaction);
                     if (res > 0)
                         return true;
                     else
@@ -184,7 +185,7 @@ namespace MS.Infrastructure.Data
         {
 
             var sql = "SELECT * FROM AspNetRoles";
-            var data = await UnitOfWork.Connection.QueryAsync<AspNetRoles>(sql);
+            var data = await DbContext.Connection.QueryAsync<AspNetRoles>(sql);
             return data;
         }
 
@@ -202,10 +203,10 @@ namespace MS.Infrastructure.Data
                     parameters.Add("@UserId", user.Id);
 
                     // Cập nhật tình trạng
-                    res += await UnitOfWork.Connection.ExecuteAsync(sqlUpdateConfirm, param: parameters, transaction: UnitOfWork.Transaction);
+                    res += await DbContext.Connection.ExecuteAsync(sqlUpdateConfirm, param: parameters, transaction: DbContext.Transaction);
 
                     // Xóa Token (nếu có):
-                    await UnitOfWork.Connection.ExecuteAsync(sqlDeleteConfirm, param: parameters, transaction: UnitOfWork.Transaction);
+                    await DbContext.Connection.ExecuteAsync(sqlDeleteConfirm, param: parameters, transaction: DbContext.Transaction);
                 }
             }
             return res;

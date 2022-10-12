@@ -8,8 +8,8 @@ namespace MS.ApplicationCore.Interfaces
     public interface IUnitOfWork: IDisposable
     {
         Guid Id { get; }
-        IDbConnection Connection { get; }
-        IDbTransaction Transaction { get; }
+        //IDbConnection Connection { get; }
+        //IDbTransaction Transaction { get; }
         void BeginTransaction();
         void Commit();
         void Rollback();

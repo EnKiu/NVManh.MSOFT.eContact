@@ -10,10 +10,10 @@ namespace MS.ApplicationCore.Services
 {
     public class AlbumService : BaseService<Album>, IAlbumService
     {
-        IAlbumRepository _repository;
-        IPictureRepository _pictureRepository;
-        IFileTransfer _fileTransfer;
-        IUnitOfWork _unitOfWork;
+        readonly IAlbumRepository _repository;
+        readonly IPictureRepository _pictureRepository;
+        readonly IFileTransfer _fileTransfer;
+        readonly IUnitOfWork _unitOfWork;
         public AlbumService(IAlbumRepository repository, IFileTransfer fileTransfer, IPictureRepository pictureRepository, IUnitOfWork unitOfWork) : base(repository, unitOfWork)
         {
             _repository = repository;
@@ -33,7 +33,7 @@ namespace MS.ApplicationCore.Services
                 throw new MISAException(System.Net.HttpStatusCode.BadRequest, Errors);
             }
             // Thêm Album vào database:
-            _unitOfWork.Connection.Open();
+            //_unitOfWork.Connection.Open();
             _unitOfWork.BeginTransaction();
             var addAlbumResult = await _repository.AddAsync(entity);
             if (addAlbumResult > 0)
@@ -50,7 +50,7 @@ namespace MS.ApplicationCore.Services
                     totalPicturesAdd += await _pictureRepository.AddAsync(pic);
                 }
                 _unitOfWork.Commit();
-                _unitOfWork.Connection.Close();
+                //_unitOfWork.Connection.Close();
             }
 
             return addAlbumResult;

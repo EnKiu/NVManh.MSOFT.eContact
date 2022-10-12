@@ -11,9 +11,8 @@ namespace MS.Infrastructure.Data
 {
     public class PictureRepository : DapperRepository<Picture>, IPictureRepository
     {
-        public PictureRepository(IUnitOfWork unitOfWork) : base(unitOfWork)
+        public PictureRepository(MySqlDbContext mySqlDbContext) : base(mySqlDbContext)
         {
-            UnitOfWork = unitOfWork;
         }
         public async override Task<int> AddAsync(Picture entity)
         {
@@ -22,7 +21,7 @@ namespace MS.Infrastructure.Data
             parameters.Add("@Description", entity.Description);
             parameters.Add("@UrlPath", entity.UrlPath);
             parameters.Add("@AlbumId", entity.AlbumId.ToString());
-            var rowAffects = await UnitOfWork.Connection.ExecuteAsync($"Proc_Picture_Insert", param: parameters, transaction: UnitOfWork.Transaction, commandType: System.Data.CommandType.StoredProcedure);
+            var rowAffects = await DbContext.Connection.ExecuteAsync($"Proc_Picture_Insert", param: parameters, transaction: DbContext.Transaction, commandType: System.Data.CommandType.StoredProcedure);
             return rowAffects;
         }
 
@@ -31,7 +30,7 @@ namespace MS.Infrastructure.Data
             var sql = "UPDATE Picture p SET TotalViews = IFNULL(TotalViews,0)+1 WHERE PictureId = @PictureId";
             var parameters = new DynamicParameters();
             parameters.Add("@PictureId", pictureId);
-            var res = await UnitOfWork.Connection.ExecuteAsync(sql, param: parameters, transaction: UnitOfWork.Transaction, commandType: System.Data.CommandType.Text);
+            var res = await DbContext.Connection.ExecuteAsync(sql, param: parameters, transaction: DbContext.Transaction, commandType: System.Data.CommandType.Text);
             return res;
         }
     }

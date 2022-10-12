@@ -8,7 +8,7 @@ using MySqlConnector;
 
 namespace MS.Infrastructure.UnitOfWork
 {
-    public class UnitOfWork : IUnitOfWork
+    public class UnitOfWork : IUnitOfWork, IDisposable
     {
         #region Properties
         public IAlbumRepository Albums { get; }
@@ -18,36 +18,25 @@ namespace MS.Infrastructure.UnitOfWork
         public IUserRepository Users { get; }
         #endregion
 
-        IDbConnection _connection = null;
-        IDbTransaction _transaction = null;
+        private readonly MySqlDbContext _dbContext;
         Guid _id = Guid.Empty;
-        IConfiguration _configuration;
-        public UnitOfWork(IConfiguration configuration, 
-            IAlbumRepository albums, 
-            IEventDetailRepository eventDetails, 
-            IEventRepository events, 
-            IPictureRepository pictures, 
-            IUserRepository users)
+        public UnitOfWork(
+            IAlbumRepository albums,
+            IEventDetailRepository eventDetails,
+            IEventRepository events,
+            IPictureRepository pictures,
+            IUserRepository users,
+            MySqlDbContext dbContext)
         {
-            _configuration = configuration;
-
             _id = Guid.NewGuid();
-            _connection = new MySqlConnection(_configuration.GetConnectionString("DefaultConnection"));
             Albums = albums;
             EventDetails = eventDetails;
             Events = events;
             Pictures = pictures;
             Users = users;
+            _dbContext = dbContext;
         }
 
-        public IDbConnection Connection
-        {
-            get { return _connection; }
-        }
-        public IDbTransaction Transaction
-        {
-            get { return _transaction; }
-        }
         public Guid Id
         {
             get { return _id; }
@@ -55,30 +44,23 @@ namespace MS.Infrastructure.UnitOfWork
 
         public void BeginTransaction()
         {
-            _transaction = _connection.BeginTransaction();
+            _dbContext.Transaction = _dbContext.Connection.BeginTransaction();
         }
 
         public void Commit()
         {
-            _transaction.Commit();
-            Dispose();
+            _dbContext.Transaction.Commit();
         }
 
         public void Rollback()
         {
-            _transaction.Rollback();
-            Dispose();
+            _dbContext.Transaction.Rollback();
         }
 
         public void Dispose()
         {
-            if (_transaction != null)
-                _transaction.Dispose();
-            _transaction = null;
-            if (_connection.State == ConnectionState.Open)
-            {
-                _connection.Close();
-            }
+            _dbContext.Transaction?.Dispose();
+            GC.SuppressFinalize(this);
         }
     }
 }

@@ -39,6 +39,21 @@ app.config.globalProperties.commonJs = commonJs;
 app.config.globalProperties.api = api;
 app.config.globalProperties.Enum = Enum;
 
+document.addEventListener("DOMContentLoaded", function() {
+    var elements = document.getElementsByTagName("INPUT");
+    for (var i = 0; i < elements.length; i++) {
+        elements[i].oninvalid = function(e) {
+            e.target.setCustomValidity("");
+            if (!e.target.validity.valid) {
+                e.target.setCustomValidity("Thông tin này không được phép để trống");
+            }
+        };
+        elements[i].oninput = function(e) {
+            e.target.setCustomValidity("");
+        };
+    }
+})
+
 app.use(ElementPlus, {
     locale: locale,
 })

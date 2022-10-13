@@ -4,13 +4,16 @@
     <div class="logo"></div>
     <div class="navbar-list">
         <router-link to="/contacts" class="navbar-item">
-            <span class="navbar-item__text"><i class="icofont-ui-contact-list"></i> Danh bạ</span>
+            <span class="navbar-item__text"><i class="icofont-contacts"></i> Danh bạ</span>
         </router-link>
          <router-link to="/events" class="navbar-item">
             <span class="navbar-item__text"><i class="icofont-history"></i> Sự kiện</span>
         </router-link>
          <router-link to="/pictures" class="navbar-item">
             <span class="navbar-item__text"><i class="icofont-image"></i> Kho ảnh</span>
+        </router-link>
+        <router-link to="/account" class="navbar-item">
+            <span class="navbar-item__text"><i class="icofont-user-alt-3"></i> Tài khoản</span>
         </router-link>
     </div>
   </nav>
@@ -61,8 +64,8 @@ export default {};
 }
 
 .navbar-item i{
-    font-size: 20px;
-    margin-right: 10px;
+    font-size: 16px;
+    margin-right: 5px;
 }
 .router-link-active{
     background-color: #656565cc;

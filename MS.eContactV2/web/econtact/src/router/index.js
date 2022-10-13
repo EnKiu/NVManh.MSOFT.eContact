@@ -3,10 +3,26 @@ import ContactList from '../views/contacts/ContactList.vue'
 import EventList from '../views/events/EventList.vue'
 // import NewList from '../views/news/NewList.vue'
 import AlbumList from '../views/pictures/AlbumList.vue'
+import LoginPage from '../views/account/Login.vue'
+import Register from '../views/account/Register.vue'
 const routes = [{
         path: '/',
-        name: 'ContactList',
+        name: 'HomePage',
         component: ContactList,
+    },
+    {
+        path: '/login',
+        name: 'LoginPage',
+        components: {
+            LoginPage: LoginPage
+        }
+    },
+    {
+        path: '/register',
+        name: 'Register',
+        components: {
+            Register: Register
+        }
     },
     {
         path: '/contacts',

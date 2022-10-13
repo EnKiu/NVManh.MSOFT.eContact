@@ -7,10 +7,11 @@
     <input
       :type="type"
       ref="minput"
-      :focus="focus"
       :required="required"
+      :placeholder="placeholder"
       v-model="value"
       @input="onInput"
+      :autocomplete="autocomplete"
       :disabled="disabled"
       class="input"
       :class="{ 'input--invalid': inValid }"
@@ -29,13 +30,23 @@
   </div>
 </template>
 <script>
+// const focus = {
+//   mounted: (el) => el.focus(),
+// };
 export default {
   name: "MInput",
+  directives: {
+    // enables v-focus in template
+      // focus,
+    
+  },
   props: {
     modelValue: { type: String, default: "", required: true },
+    placeholder: { type: String, default: "", required: false },
+    autocomplete: { type: String, default: "", required: false },
     label: { type: String, default: null, required: false },
     type: { type: String, default: "text", required: false },
-    focus: { type: Boolean, default: false, required: false },
+    isFocus: { type: Boolean, default: false, required: false },
     required: { type: Boolean, default: false, required: false },
     disabled: { type: Boolean, default: false, required: false },
     validated: { type: Boolean, default: false, required: false },
@@ -44,6 +55,13 @@ export default {
   created() {
     this.value = this.modelValue;
     this.selfValidated = this.validated;
+  },
+  mounted() {
+    if (this.isFocus == true) {
+      this.$nextTick(function () {
+        this.$refs.minput.focus();
+      });
+    }
   },
   computed: {
     inValid: function () {
@@ -70,7 +88,11 @@ export default {
       console.log(newValue);
       if (newValue == true) {
         this.selfValidated = true;
-        if (this.modelValue == "" || this.modelValue == undefined || this.modelValue == null) {
+        if (
+          this.modelValue == "" ||
+          this.modelValue == undefined ||
+          this.modelValue == null
+        ) {
           this.$emit("onValidate", false);
         } else {
           this.$emit("onValidate", true);

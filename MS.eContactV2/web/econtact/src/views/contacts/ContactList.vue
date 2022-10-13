@@ -27,16 +27,30 @@
           </tr>
         </thead>
         <tbody>
-          <tr v-for="(contact, index) in contactsFilter" :key="index" @dblclick="onSelectContact(contact)">
+          <tr
+            v-for="(contact, index) in contactsFilter"
+            :key="index"
+            @dblclick="onSelectContact(contact)"
+          >
             <td class="th-avatar">
-              <img
+              <div @click="onSelectContact(contact)"
+                class="avatar"
+                :style="{
+                  'background-image': `url(${
+                    contact.AvatarFullPath || 'avatar.png'
+                  })`,
+                }"
+              ></div>
+              <!-- <img
                 :src="contact.AvatarFullPath || 'avatar.png'"
                 alt=""
                 @click="onSelectContact(contact)"
-              />
+              /> -->
             </td>
             <td>
-              <a @click="onSelectContact(contact)">{{ contact.FirstName }} <b>{{ contact.LastName }}</b></a>
+              <a @click="onSelectContact(contact)"
+                >{{ contact.FirstName }} <b>{{ contact.LastName }}</b></a
+              >
             </td>
             <td>{{ contact.PhoneNumber }}<br />{{ contact.MobileNumber }}</td>
           </tr>
@@ -69,11 +83,11 @@ export default {
   methods: {
     loadData() {
       // Lấy danh sách liên hệ
-       this.api({
-        url: "/api/v1/contacts"
+      this.api({
+        url: "/api/v1/contacts",
       })
         .then((res) => {
-           this.contacts = res;
+          this.contacts = res;
           this.contactsFilter = res;
         })
         .catch((res) => {
@@ -180,4 +194,12 @@ export default {
   overflow-y: auto;
 }
 
+.avatar {
+  width: 50px;
+  height: 50px;
+  background-repeat: no-repeat;
+  background-position: center;
+  background-size: cover;
+  border-radius: 50%;
+}
 </style>

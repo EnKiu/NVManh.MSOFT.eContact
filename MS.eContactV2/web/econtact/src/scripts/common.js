@@ -2,11 +2,29 @@
 import store from "@/store";
 // import router from "@/router";
 import MISAEnum from "./enum";
-// import { AUTH_REQUEST } from "@/store/actions/auth";
+import { AUTH_REQUEST } from "@/store/actions/auth";
 import { CLEAR_ERROR_MSG, SET_ERROR_MSG } from '@/store/actions/notification.js';
 import { SHOW_LOADING, HIDE_LOADING } from '@/store/actions/loading.js';
 import { CLEAR_TOAST, SET_TOAST } from '@/store/actions/toast.js';
 const commonJs = {
+    login: function(username, password) {
+        commonJs.showLoading();
+        store
+            .dispatch(AUTH_REQUEST, { username, password })
+            .then(() => {
+                router.push("/");
+                commonJs.hideLoading();
+            })
+            .catch((res) => {
+                var msg = "Có lỗi xảy ra vui lòng liên hệ MISA để được trợ giúp.";
+                if (res.status == 401) {
+                    msg = "Vui lòng kiểm tra lại thông tin tài khoản hoặc mật khẩu."
+                }
+                commonJs.showMessenger({ title: "Lỗi", msg: msg, type: MISAEnum.MsgType.Error })
+                    // this.showConfirmDialog = true;
+                commonJs.hideLoading();
+            });
+    },
     change_alias: function(alias) {
         var str = alias;
         str = str.toLowerCase();

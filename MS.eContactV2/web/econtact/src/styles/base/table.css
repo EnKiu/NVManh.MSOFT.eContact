@@ -13,7 +13,9 @@ thead th {
 }
 
 td img {
-    width: 150px;
+    width: 100px;
+    height: 100px;
+    border-radius: 50%;
 }
 
 table {
@@ -25,8 +27,8 @@ table {
 table td,
 th {
     white-space: nowrap;
-    padding: 0 16px;
-    border-bottom: 1px solid #ccc;
+    padding: 10px 16px;
+    border-bottom: 1px solid #dedede;
     text-align: left;
 }
 

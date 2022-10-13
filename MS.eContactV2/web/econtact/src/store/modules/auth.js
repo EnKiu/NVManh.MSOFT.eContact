@@ -23,7 +23,7 @@ const actions = {
     [AUTH_REQUEST]: ({ commit, dispatch }, user) => {
         return new Promise((resolve, reject) => {
             commit(AUTH_REQUEST);
-            apiCall({ url: "/api/v1/Authenticate/login", data: user, method: "POST" })
+            apiCall({ url: "/api/v1/Accounts/login", data: user, method: "POST" })
                 .then(resp => {
 
                     // Lữu trữ Token và user id trong local storage:

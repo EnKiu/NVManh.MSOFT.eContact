@@ -1,6 +1,8 @@
 <template>
   <the-header></the-header>
   <the-main></the-main>
+  <router-view name="LoginPage"></router-view>
+  <router-view class="register" name="Register"></router-view>
   <!-- <m-dialog>
     <template v-slot:content>
       <div class="notice">

@@ -1,7 +1,7 @@
 import axios from 'axios'
-import router from '@/router';
-import store from '@/store';
-import { AUTH_LOGOUT } from "@/store/actions/auth";
+// import router from '@/router';
+// import store from '@/store';
+// import { AUTH_LOGOUT } from "@/store/actions/auth";
 import commonJs from '@/scripts/common';
 import MISAEnum from '@/scripts/enum';
 
@@ -88,12 +88,12 @@ const apiCall = ({ url, data, method, showToast }) =>
                                     title: "",
                                     msg: res.message,
                                     type: MISAEnum.MsgType.Info,
-                                    confirm: function() {
-                                        console.log(123434);
-                                        store.dispatch(AUTH_LOGOUT).then(() => {
-                                            router.push("/login");
-                                        });
-                                    }
+                                    // confirm: function() {
+                                    //     console.log(123434);
+                                    //     store.dispatch(AUTH_LOGOUT).then(() => {
+                                    //         router.push("/login");
+                                    //     });
+                                    // }
                                 })
                             }
                         }

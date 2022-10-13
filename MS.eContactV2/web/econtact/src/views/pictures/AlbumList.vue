@@ -12,18 +12,25 @@
         :key="index"
         @click="showDetailAlbum(album)"
       >
-        <button class="btn--remove-item" @click="onRemoveAlbum(album,index)" title="Xóa Album">
+        <button
+          class="btn--remove-item"
+          @click="onRemoveAlbum(album, index)"
+          title="Xóa Album"
+        >
           <i class="icofont-ui-remove"></i>
         </button>
         <div class="album__title">{{ album.AlbumName }}</div>
         <div class="album__date">
-          Ngày tạo: {{ commonJs.formatDate(album.CreatedDate) }}
+          <i class="icofont-ui-clock"></i> Ngày tạo:
+          {{ commonJs.formatDate(album.CreatedDate) }}
         </div>
         <div class="album__total-pictures">
-          Tổng số ảnh: {{ album.TotalPictures }}
+          <i class="icofont-files-stack"></i>Tổng số ảnh:
+          {{ album.TotalPictures }}
         </div>
         <div class="album__total-view">
-          Tổng số lượt xem: {{ album.TotalViews }}
+          <i class="icofont-eye-alt"></i>Tổng số lượt xem:
+          {{ album.TotalViews }}
         </div>
       </div>
     </div>
@@ -60,9 +67,9 @@ export default {
       this.showAddNew = false;
       this.loadAlbum();
     },
-    onRemoveAlbum(album,index){
+    onRemoveAlbum(album, index) {
       console.log(album);
-      console.log("album-index:",index);
+      console.log("album-index:", index);
     },
     showDetailAlbum(album) {
       this.albumSelected = album;
@@ -114,19 +121,32 @@ export default {
   margin: 10px;
   cursor: pointer;
 }
-.album-item .btn--remove-item{
+
+.album-item div + div {
+  margin-top: 10px;
+}
+
+.album-item div i {
+  margin-right: 10px;
+}
+.album-item .btn--remove-item {
   display: none;
   color: #ff0000;
   border-color: #ff0000;
   border-style: solid;
-  border:none
+  border: none;
 }
-.album-item:hover .btn--remove-item{
+.album-item:hover .btn--remove-item {
   display: flex;
 }
 
 .album__title {
   font-size: 16px;
   font-weight: 700;
+  color: #0059ff;
+  background: -webkit-linear-gradient(rgb(255, 0, 0), #0084ff);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  transition: all 1000ms linear;
 }
 </style>

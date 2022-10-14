@@ -8,12 +8,12 @@ using System.Threading.Tasks;
 
 namespace MS.ApplicationCore.Entities.Auth
 {
-    public class AspNetUserRoles:BaseEntity
+    public class UserRole:BaseEntity
     {
         public Guid UserId { get; set; }
         public Guid RoleId { get; set; }
 
         [NotMapQuery]
-        public Role? RoleValue { get; set; }
+        public Enums.Role? RoleValue { get; set; }
     }
 }

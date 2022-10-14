@@ -8,9 +8,9 @@ namespace MS.ApplicationCore.Entities
 {
     public class AuthenticateResponse
     {
-        public AuthenticateResponse(AspNetUsers user, string token)
+        public AuthenticateResponse(User user, string token)
         {
-            UserId = user.Id;
+            UserId = user.UserId;
             FirstName = user.FirstName;
             LastName = user.LastName;
             Username = user.UserName;
@@ -23,7 +23,7 @@ namespace MS.ApplicationCore.Entities
         public string Token { get; set; }
         public string? RefreshToken { get; set; }
         public DateTime? Expiration { get; set; }
-        public Role? RoleValue { get; set; }
+        public Enums.Role? RoleValue { get; set; }
         public string? RoleName { get; set; }
     }
 }

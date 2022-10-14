@@ -1,4 +1,5 @@
-﻿using MS.ApplicationCore.Enums;
+﻿using MS.ApplicationCore.Entities.Auth;
+using MS.ApplicationCore.Enums;
 using MS.ApplicationCore.Utilities;
 using System;
 using System.Collections.Generic;

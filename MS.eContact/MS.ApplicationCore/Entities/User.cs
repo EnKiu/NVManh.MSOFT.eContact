@@ -8,14 +8,14 @@ using System.Threading.Tasks;
 
 namespace MS.ApplicationCore.Entities.Auth
 {
-    public class AspNetUsers: BaseEntity
+    public class User: BaseEntity
     {
-        public AspNetUsers()
+        public User()
         {
-            Roles = new List<AspNetRoles>();
+            Roles = new List<Role>();
         }
 
-        public Guid Id { get; set; }
+        public Guid UserId { get; set; }
 
         public string? FirstName { get; set; }
 
@@ -29,7 +29,7 @@ namespace MS.ApplicationCore.Entities.Auth
         public DateTime? LockoutEndDateUtc { get; set; }
         public string? SecurityStamp { get; set; }
         public int LockoutEnabled { get; set; } = 0;
-        public IEnumerable<AspNetRoles> Roles { get; set; }
+        public IEnumerable<Role> Roles { get; set; }
 
         [JsonIgnore]
         public string? PasswordHash { get; set; }
@@ -42,6 +42,8 @@ namespace MS.ApplicationCore.Entities.Auth
         public string? RefreshToken { get; set; }
 
         public DateTime? RefreshTokenExpiryTime { get; set; }
+        public Guid ContactId { get; set; }
+        public Contact Contact { get; set; }
 
     }
 }

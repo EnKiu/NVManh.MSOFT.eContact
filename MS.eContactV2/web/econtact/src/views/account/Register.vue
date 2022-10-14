@@ -1,27 +1,36 @@
 <template>
   <div class="register">
     <div class="register-container">
-        <div class="form__title">Tạo tài khoản mới</div>
-      <form class="register-form" id="FRM_REGISTER" @submit.prevent="onRegister">
+      <div class="form__title">Tạo tài khoản mới</div>
+      <form
+        class="register-form"
+        id="FRM_REGISTER"
+        @submit.prevent="onRegister"
+      >
+        <m-input
+          label="Số điện thoại"
+          :onlyNumberChar="true"
+          :required="true"
+          :isFocus="true"
+          type="tel"
+          name="username"
+          v-model="user.UserName"
+          :maxLength="10"
+          placeholder="Nhập số điện thoại chính của bạn"
+          v-model:validated="validated"
+          @onBlur="onBlurPhoneInput"
+        ></m-input>
         <m-combobox
           label="Chủ tài khoản"
           url="/api/v1/contacts"
           placeholder="Chọn thành viên sử dụng tài khoản này"
           v-model="user.ContactId"
           :required="true"
+          :isDisabled="isLockSelectContact"
           propValue="ContactId"
           propText="FullName"
         >
         </m-combobox>
-        <m-input
-          label="Số điện thoại"
-          :required="true"
-          :isFocus="true"
-          name="username"
-          v-model="user.UserName"
-          placeholder="Nhập số điện thoại chính của bạn"
-          v-model:validated="validated"
-        ></m-input>
         <m-input
           label="Mật khẩu"
           placeholder="Mật khẩu"
@@ -73,7 +82,33 @@ export default {
   emits: [],
   props: [],
   created() {},
-  methods: {},
+  methods: {
+    onBlurPhoneInput() {
+      // Kiểm tra thông tin số điện thoại đã được đăng ký hoặc khớp với thành viên nào trong hệ thống:
+      var userName = this.user.UserName;
+      if (userName) {
+        this.api({
+          url: "/api/v1/accounts/register?phoneNumber=" + this.user.UserName,
+        }).then((res) => {
+          if (!res) {
+            console.log("Không có dữ liệu");
+            return;
+          } else {
+            console.log(res);
+          }
+        });
+      }
+    },
+  },
+  computed: {
+    isLockSelectContact: function () {
+      if (!this.user.UserName) {
+        return true;
+      } else {
+        return false;
+      }
+    },
+  },
   data() {
     return {
       validated: false,
@@ -101,13 +136,13 @@ export default {
   padding: 24px;
   border-radius: 4px;
 }
-.register-form>div+div{
-    margin-top: 10px;
+.register-form > div + div {
+  margin-top: 10px;
 }
-.form__title{
-    font-size: 24px;
-    font-weight: 700;
-    margin-bottom: 10px;
+.form__title {
+  font-size: 24px;
+  font-weight: 700;
+  margin-bottom: 10px;
 }
 .form__button {
   width: 100%;

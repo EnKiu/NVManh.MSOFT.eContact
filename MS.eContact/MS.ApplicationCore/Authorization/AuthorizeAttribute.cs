@@ -16,11 +16,11 @@ namespace MS.ApplicationCore.Authorization
     [AttributeUsage(AttributeTargets.Class | AttributeTargets.Method)]
     public class AuthorizeAttribute : Attribute, IAuthorizationFilter
     {
-        private readonly IList<Role> _roles;
+        private readonly IList<Enums.Role> _roles;
 
-        public AuthorizeAttribute(params Role[] roles)
+        public AuthorizeAttribute(params Enums.Role[] roles)
         {
-            _roles = roles ?? new Role[] { };
+            _roles = roles ?? new Enums.Role[] { };
         }
         public void OnAuthorization(AuthorizationFilterContext context)
         {
@@ -29,7 +29,7 @@ namespace MS.ApplicationCore.Authorization
             if (allowAnonymous)
                 return;
 
-            var user = (AspNetUsers)context.HttpContext.Items["User"];
+            var user = (User)context.HttpContext.Items["User"];
 
             //var roles = (_roles.Any() && !_roles.Contains(user.Role));
             if (user == null)

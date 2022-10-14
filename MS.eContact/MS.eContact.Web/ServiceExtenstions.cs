@@ -1,5 +1,6 @@
 ﻿using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
+using MS.ApplicationCore;
 using MS.ApplicationCore.Authorization;
 using MS.ApplicationCore.Interface.Service;
 using MS.ApplicationCore.Interfaces;
@@ -16,6 +17,7 @@ namespace MS.eContact.Web
     {
         public static void AddApplication(this IServiceCollection service)
         {
+            service.AddApplicationCore();
             //service.AddTransient<IUnitOfWork, UnitOfWork>(); //Chú ý sử dụng AddTransient
             service.AddScoped<MySqlDbContext>();// Chú ý phải sử dụng AddScoped để đảm bảo không mở nhiều kết nối (các kết nối được tạo ra sẽ được duy trì và sử dụng lại)
             //service.AddScoped<IDbConnection>(db => new MySqlConnection(""));

@@ -11,7 +11,7 @@ using System.Threading.Tasks;
 
 namespace MS.ApplicationCore.Services
 {
-    public class UserService : BaseService<AspNetUsers>, IUserService
+    public class UserService : BaseService<User>, IUserService
     {
         IUserRepository _repository;
         IJwtUtils _jwtUtils;
@@ -21,7 +21,7 @@ namespace MS.ApplicationCore.Services
             _repository = repository;
             _jwtUtils = jwtUtils;
         }
-        public async Task<int> Register(AspNetUsers user)
+        public async Task<int> Register(User user)
         {
             user.SecurityStamp = Guid.NewGuid().ToString();
 
@@ -57,12 +57,12 @@ namespace MS.ApplicationCore.Services
             return new AuthenticateResponse(user, token);
         }
 
-        public IEnumerable<AspNetUsers> GetAll()
+        public IEnumerable<User> GetAll()
         {
             return null;
         }
 
-        public async Task<AspNetUsers> GetById(Guid id)
+        public async Task<User> GetById(Guid id)
         {
             return await _repository.FindAsync(id);
         }
@@ -73,7 +73,7 @@ namespace MS.ApplicationCore.Services
         /// <param name="user"></param>
         /// <returns></returns>
         /// <exception cref="HttpResponseException"></exception>
-        private async Task<bool> ValidateUser(AspNetUsers user)
+        private async Task<bool> ValidateUser(User user)
         {
 
             //if (await _repository.CheckEmailExist(user.Email) == true)
@@ -93,7 +93,7 @@ namespace MS.ApplicationCore.Services
             throw new NotImplementedException();
         }
 
-        public async Task<int> ConfirmMultiUser(IEnumerable<AspNetUsers> users)
+        public async Task<int> ConfirmMultiUser(IEnumerable<User> users)
         {
             return await UnitOfWork.Users.ConfirmMultiUser(users);
         }

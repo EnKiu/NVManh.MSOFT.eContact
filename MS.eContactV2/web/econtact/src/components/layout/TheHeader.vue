@@ -12,14 +12,20 @@
          <router-link to="/pictures" class="navbar-item">
             <span class="navbar-item__text"><i class="icofont-image"></i> Kho ảnh</span>
         </router-link>
-        <router-link to="/account" class="navbar-item">
+        <router-link v-if="isAuthenticated" to="/account" class="navbar-item">
             <span class="navbar-item__text"><i class="icofont-user-alt-3"></i> Tài khoản</span>
+        </router-link>
+        <router-link v-else to="/login" class="navbar-item">
+            <span class="navbar-item__text"><i class="icofont-login"></i> Đăng nhập</span>
         </router-link>
     </div>
   </nav>
 </template>
 <script>
-export default {};
+export default {
+    name:"TheHeader",
+    props:["isAuthenticated"]
+};
 </script>
 
 <style scoped>

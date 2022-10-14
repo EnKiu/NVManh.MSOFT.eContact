@@ -1,6 +1,6 @@
 <template>
     <div>
-        
+        Thông tin tài khoản
     </div>
 </template>
 <script>

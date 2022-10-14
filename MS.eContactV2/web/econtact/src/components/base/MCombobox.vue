@@ -14,6 +14,7 @@
         v-model="textInput"
         :placeholder="placeholder"
         @input="inputOnChange"
+        :disabled="isDisabled"
         @keydown="selecItemUpDown"
       />
       <button
@@ -22,6 +23,7 @@
         type="button"
         @keydown="selecItemUpDown"
         tabindex="-1"
+        :disabled="isDisabled"
       >
         <!-- <i class="fa-solid fa-chevron-down"></i> -->
         <img
@@ -158,6 +160,7 @@ export default {
     "isLoadData",
     "placeholder",
     "required",
+    "isDisabled"
   ],
   methods: {
     /**

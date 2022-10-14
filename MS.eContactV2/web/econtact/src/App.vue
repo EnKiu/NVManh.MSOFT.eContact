@@ -1,23 +1,8 @@
 <template>
-  <the-header></the-header>
+  <the-header :isAuthenticated="isAuthenticated"></the-header>
   <the-main></the-main>
   <router-view name="LoginPage"></router-view>
   <router-view class="register" name="Register"></router-view>
-  <!-- <m-dialog>
-    <template v-slot:content>
-      <div class="notice">
-        <div class="notice__icon --error">
-          <i class="icofont-error"></i>
-        </div>
-        <div class="notice__text">
-          Có lỗi xảy ra vui lòng liên hệ MISA để được trợ giúp!
-        </div>
-      </div>
-    </template>
-    <template v-slot:footer>
-      <button class="btn btn--default"><i class="icofont-ui-add"></i> Đồng ý</button>
-    </template>
-  </m-dialog> -->
   <MLoading v-if="isShowLoading" />
 <!-- <MLoading /> -->
   <MDialogNotification

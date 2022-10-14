@@ -11,9 +11,12 @@
       :placeholder="placeholder"
       v-model="value"
       @input="onInput"
+      :maxlength="maxLength"
       :autocomplete="autocomplete"
       :disabled="disabled"
       class="input"
+      @keydown="onKeyDown"
+      @blur="onBlur"
       :class="{ 'input--invalid': inValid }"
     />
     <div v-if="inValid" class="validate-error">
@@ -37,8 +40,7 @@ export default {
   name: "MInput",
   directives: {
     // enables v-focus in template
-      // focus,
-    
+    // focus,
   },
   props: {
     modelValue: { type: String, default: "", required: true },
@@ -50,8 +52,10 @@ export default {
     required: { type: Boolean, default: false, required: false },
     disabled: { type: Boolean, default: false, required: false },
     validated: { type: Boolean, default: false, required: false },
+    onlyNumberChar: { type: Boolean, default: false, required: false },
+    maxLength: { type: Number, default: 0, required: false },
   },
-  emits: ["update:modelValue", "onValidate", "update:validated"],
+  emits: ["update:modelValue", "onValidate", "update:validated","onBlur"],
   created() {
     this.value = this.modelValue;
     this.selfValidated = this.validated;
@@ -82,6 +86,22 @@ export default {
     onInput() {
       this.$emit("update:modelValue", this.value);
     },
+    onKeyDown(evt) {
+      if (this.onlyNumberChar == true) {
+        evt = evt ? evt : window.event;
+        var charCode = evt.which ? evt.which : evt.keyCode;
+        if (charCode > 31 && (charCode < 48 || charCode > 57)) {
+          evt.preventDefault();
+        }
+        return true;
+      }else{
+        return true;
+      }
+    },
+    onBlur(){
+      this.selfValidated = true;
+      this.$emit('onBlur')
+    }
   },
   watch: {
     validated: function (newValue) {

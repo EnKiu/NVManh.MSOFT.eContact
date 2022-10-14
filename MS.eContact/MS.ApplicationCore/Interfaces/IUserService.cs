@@ -9,17 +9,17 @@ using System.Threading.Tasks;
 
 namespace MS.ApplicationCore.Interface.Service
 {
-    public interface IUserService:IBaseService<AspNetUsers>
+    public interface IUserService:IBaseService<User>
     {
         Task<AuthenticateResponse?> Authenticate(AuthenticateRequest model);
-        IEnumerable<AspNetUsers> GetAll();
-        Task<AspNetUsers> GetById(Guid id);
+        IEnumerable<User> GetAll();
+        Task<User> GetById(Guid id);
 
         /// <summary>
         /// Đăng ký tài khoản mới
         /// </summary>
         /// <param name="user"></param>
-        Task<int> Register(AspNetUsers user);
+        Task<int> Register(User user);
 
         object? LogOut();
 
@@ -29,6 +29,6 @@ namespace MS.ApplicationCore.Interface.Service
         /// <param name="users">Danh sách User thực hiện xác thực thông tin</param>
         /// <returns>Số lượng User đã xác thực</returns>
         /// CreatedBy: NVMANH (10/09/2022)
-        Task<int> ConfirmMultiUser(IEnumerable<AspNetUsers> users);
+        Task<int> ConfirmMultiUser(IEnumerable<User> users);
     }
 }

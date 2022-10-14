@@ -12,18 +12,28 @@ using System.Threading.Tasks;
 
 namespace MS.eContact.Web.Controllers
 {
-    public class AccountsController : BaseController<AspNetUsers>
+    public class AccountsController : BaseController<User>
     {
         readonly IUserRepository _repository;
         readonly IUserService _service;
         readonly IJwtUtils _jwtUntils;
         private readonly IConfiguration _configuration;
-        public AccountsController(IUserRepository repository, IUserService baseService, IJwtUtils jwtUntils, IConfiguration configuration) : base(repository, baseService)
+        readonly IUnitOfWork _unitOfWork;
+        public AccountsController(IUserRepository repository, IUserService baseService, IJwtUtils jwtUntils, IConfiguration configuration, IUnitOfWork unitOfWork) : base(repository, baseService)
         {
             _repository = repository;
             _service = baseService;
             _jwtUntils = jwtUntils;
             _configuration = configuration;
+            _unitOfWork = unitOfWork;
+        }
+
+        [AllowAnonymous]
+        [HttpGet]
+        [Route("register")]
+        public async Task<IActionResult> Get(string phoneNumber)
+        {
+            return Ok(await _unitOfWork.Users.GetByPhoneNumber(phoneNumber));
         }
 
         [AllowAnonymous]
@@ -72,7 +82,7 @@ namespace MS.eContact.Web.Controllers
         [AllowAnonymous]
         [HttpPost]
         [Route("register")]
-        public async Task<IActionResult> Register([FromBody] AspNetUsers user)
+        public async Task<IActionResult> Register([FromBody] User user)
         {
             var result = await _service.Register(user);
 
@@ -91,7 +101,7 @@ namespace MS.eContact.Web.Controllers
                 return StatusCode(StatusCodes.Status500InternalServerError, new  { Status = "Error", Message = "User already exists!" });
 
 
-            AspNetUsers user = new()
+            User user = new()
             {
                 Email = model.Email,
                 SecurityStamp = Guid.NewGuid().ToString(),

@@ -7,11 +7,11 @@ using System.Threading.Tasks;
 
 namespace MS.ApplicationCore.Entities.Auth
 {
-    public class AspNetRoles:BaseEntity
+    public class Role:BaseEntity
     {
         public Guid Id { get; set; }
         public string? Name { get; set; }
-        public  Role RoleValue { get; set; }
+        public Enums.Role RoleValue { get; set; }
         public string? OtherName { get; set; }
     }
 }

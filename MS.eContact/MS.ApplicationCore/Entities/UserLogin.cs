@@ -6,11 +6,10 @@ using System.Threading.Tasks;
 
 namespace MS.ApplicationCore.Entities.Auth
 {
-    public class AspNetUserClaims
+    public class UserLogin
     {
-        public Guid Id { get; set; }
+        public string? LoginProvider { get; set; }
+        public string? ProviderKey { get; set; }
         public Guid UserId { get; set; }
-        public string? ClaimType { get; set; }
-        public string? ClaimValue { get; set; }
     }
 }

@@ -5,6 +5,7 @@ import EventList from '../views/events/EventList.vue'
 import AlbumList from '../views/pictures/AlbumList.vue'
 import LoginPage from '../views/account/Login.vue'
 import Register from '../views/account/Register.vue'
+import AccountInfo from '../views/account/AccountInfo.vue'
 const routes = [{
         path: '/',
         name: 'HomePage',
@@ -38,6 +39,11 @@ const routes = [{
         path: '/pictures',
         name: 'AlbumList',
         component: AlbumList
+    },
+    {
+        path: '/account',
+        name: 'AccountInfo',
+        component: AccountInfo
     }
 ]
 

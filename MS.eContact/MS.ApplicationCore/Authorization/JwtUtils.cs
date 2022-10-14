@@ -18,7 +18,7 @@ namespace MS.ApplicationCore.Authorization
 {
     public interface IJwtUtils
     {
-        public string GenerateJwtToken(AspNetUsers user);
+        public string GenerateJwtToken(User user);
         public Guid? ValidateJwtToken(string token);
         public ClaimsPrincipal? GetPrincipalFromExpiredToken(string? token);
         public string CreateToken(List<Claim> authClaims);
@@ -42,13 +42,13 @@ namespace MS.ApplicationCore.Authorization
         /// </summary>
         /// <param name="user">Thông tin người dùng</param>
         /// <returns></returns>
-        public string GenerateJwtToken(AspNetUsers user)
+        public string GenerateJwtToken(User user)
         {
             var userRoles = user.Roles;
 
             var authClaims = new List<Claim>
                 {
-                    new Claim("id", user.Id.ToString()),
+                    new Claim("id", user.UserId.ToString()),
                     new Claim("UserName", user.UserName.ToString()),
                     new Claim(ClaimTypes.Name, user.UserName),
                     new Claim(JwtRegisteredClaimNames.Jti, Guid.NewGuid().ToString()),

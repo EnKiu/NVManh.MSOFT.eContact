@@ -1,4 +1,5 @@
-﻿using MS.ApplicationCore.Entities;
+﻿using MS.ApplicationCore.DTOs;
+using MS.ApplicationCore.Entities;
 using MS.ApplicationCore.Entities.Auth;
 using System;
 using System.Collections.Generic;
@@ -7,15 +8,16 @@ using System.Threading.Tasks;
 
 namespace MS.ApplicationCore.Interfaces
 {
-    public interface IUserRepository:IRepository<AspNetUsers>
+    public interface IUserRepository:IRepository<User>
     {
+        Task<UserRegisterResponse> GetByPhoneNumber (string phoneNumber);
         /// <summary>
         /// Đăng ký User mới
         /// </summary>
         /// <param name="user">Thông tin user</param>
         /// <returns>int>0 là thành công</returns>
         /// CreatedBy: NVMANH (10.09.2022)
-        Task<int> Register(AspNetUsers user);
+        Task<int> Register(User user);
 
         /// <summary>
         /// Lấy thông tin xác thực người dùng theo userName và password
@@ -24,7 +26,7 @@ namespace MS.ApplicationCore.Interfaces
         /// <param name="password">Mật khẩu</param>
         /// <returns>Thông tin User Name</returns>
         /// CreatedBy: NVMANH (10.09.2022)
-        Task<AspNetUsers> GetUserAuthenticate(string userName, string password);
+        Task<User> GetUserAuthenticate(string userName, string password);
 
         /// <summary>
         /// Kiểm tra userName đã tồn tại hay chưa
@@ -55,7 +57,7 @@ namespace MS.ApplicationCore.Interfaces
         /// <param name="user">thông tin user</param>
         /// <returns>Danh sách các quyền hạn được cấp</returns>
         /// CreatedBy: NVMANH (10.09.2022)
-        Task<IList<string>> GetRolesAsync(AspNetUsers user);
+        Task<IList<string>> GetRolesAsync(User user);
 
         /// <summary>
         /// Tìm kiếm User theo user Name
@@ -63,7 +65,7 @@ namespace MS.ApplicationCore.Interfaces
         /// <param name="userName">Tên tài khoản</param>
         /// <returns>Thông tin User</returns>
         /// CreatedBy: NVMANH (10.09.2022)
-        Task<AspNetUsers> FindByNameAsync(string userName);
+        Task<User> FindByNameAsync(string userName);
 
         /// <summary>
         /// 
@@ -86,12 +88,12 @@ namespace MS.ApplicationCore.Interfaces
         /// <param name="users">Danh sách User thực hiện xác thực thông tin</param>
         /// <returns>Số lượng User đã xác thực</returns>
         /// CreatedBy: NVMANH (10/09/2022)
-        Task<int> ConfirmMultiUser(IEnumerable<AspNetUsers> users);
+        Task<int> ConfirmMultiUser(IEnumerable<User> users);
 
         /// <summary>
         /// Lấy toàn bộ các Roles
         /// </summary>
         /// <returns>Danh sách Roles trong hệ thống</returns>
-        Task<IEnumerable<AspNetRoles>> GetRoles();
+        Task<IEnumerable<Role>> GetRoles();
     }
 }

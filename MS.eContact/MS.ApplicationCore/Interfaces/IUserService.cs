@@ -19,7 +19,7 @@ namespace MS.ApplicationCore.Interface.Service
         /// Đăng ký tài khoản mới
         /// </summary>
         /// <param name="user"></param>
-        Task<int> Register(User user);
+        Task<int> Register(RegisterModel user);
 
         object? LogOut();
 

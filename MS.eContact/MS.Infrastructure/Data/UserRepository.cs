@@ -20,21 +20,21 @@ namespace MS.Infrastructure.Data
         {
             _mapper = mapper;
         }
-        public async Task<User> GetUserAuthenticate(string userName, string password)
+        public async Task<UserInfoResponse> GetUserAuthenticate(string userName, string password)
         {
 
             var sql = "SELECT * FROM User WHERE (UserName = @UserName OR Email = @UserName OR PhoneNumber = @UserName) AND PasswordHash = @Password";
             var parameters = new DynamicParameters();
             parameters.Add("@UserName", userName);
             parameters.Add("@Password", password);
-            var user = await DbContext.Connection.QueryFirstOrDefaultAsync<User>(sql, param: parameters, transaction: DbContext.Transaction);
+            var user = await DbContext.Connection.QueryFirstOrDefaultAsync<UserInfoResponse>(sql, param: parameters, transaction: DbContext.Transaction);
 
             // get roles:
             if (user == null)
             {
                 return null;
             }
-            var sqlRoles = "SELECT a.Id,a.Name,a.RoleValue, b.UserId FROM AspNetRoles a INNER JOIN AspNetUserRoles b ON a.Id = b.RoleId WHERE b.UserId = @UserId";
+            var sqlRoles = "SELECT a.RoleId,a.RoleName,a.RoleValue, b.UserId FROM Role a INNER JOIN UserRole b ON a.RoleId = b.RoleId WHERE b.UserId = @UserId";
             parameters.Add("@UserId", user.UserId);
             user.Roles = await DbContext.Connection.QueryAsync<Role>(sqlRoles, param: parameters, transaction: DbContext.Transaction);
 
@@ -43,35 +43,36 @@ namespace MS.Infrastructure.Data
 
         public async override Task<User> FindAsync(object id)
         {
-            var sqlCommand = $"SELECT * FROM User WHERE Id = @UserID";
-            var sqlSelectRoles = $"SELECT anr.Id,anr.RoleValue," +
-                                    "anr.Name, anr.OtherName FROM AspNetRoles anr " +
-                                    "LEFT JOIN AspNetUserRoles anur ON anr.Id = anur.RoleId " +
+            var sqlCommand = $"SELECT * FROM User WHERE UserId = @UserID";
+            var sqlSelectRoles = $"SELECT anr.RoleId,anr.RoleValue," +
+                                    "anr.RoleName, anr.OtherName FROM Role anr " +
+                                    "LEFT JOIN UserRole anur ON anr.RoleId = anur.RoleId " +
                                     "WHERE anur.UserId = @UserID ORDER BY anr.RoleValue";
             var sqlSelectEmployeeInfo = "SELECT * FROM View_Employee e WHERE e.UserId = @UserId";
             var parameters = new DynamicParameters();
             parameters.Add($"@UserID", id);
-            var user = await DbContext.Connection.QueryFirstOrDefaultAsync<User>(sqlCommand, param: parameters, transaction: DbContext.Transaction);
-            if (user != null)
+            var userResponse = await DbContext.Connection.QueryFirstOrDefaultAsync<UserInfoResponse>(sqlCommand, param: parameters, transaction: DbContext.Transaction);
+            if (userResponse != null)
             {
-                user.Roles = await DbContext.Connection.QueryAsync<Role>(sqlSelectRoles, param: parameters, transaction: DbContext.Transaction);
+                userResponse.Roles = await DbContext.Connection.QueryAsync<Role>(sqlSelectRoles, param: parameters, transaction: DbContext.Transaction);
                 //user.Employee = await UnitOfWork.Connection.QueryFirstOrDefaultAsync<Employee>(sqlSelectEmployeeInfo, param: parameters, transaction: UnitOfWork.Transaction);
 
             }
+            var user = _mapper.Map<UserInfoResponse, User>(userResponse);
             return user;
         }
 
-        public new User GetById(Guid id)
+        public new UserInfoResponse GetById(Guid id)
         {
-            var sqlCommand = $"SELECT * FROM User WHERE Id = @UserID";
-            var sqlSelectRoles = $"SELECT anr.Id,anr.RoleValue," +
-                                    "anr.Name, anr.OtherName FROM AspNetRoles anr " +
-                                    "LEFT JOIN AspNetUserRoles anur ON anr.Id = anur.RoleId " +
+            var sqlCommand = $"SELECT * FROM User WHERE UserId = @UserID";
+            var sqlSelectRoles = $"SELECT anr.RoleId,anr.RoleValue," +
+                                    "anr.Name, anr.OtherName FROM Role anr " +
+                                    "LEFT JOIN UserRole anur ON anr.UserRoleId = anur.RoleId " +
                                     "WHERE anur.UserId = @UserID ORDER BY anr.RoleValue DESC";
             var sqlSelectEmployeeInfo = "SELECT * FROM View_Employee e WHERE e.UserId = @UserId";
             var parameters = new DynamicParameters();
             parameters.Add($"@UserID", id);
-            var user = DbContext.Connection.QueryFirstOrDefault<User>(sqlCommand, param: parameters, transaction: DbContext.Transaction);
+            var user = DbContext.Connection.QueryFirstOrDefault<UserInfoResponse>(sqlCommand, param: parameters, transaction: DbContext.Transaction);
             if (user != null)
             {
                 user.Roles = DbContext.Connection.Query<Role>(sqlSelectRoles, param: parameters, transaction: DbContext.Transaction);
@@ -83,8 +84,8 @@ namespace MS.Infrastructure.Data
 
         public async Task<int> Register(User user)
         {
-            //return await AddAsync<User>(user);
-            return await Task.FromResult(1);
+            return await AddAsync(user);
+            //return await Task.FromResult(1);
         }
 
         public async Task<bool> CheckEmailExist(string email)
@@ -166,7 +167,7 @@ namespace MS.Infrastructure.Data
                 {
 
                     // Cập nhật tình trạng xác nhận:
-                    var sqlUpdateConfirm = "UPDATE User anu SET anu.EmailConfirmed = 1 WHERE anu.Id = @UserId;" +
+                    var sqlUpdateConfirm = "UPDATE User anu SET anu.EmailConfirmed = 1 WHERE anu.UserId = @UserId;" +
                         "DELETE FROM UserTokenConfirm WHERE UserId = @UserId";
                     parameters.Add("@UserId", useToken.UserId);
                     var res = await DbContext.Connection.ExecuteAsync(sqlUpdateConfirm, param: parameters, transaction: DbContext.Transaction);
@@ -188,7 +189,7 @@ namespace MS.Infrastructure.Data
         public async Task<IEnumerable<Role>> GetRoles()
         {
 
-            var sql = "SELECT * FROM AspNetRoles";
+            var sql = "SELECT * FROM Role";
             var data = await DbContext.Connection.QueryAsync<Role>(sql);
             return data;
         }
@@ -200,7 +201,7 @@ namespace MS.Infrastructure.Data
             {
                 foreach (var user in users)
                 {
-                    var sqlUpdateConfirm = "UPDATE User anu SET anu.EmailConfirmed = 1 WHERE anu.Id = @UserId;";
+                    var sqlUpdateConfirm = "UPDATE User anu SET anu.EmailConfirmed = 1 WHERE anu.UserId = @UserId;";
                     var sqlDeleteConfirm = "DELETE FROM UserTokenConfirm WHERE UserId = @UserId";
 
                     var parameters = new DynamicParameters();

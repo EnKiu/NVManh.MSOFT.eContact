@@ -26,7 +26,7 @@ namespace MS.ApplicationCore.Interfaces
         /// <param name="password">Mật khẩu</param>
         /// <returns>Thông tin User Name</returns>
         /// CreatedBy: NVMANH (10.09.2022)
-        Task<User> GetUserAuthenticate(string userName, string password);
+        Task<UserInfoResponse> GetUserAuthenticate(string userName, string password);
 
         /// <summary>
         /// Kiểm tra userName đã tồn tại hay chưa

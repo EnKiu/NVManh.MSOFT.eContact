@@ -31,7 +31,7 @@ const actions = {
         return new Promise((resolve, reject) => {
             commit(USER_REQUEST);
             var userId = localStorage.getItem('user-id');
-            apiCall({ url: `/api/v1/users/${userId}`, method: "GET" })
+            apiCall({ url: `/api/v1/accounts/${userId}`, method: "GET" })
                 .then(resp => {
                     commit(USER_SUCCESS, resp);
                     localStorage.setItem("userName", resp.UserName);

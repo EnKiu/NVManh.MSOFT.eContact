@@ -1,4 +1,5 @@
-﻿using MS.ApplicationCore.Entities;
+﻿using AutoMapper;
+using MS.ApplicationCore.Entities;
 using MS.ApplicationCore.Interfaces;
 using System;
 using System.Collections.Generic;
@@ -9,7 +10,7 @@ namespace MS.ApplicationCore.Services
     public class EventService:BaseService<Event>, IEventService
     {
         IEventRepository _repository;
-        public EventService(IEventRepository repository, IUnitOfWork unitOfWork) : base(repository, unitOfWork)
+        public EventService(IEventRepository repository, IUnitOfWork unitOfWork, IMapper mapper) : base(repository, unitOfWork, mapper)
         {
             _repository = repository;
         }

@@ -1,8 +1,7 @@
 <template>
   <div class="combobox-wrapper">
     <label v-if="label" for=""
-      >{{ label
-      }} <span v-if="required">(<span class="required">*</span>)</span>:</label
+      >{{ label }} <span v-if="required">(<span class="required">*</span>)</span>:</label
     >
     <div class="combobox">
       <span v-if="isShowClear" class="clear-button" @click="clearButtonOnClick"
@@ -11,6 +10,7 @@
       <input
         type="text"
         class="input combobox__input"
+        ref="minput"
         v-model="textInput"
         :placeholder="placeholder"
         @input="inputOnChange"
@@ -26,13 +26,7 @@
         :disabled="isDisabled"
       >
         <!-- <i class="fa-solid fa-chevron-down"></i> -->
-        <img
-          :src="require('./icon/down.png')"
-          alt=""
-          srcset=""
-          width="24"
-          height="24"
-        />
+        <img :src="require('./icon/down.png')" alt="" srcset="" width="24" height="24" />
       </button>
       <div
         v-if="isShowListData"
@@ -160,7 +154,8 @@ export default {
     "isLoadData",
     "placeholder",
     "required",
-    "isDisabled"
+    "isDisabled",
+    "isFocus",
   ],
   methods: {
     /**
@@ -211,9 +206,7 @@ export default {
       var me = this;
       // Thực hiện lọc các phần tử phù hợp trong data:
       this.dataFilter = this.data.filter((e) => {
-        let text = removeVietnameseTones(me.textInput)
-          .toLowerCase()
-          .replace(" ", "");
+        let text = removeVietnameseTones(me.textInput).toLowerCase().replace(" ", "");
         let textOfItem = removeVietnameseTones(e[me.propText])
           .toLowerCase()
           .replace(" ", "");
@@ -237,11 +230,7 @@ export default {
         case keyCode.ArrowDown:
           this.isShowListData = true;
           elToFocus = this.$refs[`toFocus_${me.indexItemFocus + 1}`];
-          if (
-            this.indexItemFocus == null ||
-            !elToFocus ||
-            elToFocus.length == 0
-          ) {
+          if (this.indexItemFocus == null || !elToFocus || elToFocus.length == 0) {
             this.indexItemFocus = 0;
           } else {
             this.indexItemFocus += 1;
@@ -250,11 +239,7 @@ export default {
         case keyCode.ArrowUp:
           this.isShowListData = true;
           elToFocus = this.$refs[`toFocus_${me.indexItemFocus - 1}`];
-          if (
-            this.indexItemFocus == null ||
-            !elToFocus ||
-            elToFocus.length == 0
-          ) {
+          if (this.indexItemFocus == null || !elToFocus || elToFocus.length == 0) {
             this.indexItemFocus = this.dataFilter.length - 1;
           } else {
             this.indexItemFocus -= 1;
@@ -321,6 +306,13 @@ export default {
       this.indexItemFocus = null;
       this.$emit("update:modelValue", null);
     },
+    setFocusDefault() {
+      if (this.isFocus == true) {
+        this.$nextTick(function () {
+          this.$refs.minput.focus();
+        });
+      }
+    },
   },
   watch: {
     modelValue: function (newValue, oldValue) {
@@ -333,9 +325,16 @@ export default {
         this.isShowClear = false;
       }
     },
+    showLoadingData: function(newValue){
+      if(!this.isDisabled && !newValue)
+          this.setFocusDefault();
+    }
   },
   created() {
     this.loadData();
+  },
+  mounted() {
+     
   },
   data() {
     return {

@@ -1,5 +1,7 @@
 ﻿using AutoMapper;
+using MS.ApplicationCore.Authorization;
 using MS.ApplicationCore.DTOs;
+using MS.ApplicationCore.Entities;
 using MS.ApplicationCore.Entities.Auth;
 using System;
 using System.Collections.Generic;
@@ -9,9 +11,17 @@ namespace MS.ApplicationCore.Mappings
 {
     public class GeneralProfile: Profile
     {
+        //IJwtUtils _jwtUtils;
         public GeneralProfile()
         {
+            //_jwtUtils = jwtUtils;
             CreateMap<User, UserRegisterResponse>();
+            CreateMap<UserInfoResponse, User>();
+            CreateMap<User, UserInfoResponse>();
+            CreateMap<RegisterModel, User>()
+                .ForMember(user => user.SecurityStamp, act => act.MapFrom(src => Guid.NewGuid().ToString()));
+                //.ForMember(user => user.PasswordHash, act => act.MapFrom(src => _jwtUtils.HashPassword(src.Password)));
+            
         }
     }
 }

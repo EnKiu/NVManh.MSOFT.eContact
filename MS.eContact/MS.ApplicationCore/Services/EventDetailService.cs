@@ -1,4 +1,5 @@
-﻿using MS.ApplicationCore.Entities;
+﻿using AutoMapper;
+using MS.ApplicationCore.Entities;
 using MS.ApplicationCore.Exceptions;
 using MS.ApplicationCore.Interfaces;
 using System;
@@ -10,7 +11,7 @@ namespace MS.ApplicationCore.Services
 {
     public class EventDetailService : BaseService<EventDetail>, IEventDetailService
     {
-        public EventDetailService(IEventDetailRepository repository,IUnitOfWork unitOfWork) : base(repository, unitOfWork)
+        public EventDetailService(IEventDetailRepository repository,IUnitOfWork unitOfWork, IMapper mapper) : base(repository, unitOfWork, mapper)
         {
         }
         public override async Task<int> AddAsync(EventDetail entity)

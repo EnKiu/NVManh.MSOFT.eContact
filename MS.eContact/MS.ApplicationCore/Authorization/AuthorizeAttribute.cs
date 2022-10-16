@@ -1,6 +1,7 @@
 ﻿using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Filters;
+using MS.ApplicationCore.DTOs;
 using MS.ApplicationCore.Entities;
 using MS.ApplicationCore.Entities.Auth;
 using MS.ApplicationCore.Enums;
@@ -29,7 +30,7 @@ namespace MS.ApplicationCore.Authorization
             if (allowAnonymous)
                 return;
 
-            var user = (User)context.HttpContext.Items["User"];
+            var user = (UserInfoResponse)context.HttpContext.Items["User"];
 
             //var roles = (_roles.Any() && !_roles.Contains(user.Role));
             if (user == null)

@@ -1,4 +1,5 @@
-﻿using MS.ApplicationCore.Entities;
+﻿using AutoMapper;
+using MS.ApplicationCore.Entities;
 using MS.ApplicationCore.Exceptions;
 using MS.ApplicationCore.Interfaces;
 using System;
@@ -14,7 +15,7 @@ namespace MS.ApplicationCore.Services
         readonly IPictureRepository _pictureRepository;
         readonly IFileTransfer _fileTransfer;
         readonly IUnitOfWork _unitOfWork;
-        public AlbumService(IAlbumRepository repository, IFileTransfer fileTransfer, IPictureRepository pictureRepository, IUnitOfWork unitOfWork) : base(repository, unitOfWork)
+        public AlbumService(IAlbumRepository repository, IFileTransfer fileTransfer, IPictureRepository pictureRepository, IUnitOfWork unitOfWork, IMapper mapper) : base(repository, unitOfWork, mapper)
         {
             _repository = repository;
             _fileTransfer = fileTransfer;

@@ -2,16 +2,23 @@
   <div class="register">
     <div class="register-container">
       <div class="form__title">Tạo tài khoản mới</div>
-      <form
-        class="register-form"
-        id="FRM_REGISTER"
-        @submit.prevent="onRegister"
-      >
+      <form class="register-form" id="FRM_REGISTER" @submit.prevent="onRegister">
+        <m-combobox
+          label="Chủ tài khoản"
+          url="/api/v1/contacts"
+          placeholder="Chọn thành viên sử dụng tài khoản này"
+          v-model="user.ContactId"
+          :required="true"
+          :isDisabled="false"
+          :isFocus="true"
+          propValue="ContactId"
+          propText="FullName"
+        >
+        </m-combobox>
         <m-input
           label="Số điện thoại"
           :onlyNumberChar="true"
           :required="true"
-          :isFocus="true"
           type="tel"
           name="username"
           v-model="user.UserName"
@@ -20,17 +27,6 @@
           v-model:validated="validated"
           @onBlur="onBlurPhoneInput"
         ></m-input>
-        <m-combobox
-          label="Chủ tài khoản"
-          url="/api/v1/contacts"
-          placeholder="Chọn thành viên sử dụng tài khoản này"
-          v-model="user.ContactId"
-          :required="true"
-          :isDisabled="isLockSelectContact"
-          propValue="ContactId"
-          propText="FullName"
-        >
-        </m-combobox>
         <m-input
           label="Mật khẩu"
           placeholder="Mật khẩu"
@@ -38,7 +34,7 @@
           v-model="user.Password"
           autocomplete="on"
           :required="true"
-          :validated="validated"
+          v-model:validated="validated"
         ></m-input>
         <m-input
           label="Xác nhận Mật khẩu"
@@ -47,21 +43,17 @@
           v-model="user.RePassword"
           autocomplete="on"
           :required="true"
-          :validated="validated"
+          v-model:validated="validated"
         ></m-input>
         <m-input
-          label="Email (nếu có)"
+          label="Email"
           placeholder="VD: example@domain.com"
           type="email"
           v-model="user.Email"
           autocomplete="on"
         ></m-input>
         <div class="form__button">
-          <button
-            id="btn-register"
-            class="btn btn--default"
-            submit="onRegister"
-          >
+          <button id="btn-register" class="btn btn--default" submit="onRegister">
             <i class="icofont-login"></i> Tạo tài khoản
           </button>
         </div>
@@ -76,6 +68,7 @@
   </div>
 </template>
 <script>
+import Enum from "@/scripts/enum";
 export default {
   name: "AccountRegister",
   components: {},
@@ -83,21 +76,40 @@ export default {
   props: [],
   created() {},
   methods: {
-    onBlurPhoneInput() {
-      // Kiểm tra thông tin số điện thoại đã được đăng ký hoặc khớp với thành viên nào trong hệ thống:
-      var userName = this.user.UserName;
-      if (userName) {
-        this.api({
-          url: "/api/v1/accounts/register?phoneNumber=" + this.user.UserName,
-        }).then((res) => {
-          if (!res) {
-            console.log("Không có dữ liệu");
-            return;
-          } else {
-            console.log(res);
-          }
+    onRegister() {
+      this.api({
+        url: "/api/v1/accounts/register",
+        data: this.user,
+        method: "POST",
+      }).then(() => {
+        this.commonJs.showMessenger({
+          title: "Tạo tài khoản thành công",
+          msg: "Tài khoản đã được tạo thành công. Nhấn [Đồng ý] để tiến hành đăng nhập",
+          type: Enum.MsgType.Success,
+          confirm: this.onLogin,
+          showCancelButton: true,
         });
-      }
+      });
+    },
+    onLogin() {
+      this.commonJs.login(this.user.UserName, this.user.Password);
+    },
+    onBlurPhoneInput() {
+      console.log("onBlurPhoneInput");
+      // Kiểm tra thông tin số điện thoại đã được đăng ký hoặc khớp với thành viên nào trong hệ thống:
+      // var userName = this.user.UserName;
+      // if (userName) {
+      //   this.api({
+      //     url: "/api/v1/accounts/register?phoneNumber=" + this.user.UserName,
+      //   }).then((res) => {
+      //     if (!res) {
+      //       console.log("Không có dữ liệu");
+      //       return;
+      //     } else {
+      //       console.log(res);
+      //     }
+      //   });
+      // }
     },
   },
   computed: {
@@ -137,7 +149,7 @@ export default {
   border-radius: 4px;
 }
 .register-form > div + div {
-  margin-top: 10px;
+  /* margin-top: 10px; */
 }
 .form__title {
   font-size: 24px;

@@ -9,6 +9,7 @@ using System.Data.Common;
 using System.Text;
 using System.Threading.Tasks;
 using System.Transactions;
+using static Dapper.SqlMapper;
 
 namespace MS.Infrastructure.Data
 {
@@ -27,16 +28,12 @@ namespace MS.Infrastructure.Data
         public virtual int Add(TEntity entity)
         {
             var rowAffects = 0;
-            DbContext.Connection.Open();
-            var transaction = DbContext.Connection.BeginTransaction();
             try
             {
                 rowAffects = DbContext.Connection.Execute($"Proc_Insert{_tableName}", entity, transaction: DbContext.Transaction, commandType: System.Data.CommandType.StoredProcedure);
-                transaction.Commit();
             }
             catch (Exception ex)
             {
-                transaction.Rollback();
                 throw new MISAException(System.Net.HttpStatusCode.InternalServerError, ex.Message);
             }
             finally
@@ -53,9 +50,17 @@ namespace MS.Infrastructure.Data
 
         public virtual async Task<int> AddAsync(TEntity entity)
         {
-            var rowAffects = await DbContext.Connection.ExecuteAsync($"Proc_Insert{_tableName}", entity, transaction: DbContext.Transaction, commandType: System.Data.CommandType.StoredProcedure);
+            try
+            {
+                var rowAffects = await DbContext.Connection.ExecuteAsync($"Proc_Insert{_tableName}", entity, transaction: DbContext.Transaction, commandType: System.Data.CommandType.StoredProcedure);
+                return rowAffects;
+            }
+            catch (Exception)
+            {
+                var rowAffects = await DbContext.AddAsync<TEntity>(entity);
+                return rowAffects;
+            }
 
-            return rowAffects;
         }
 
         public async Task<int> AddAsync(IEnumerable<TEntity> entities)
@@ -109,38 +114,23 @@ namespace MS.Infrastructure.Data
 
         public int Update(TEntity entity, object pks)
         {
-            var rowAffects = 0;
-            DbContext.Connection.Open();
-            var transaction = DbContext.Connection.BeginTransaction();
-            try
-            {
-                rowAffects = DbContext.Connection.Execute($"Proc_Update{_tableName}", entity, transaction: transaction, commandType: System.Data.CommandType.StoredProcedure);
-                transaction.Commit();
-            }
-            catch (Exception)
-            {
-                transaction.Rollback();
-            }
-            DbContext.Connection.Close();
+            var rowAffects = DbContext.Connection.Execute($"Proc_Update{_tableName}", entity, transaction: DbContext.Transaction, commandType: System.Data.CommandType.StoredProcedure);
             return rowAffects;
+
         }
 
         public async Task<int> UpdateAsync(TEntity entity, object pks)
         {
-            var rowAffects = 0;
-            DbContext.Connection.Open();
-            var transaction = DbContext.Connection.BeginTransaction();
             try
             {
-                rowAffects = await DbContext.Connection.ExecuteAsync($"Proc_Update{_tableName}", entity, transaction: transaction, commandType: System.Data.CommandType.StoredProcedure);
-                transaction.Commit();
+                var rowAffects = await DbContext.Connection.ExecuteAsync($"Proc_Update{_tableName}", entity, transaction: DbContext.Transaction, commandType: System.Data.CommandType.StoredProcedure);
+                return rowAffects;
             }
             catch (Exception)
             {
-                transaction.Rollback();
+                var rowAffects = await DbContext.UpdateAsync<TEntity>(entity);
+                return rowAffects;
             }
-            DbContext.Connection.Close();
-            return rowAffects;
         }
         #endregion
 
@@ -154,20 +144,9 @@ namespace MS.Infrastructure.Data
         {
             var rowAffects = 0;
             var sql = $"DELETE FROM {_tableName} WHERE {_tableName}Id = @Id";
-            DbContext.Connection.Open();
-            var transaction = DbContext.Connection.BeginTransaction();
-            try
-            {
-                var parameters = new DynamicParameters();
-                parameters.Add("@Id", key);
-                rowAffects = await DbContext.Connection.ExecuteAsync(sql, parameters, transaction: transaction, commandType: System.Data.CommandType.Text);
-                transaction.Commit();
-            }
-            catch (Exception)
-            {
-                transaction.Rollback();
-            }
-            DbContext.Connection.Close();
+            var parameters = new DynamicParameters();
+            parameters.Add("@Id", key);
+            rowAffects = await DbContext.Connection.ExecuteAsync(sql, parameters, transaction: DbContext.Transaction, commandType: System.Data.CommandType.Text);
             return rowAffects;
         }
 

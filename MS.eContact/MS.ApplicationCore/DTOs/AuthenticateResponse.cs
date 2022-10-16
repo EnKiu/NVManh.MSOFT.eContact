@@ -1,4 +1,5 @@
-﻿using MS.ApplicationCore.Entities.Auth;
+﻿using MS.ApplicationCore.DTOs;
+using MS.ApplicationCore.Entities.Auth;
 using MS.ApplicationCore.Enums;
 using System;
 using System.Collections.Generic;
@@ -8,7 +9,7 @@ namespace MS.ApplicationCore.Entities
 {
     public class AuthenticateResponse
     {
-        public AuthenticateResponse(User user, string token)
+        public AuthenticateResponse(UserInfoResponse user, string token)
         {
             UserId = user.UserId;
             FirstName = user.FirstName;

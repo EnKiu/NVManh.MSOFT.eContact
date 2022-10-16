@@ -1,4 +1,5 @@
-﻿using MS.ApplicationCore.Authorization;
+﻿using AutoMapper;
+using MS.ApplicationCore.Authorization;
 using MS.ApplicationCore.Entities;
 using MS.ApplicationCore.Entities.Auth;
 using MS.ApplicationCore.Exceptions;
@@ -16,37 +17,34 @@ namespace MS.ApplicationCore.Services
         IUserRepository _repository;
         IJwtUtils _jwtUtils;
 
-        public UserService(IUserRepository repository, IJwtUtils jwtUtils, IUnitOfWork unitOfWork) : base(repository, unitOfWork)
+        public UserService(IUserRepository repository, IJwtUtils jwtUtils, IUnitOfWork unitOfWork, IMapper mapper) : base(repository, unitOfWork, mapper)
         {
             _repository = repository;
             _jwtUtils = jwtUtils;
         }
-        public async Task<int> Register(User user)
+        public async Task<int> Register(RegisterModel registerModel)
         {
-            user.SecurityStamp = Guid.NewGuid().ToString();
-
-            if (user.Password != null)
-                user.PasswordHash = _jwtUtils.HashPassword(user.Password);
 
             // Update lại thông tin Email và số điện thoại
             //user.Email = user.Employee.Email;
             //user.PhoneNumber = user.Employee.Mobile;
             // Kiểm tra thông tin trước khi thực hiện thêm mới user:
-            ValidateObject(user);
-            await ValidateUser(user);
+            await ValidateUser(registerModel);
 
             if (Errors.Count > 0)
             {
 
                 throw new MISAException(System.Net.HttpStatusCode.BadRequest, Errors);
             }
-            var res = await _repository.Register(user);
+            var newUser = Mapper.Map<RegisterModel, User>(registerModel);
+            newUser.PasswordHash = _jwtUtils.HashPassword(registerModel.Password);
+            var res = await UnitOfWork.Users.Register(newUser);
             return res;
         }
 
         public async Task<AuthenticateResponse?> Authenticate(AuthenticateRequest model)
         {
-            var user = await _repository.GetUserAuthenticate(model.Username, _jwtUtils.HashPassword(model.Password));
+            var user = await UnitOfWork.Users.GetUserAuthenticate(model.Username, _jwtUtils.HashPassword(model.Password));
             // return null if user not found
             if (user == null)
                 return null;
@@ -64,7 +62,7 @@ namespace MS.ApplicationCore.Services
 
         public async Task<User> GetById(Guid id)
         {
-            return await _repository.FindAsync(id);
+            return await UnitOfWork.Users.FindAsync(id);
         }
 
         /// <summary>
@@ -73,14 +71,16 @@ namespace MS.ApplicationCore.Services
         /// <param name="user"></param>
         /// <returns></returns>
         /// <exception cref="HttpResponseException"></exception>
-        private async Task<bool> ValidateUser(User user)
+        private async Task<bool> ValidateUser(RegisterModel user)
         {
 
             //if (await _repository.CheckEmailExist(user.Email) == true)
             //    Errors.Add("Email đã được đăng ký.");
-            if (await _repository.CheckPhoneNumberExist(user.PhoneNumber) == true)
+            if (await UnitOfWork.Users.CheckPhoneNumberExist(user.PhoneNumber) == true)
                 Errors.Add("PhoneNumber", new List<string>() { "Số điện thoại đã được đăng ký." });
-            if (await _repository.CheckUserNameExist(user.UserName) == true)
+            if (user.Password.Trim() != user.RePassword.Trim())
+                Errors.Add("RePassword", new List<string>() { "Mật khẩu không khớp." });
+            if (await UnitOfWork.Users.CheckUserNameExist(user.UserName) == true)
                 Errors.Add("UserName", new List<string>() { "Tên tài khoản đã được đăng ký." });
             if (Errors.Count > 0)
             {

@@ -1,4 +1,5 @@
-﻿using MS.ApplicationCore.Entities;
+﻿using AutoMapper;
+using MS.ApplicationCore.Entities;
 using MS.ApplicationCore.Exceptions;
 using MS.ApplicationCore.Interfaces;
 using System;
@@ -14,10 +15,12 @@ namespace MS.ApplicationCore.Services
         readonly IRepository<TEntity> _repository;
         protected Dictionary<string, List<string>> Errors = new();
         protected IUnitOfWork UnitOfWork;
-        public BaseService(IRepository<TEntity> repository, IUnitOfWork unitOfWork)
+        protected readonly IMapper Mapper;
+        public BaseService(IRepository<TEntity> repository, IUnitOfWork unitOfWork, IMapper mapper)
         {
             _repository = repository;
             UnitOfWork = unitOfWork;
+            Mapper = mapper;
         }
         public int Add(TEntity entity)
         {

@@ -2,6 +2,7 @@
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Options;
 using Microsoft.IdentityModel.Tokens;
+using MS.ApplicationCore.DTOs;
 using MS.ApplicationCore.Entities;
 using MS.ApplicationCore.Entities.Auth;
 using MS.ApplicationCore.Exceptions;
@@ -18,7 +19,7 @@ namespace MS.ApplicationCore.Authorization
 {
     public interface IJwtUtils
     {
-        public string GenerateJwtToken(User user);
+        public string GenerateJwtToken(UserInfoResponse user);
         public Guid? ValidateJwtToken(string token);
         public ClaimsPrincipal? GetPrincipalFromExpiredToken(string? token);
         public string CreateToken(List<Claim> authClaims);
@@ -42,7 +43,7 @@ namespace MS.ApplicationCore.Authorization
         /// </summary>
         /// <param name="user">Thông tin người dùng</param>
         /// <returns></returns>
-        public string GenerateJwtToken(User user)
+        public string GenerateJwtToken(UserInfoResponse user)
         {
             var userRoles = user.Roles;
 

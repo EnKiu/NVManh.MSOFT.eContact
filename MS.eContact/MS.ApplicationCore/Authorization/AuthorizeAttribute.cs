@@ -30,7 +30,7 @@ namespace MS.ApplicationCore.Authorization
             if (allowAnonymous)
                 return;
 
-            var user = (UserInfoResponse)context.HttpContext.Items["User"];
+            var user = (UserInfo)context.HttpContext.Items["User"];
 
             //var roles = (_roles.Any() && !_roles.Contains(user.Role));
             if (user == null)
@@ -41,9 +41,25 @@ namespace MS.ApplicationCore.Authorization
             else
             {
                 var userRoles = user.Roles.Where(r => _roles.Contains(r.RoleValue));
-                if (userRoles == null || userRoles.Count() == 0)
+                var hasNotPermission = (userRoles == null || userRoles.Count() == 0);
+                // Chỉ quản lý hoặc người dùng thông thường được phép sửa thông tin liên hệ:
+                var path = context.HttpContext.Request.Path.Value;
+                var method = context.HttpContext.Request.Method;
+                if (path == "/api/v1/contacts" && method == "PUT")
                 {
-                    context.Result = new JsonResult(new { message = "Forbidden" }) { StatusCode = StatusCodes.Status403Forbidden };
+                    var contactId = Guid.Parse(context.HttpContext.Request.Form["contactId"].First().ToString());
+                    var currentUserId = user.ContactId;
+                    if (contactId!= currentUserId && hasNotPermission)
+                    {
+                        context.Result = new JsonResult(new { message = "Bạn không được cấp quyền thực hiện chỉnh sửa liên hệ của người khác." }) { StatusCode = StatusCodes.Status403Forbidden };
+                    }
+                }
+                else
+                {
+                    if (hasNotPermission)
+                    {
+                        context.Result = new JsonResult(new { message = "Bạn không có quyền thực hiện chức năng hoặc truy cập tài nguyên hiện tại." }) { StatusCode = StatusCodes.Status403Forbidden };
+                    }
                 }
             }
         }

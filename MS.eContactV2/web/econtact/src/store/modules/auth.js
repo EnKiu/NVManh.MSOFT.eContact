@@ -52,9 +52,9 @@ const actions = {
         return new Promise((resolve) => {
             var userName = localStorage.getItem("userName");
             if (userName) {
-                apiCall({ url: `/api/v1/Authenticate/revoke/${userName}`, data: null, method: "POST" })
+                apiCall({ url: `/api/v1/accounts/revoke/${userName}`, data: null, method: "POST" })
                     .then(() => {
-
+                        console.log("logout success!");
                     })
                     .catch(() => {
 

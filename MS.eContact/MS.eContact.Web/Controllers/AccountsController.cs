@@ -33,9 +33,16 @@ namespace MS.eContact.Web.Controllers
         }
 
         [AllowAnonymous]
+        public async override Task<IActionResult> Get(string id)
+        {
+            var data = await _unitOfWork.Users.GetUserInfoResponseById(id);
+            return Ok(data);
+        }
+
+        [AllowAnonymous]
         [HttpGet]
         [Route("register")]
-        public async Task<IActionResult> Get(string phoneNumber)
+        public async Task<IActionResult> GetByPhone(string phoneNumber)
         {
             return Ok(await _unitOfWork.Users.GetByPhoneNumber(phoneNumber));
         }
@@ -55,9 +62,9 @@ namespace MS.eContact.Web.Controllers
                 _ = int.TryParse(_configuration["JWT:RefreshTokenValidityInDays"], out int refreshTokenValidityInDays);
                 _ = int.TryParse(_configuration["JWT:TokenValidityInMinutes"], out int tokenValidityInMinutes);
 
-                userInfo.RefreshToken = refreshToken;
-                userInfo.RefreshTokenExpiryTime = DateTime.Now.AddDays(refreshTokenValidityInDays);
-                var user = _mapper.Map<UserInfoResponse, User>(userInfo);
+                var user = _mapper.Map<UserInfo, User>(userInfo);
+                user.RefreshToken = refreshToken;
+                user.RefreshTokenExpiryTime = DateTime.Now.AddDays(refreshTokenValidityInDays);
                 await _unitOfWork.Users.UpdateAsync(user);
 
                 var authenticateResponse = new AuthenticateResponse(userInfo, token);
@@ -139,7 +146,7 @@ namespace MS.eContact.Web.Controllers
 
             var username = principal.Identity.Name;
 
-            var user = await _repository.FindByNameAsync(username);
+            var user = await _unitOfWork.Users.FindByNameAsync(username);
 
             if (user == null || user.RefreshToken != refreshToken || user.RefreshTokenExpiryTime <= DateTime.Now)
             {
@@ -150,7 +157,7 @@ namespace MS.eContact.Web.Controllers
             var newRefreshToken = JwtUtils.GenerateRefreshToken();
 
             user.RefreshToken = newRefreshToken;
-            await _repository.UpdateAsync(user);
+            await _unitOfWork.Users.UpdateAsync(user);
 
             return new ObjectResult(new
             {
@@ -164,11 +171,11 @@ namespace MS.eContact.Web.Controllers
         [Route("revoke/{username}")]
         public async Task<IActionResult> Revoke(string username)
         {
-            var user = await _repository.FindByNameAsync(username);
+            var user = await _unitOfWork.Users.FindByNameAsync(username);
             if (user == null) return BadRequest("Invalid user name");
 
             user.RefreshToken = null;
-            await _repository.UpdateAsync(user);
+            await _unitOfWork.Users.UpdateAsync(user);
 
             return NoContent();
         }
@@ -177,13 +184,14 @@ namespace MS.eContact.Web.Controllers
         [Route("revoke-all")]
         public async Task<IActionResult> RevokeAll()
         {
-            //var users = _userManager.Users.ToList();
-            //foreach (var user in users)
-            //{
-            //    user.RefreshToken = null;
-            //    await _userManager.UpdateAsync(user);
-            //}
-
+            _unitOfWork.BeginTransaction();
+            var users = await _unitOfWork.Users.AllAsync();
+            foreach (var user in users)
+            {
+                user.RefreshToken = null;
+                await _unitOfWork.Users.UpdateAsync(user);
+            }
+            _unitOfWork.Commit();
             return NoContent();
         }
 

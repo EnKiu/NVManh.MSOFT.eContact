@@ -1,6 +1,6 @@
 /* eslint-disable */
 import store from "@/store";
-// import router from "@/router";
+import router from "@/router";
 import MISAEnum from "./enum";
 import { AUTH_REQUEST } from "@/store/actions/auth";
 import { CLEAR_ERROR_MSG, SET_ERROR_MSG } from '@/store/actions/notification.js';
@@ -15,15 +15,15 @@ const commonJs = {
                 router.push("/");
                 commonJs.hideLoading();
             })
-            .catch((res) => {
-                var msg = "Có lỗi xảy ra vui lòng liên hệ MISA để được trợ giúp.";
-                if (res.status == 401) {
-                    msg = "Vui lòng kiểm tra lại thông tin tài khoản hoặc mật khẩu."
-                }
-                commonJs.showMessenger({ title: "Lỗi", msg: msg, type: MISAEnum.MsgType.Error })
-                    // this.showConfirmDialog = true;
-                commonJs.hideLoading();
-            });
+            // .catch((res) => {
+            //     var msg = "Có lỗi xảy ra vui lòng liên hệ MISA để được trợ giúp.";
+            //     if (res.status == 401) {
+            //         msg = "Vui lòng kiểm tra lại thông tin tài khoản hoặc mật khẩu."
+            //     }
+            //     commonJs.showMessenger({ title: "Lỗi", msg: msg, type: MISAEnum.MsgType.Error })
+            //         // this.showConfirmDialog = true;
+            //     commonJs.hideLoading();
+            // });
     },
     change_alias: function(alias) {
         var str = alias;

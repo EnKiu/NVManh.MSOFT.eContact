@@ -1,5 +1,6 @@
 ﻿using AutoMapper;
 using MS.ApplicationCore.Authorization;
+using MS.ApplicationCore.DTOs;
 using MS.ApplicationCore.Entities;
 using MS.ApplicationCore.Entities.Auth;
 using MS.ApplicationCore.Exceptions;
@@ -60,9 +61,9 @@ namespace MS.ApplicationCore.Services
             return null;
         }
 
-        public async Task<User> GetById(Guid id)
+        public async Task<UserInfo> GetUserInfoById(string id)
         {
-            return await UnitOfWork.Users.FindAsync(id);
+            return await UnitOfWork.Users.GetUserInfoResponseById(id);
         }
 
         /// <summary>
@@ -77,17 +78,18 @@ namespace MS.ApplicationCore.Services
             //if (await _repository.CheckEmailExist(user.Email) == true)
             //    Errors.Add("Email đã được đăng ký.");
             if (await UnitOfWork.Users.CheckPhoneNumberExist(user.PhoneNumber) == true)
-                Errors.Add("PhoneNumber", new List<string>() { "Số điện thoại đã được đăng ký." });
+                AddErrors("PhoneNumber", "Số điện thoại đã được đăng ký.");
             if (user.Password.Trim() != user.RePassword.Trim())
-                Errors.Add("RePassword", new List<string>() { "Mật khẩu không khớp." });
+                AddErrors("RePassword", "Mật khẩu xác nhận không khớp.");
             if (await UnitOfWork.Users.CheckUserNameExist(user.UserName) == true)
-                Errors.Add("UserName", new List<string>() { "Tên tài khoản đã được đăng ký." });
+                AddErrors("UserName", "Tên tài khoản đã được đăng ký");
             if (Errors.Count > 0)
             {
                 return false;
             }
             return true;
         }
+
         public object? LogOut()
         {
             throw new NotImplementedException();

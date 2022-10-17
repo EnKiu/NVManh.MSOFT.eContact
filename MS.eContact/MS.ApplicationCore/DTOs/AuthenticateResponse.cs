@@ -9,7 +9,7 @@ namespace MS.ApplicationCore.Entities
 {
     public class AuthenticateResponse
     {
-        public AuthenticateResponse(UserInfoResponse user, string token)
+        public AuthenticateResponse(UserInfo user, string token)
         {
             UserId = user.UserId;
             FirstName = user.FirstName;

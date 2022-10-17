@@ -20,5 +20,6 @@ export default {
     box-sizing: border-box;
     overflow-y: auto;
     background-color: #fff;
+    z-index: 99;
  }
 </style>

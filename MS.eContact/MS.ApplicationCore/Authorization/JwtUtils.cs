@@ -19,8 +19,8 @@ namespace MS.ApplicationCore.Authorization
 {
     public interface IJwtUtils
     {
-        public string GenerateJwtToken(UserInfoResponse user);
-        public Guid? ValidateJwtToken(string token);
+        public string GenerateJwtToken(UserInfo user);
+        public string? ValidateJwtToken(string token);
         public ClaimsPrincipal? GetPrincipalFromExpiredToken(string? token);
         public string CreateToken(List<Claim> authClaims);
         string HashPassword(string password);
@@ -43,7 +43,7 @@ namespace MS.ApplicationCore.Authorization
         /// </summary>
         /// <param name="user">Thông tin người dùng</param>
         /// <returns></returns>
-        public string GenerateJwtToken(UserInfoResponse user)
+        public string GenerateJwtToken(UserInfo user)
         {
             var userRoles = user.Roles;
 
@@ -69,7 +69,7 @@ namespace MS.ApplicationCore.Authorization
         /// </summary>
         /// <param name="token"></param>
         /// <returns></returns>
-        public Guid? ValidateJwtToken(string token)
+        public string? ValidateJwtToken(string token)
         {
             if (token == null)
                 return null;
@@ -89,7 +89,7 @@ namespace MS.ApplicationCore.Authorization
             }, out SecurityToken validatedToken);
 
             var jwtToken = (JwtSecurityToken)validatedToken;
-            var userId = Guid.Parse(jwtToken.Claims.First(x => x.Type == "id").Value);
+            var userId =jwtToken.Claims.First(x => x.Type == "id").Value.ToString();
 
             // return user id from JWT token if validation successful
             return userId;

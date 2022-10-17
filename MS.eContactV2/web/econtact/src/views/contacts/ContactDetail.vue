@@ -21,7 +21,7 @@
               <div class="phone-item">
                 <div class="phone-item__number">
                   <m-input
-                    class="no-border"
+                    class="no-border margin-0"
                     :class="{ 'bg-blue': formMode == 3 }"
                     :disabled="formMode == 3"
                     :focus="true"
@@ -35,7 +35,7 @@
               <div class="phone-item">
                 <div class="phone-item__number">
                   <m-input
-                    class="no-border"
+                    class="no-border margin-0"
                     :class="{ 'bg-yellow': formMode == 3 }"
                     :disabled="formMode == 3"
                     v-model="contact.PhoneNumber"
@@ -57,7 +57,7 @@
             </div>
             <div class="social__info">
               <m-input
-                class="no-border"
+                class="no-border margin-0"
                 :disabled="formMode == 3"
                 :focus="true"
                 v-model="contact.Facebook"
@@ -71,7 +71,7 @@
             </div>
             <div class="social__info">
               <m-input
-                class="no-border"
+                class="no-border margin-0"
                 :disabled="formMode == 3"
                 :focus="true"
                 v-model="contact.Zalo"
@@ -82,7 +82,7 @@
             <div class="info__label">Nơi làm việc</div>
             <div v-if="formMode == 3">{{ contact.Workplace }}</div>
             <m-input
-              class="no-border"
+              class="no-border margin-0"
               v-else
               :focus="true"
               v-model="contact.Workplace"
@@ -189,25 +189,10 @@ export default {
           this.$emit("afterSave", res);
         })
         .catch((res) => {
-          console.log(res);
+          if(res.status == 403)
+          this.$emit("update:formMode", this.Enum.FormMode.VIEW);
           this.$emit("afterSave", res);
         });
-      // fetch(baseUrl + "/api/v1/contacts", {
-      //   method: "PUT",
-      //   // headers: {
-      //   //   "Content-Type": "application/json",
-      //   // },
-      //   body: formData,
-      // })
-      //   .then((res) => res.json())
-      //   .then((res) => {
-      //     console.log(res);
-      //     this.$emit("afterSave", res);
-      //   })
-      //   .catch((res) => {
-      //     console.log(res);
-      //     this.$emit("afterSave", res);
-      //   });
     },
     onChangeEditMode() {
       this.$emit("update:formMode", this.Enum.FormMode.UPDATE);
@@ -231,7 +216,6 @@ export default {
         // this.avatar = file;
         this.contact.AvatarFullPath = URL.createObjectURL(file);
       }
-      console.log(file);
     },
   },
   data() {
@@ -250,6 +234,13 @@ export default {
 };
 </script>
 <style scoped>
+.input-wrapper{
+  max-width: unset;
+}
+
+.margin-0{
+  margin: 0 !important;
+}
 .contact-info {
   width: 350px;
 }

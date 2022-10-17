@@ -16,8 +16,8 @@ namespace MS.ApplicationCore.Mappings
         {
             //_jwtUtils = jwtUtils;
             CreateMap<User, UserRegisterResponse>();
-            CreateMap<UserInfoResponse, User>();
-            CreateMap<User, UserInfoResponse>();
+            CreateMap<UserInfo, User>();
+            CreateMap<User, UserInfo>();
             CreateMap<RegisterModel, User>()
                 .ForMember(user => user.SecurityStamp, act => act.MapFrom(src => Guid.NewGuid().ToString()));
                 //.ForMember(user => user.PasswordHash, act => act.MapFrom(src => _jwtUtils.HashPassword(src.Password)));

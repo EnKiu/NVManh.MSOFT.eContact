@@ -139,3 +139,7 @@ label+* {
         transform: rotate(360deg);
     }
 }
+
+.margin-0 {
+    margin: 0;
+}

@@ -35,7 +35,10 @@ const actions = {
                 .then(resp => {
                     commit(USER_SUCCESS, resp);
                     localStorage.setItem("userName", resp.UserName);
-                    localStorage.setItem("avatar", resp.Employee.AvatarFullPath);
+                    localStorage.setItem("avatar", resp.AvatarFullPath);
+                    localStorage.setItem("firstName", resp.firstName);
+                    localStorage.setItem("lastName", resp.LastName);
+                    localStorage.setItem("fullName", resp.FullName);
                     resolve(resp);
                 })
                 .catch((res) => {

@@ -1,4 +1,5 @@
-﻿using MS.ApplicationCore.Entities;
+﻿using MS.ApplicationCore.DTOs;
+using MS.ApplicationCore.Entities;
 using MS.ApplicationCore.Entities.Auth;
 using MS.ApplicationCore.Interfaces;
 using System;
@@ -13,7 +14,7 @@ namespace MS.ApplicationCore.Interface.Service
     {
         Task<AuthenticateResponse?> Authenticate(AuthenticateRequest model);
         IEnumerable<User> GetAll();
-        Task<User> GetById(Guid id);
+        Task<UserInfo> GetUserInfoById(string id);
 
         /// <summary>
         /// Đăng ký tài khoản mới

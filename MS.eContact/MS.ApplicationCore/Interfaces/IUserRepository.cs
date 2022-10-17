@@ -10,6 +10,7 @@ namespace MS.ApplicationCore.Interfaces
 {
     public interface IUserRepository:IRepository<User>
     {
+        Task<UserInfo> GetUserInfoResponseById(string id);
         Task<UserRegisterResponse> GetByPhoneNumber (string phoneNumber);
         /// <summary>
         /// Đăng ký User mới
@@ -26,7 +27,7 @@ namespace MS.ApplicationCore.Interfaces
         /// <param name="password">Mật khẩu</param>
         /// <returns>Thông tin User Name</returns>
         /// CreatedBy: NVMANH (10.09.2022)
-        Task<UserInfoResponse> GetUserAuthenticate(string userName, string password);
+        Task<UserInfo> GetUserAuthenticate(string userName, string password);
 
         /// <summary>
         /// Kiểm tra userName đã tồn tại hay chưa

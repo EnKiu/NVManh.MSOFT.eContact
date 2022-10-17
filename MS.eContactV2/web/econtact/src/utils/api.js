@@ -63,8 +63,10 @@ const apiCall = ({ url, data, method, showToast }) =>
                             for (const key in error) {
                                 if (Object.hasOwnProperty.call(error, key)) {
                                     const errorsArray = error[key];
-                                    for (const msg of errorsArray) {
-                                        errorsMsg.push(msg);
+                                    if (errorsArray) {
+                                        for (const msg of errorsArray) {
+                                            errorsMsg.push(msg);
+                                        }
                                     }
                                 }
                             }
@@ -98,7 +100,9 @@ const apiCall = ({ url, data, method, showToast }) =>
                             }
                         }
                         if (statusCode == 403) {
-                            res.message = "Bạn bị giới hạn quyền truy cập tài nguyên, vui lòng liên hệ quản trị viên để được trợ giúp."
+                            res.message = res.response.data.message;
+                            if (!res.message)
+                                res.message = "Bạn bị giới hạn quyền truy cập tài nguyên, vui lòng liên hệ quản trị viên để được trợ giúp."
                             commonJs.showErrorMessenger("Yêu cầu bị từ chối.", res.message)
                         }
                         if (statusCode == 404) {
@@ -107,6 +111,7 @@ const apiCall = ({ url, data, method, showToast }) =>
                         }
 
                     }
+                    reject(res.response);
                     commonJs.hideLoading();
                 })
         } catch (err) {

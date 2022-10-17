@@ -47,7 +47,7 @@ namespace MS.ApplicationCore.Authorization
                     if (userId != null)
                     {
                         // Trích xuất thông tin người dùng, gắn nó vào context để sử dụng khi cần
-                        context.Items["User"] = await userService.GetById((Guid)userId);
+                        context.Items["User"] = await userService.GetUserInfoById(userId);
                     }
                 }
                 catch(Microsoft.IdentityModel.Tokens.SecurityTokenExpiredException)

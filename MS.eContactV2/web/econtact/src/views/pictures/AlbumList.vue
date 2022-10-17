@@ -14,7 +14,7 @@
       >
         <button
           class="btn--remove-item"
-          @click="onRemoveAlbum(album, index)"
+          @click.prevent="onRemoveAlbum(album, index)"
           title="Xóa Album"
         >
           <i class="icofont-ui-remove"></i>
@@ -70,6 +70,20 @@ export default {
     onRemoveAlbum(album, index) {
       console.log(album);
       console.log("album-index:", index);
+      this.commonJs.showConfirm(
+        "Bạn có chắc chắn muốn xóa Album này không?",
+        () => {
+          this.api({ url: "api/v1/albums/" + album.AlbumId, method: "DELETE" })
+            .then((res) => {
+              console.log(res);
+              this.loadAlbum();
+            })
+            .catch((res) => {
+              console.log(res);
+            });
+        }
+      );
+      event.stopPropagation();
     },
     showDetailAlbum(album) {
       this.albumSelected = album;

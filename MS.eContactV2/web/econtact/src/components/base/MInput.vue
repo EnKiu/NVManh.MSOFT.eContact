@@ -81,7 +81,6 @@ export default {
   },
   methods: {
     onInput() {
-      console.log(this.value);
       this.$emit("update:modelValue", this.value);
     },
     onKeyDown(evt) {
@@ -104,7 +103,6 @@ export default {
   },
   watch: {
     validated: function (newValue) {
-      console.log(newValue);
       if (newValue == true) {
         this.selfValidated = true;
         if (

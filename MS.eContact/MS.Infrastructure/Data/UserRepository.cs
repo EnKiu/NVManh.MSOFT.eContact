@@ -20,14 +20,14 @@ namespace MS.Infrastructure.Data
         {
             _mapper = mapper;
         }
-        public async Task<UserInfoResponse> GetUserAuthenticate(string userName, string password)
+        public async Task<UserInfo> GetUserAuthenticate(string userName, string password)
         {
 
             var sql = "SELECT * FROM User WHERE (UserName = @UserName OR Email = @UserName OR PhoneNumber = @UserName) AND PasswordHash = @Password";
             var parameters = new DynamicParameters();
             parameters.Add("@UserName", userName);
             parameters.Add("@Password", password);
-            var user = await DbContext.Connection.QueryFirstOrDefaultAsync<UserInfoResponse>(sql, param: parameters, transaction: DbContext.Transaction);
+            var user = await DbContext.Connection.QueryFirstOrDefaultAsync<UserInfo>(sql, param: parameters, transaction: DbContext.Transaction);
 
             // get roles:
             if (user == null)
@@ -51,28 +51,28 @@ namespace MS.Infrastructure.Data
             var sqlSelectEmployeeInfo = "SELECT * FROM View_Employee e WHERE e.UserId = @UserId";
             var parameters = new DynamicParameters();
             parameters.Add($"@UserID", id);
-            var userResponse = await DbContext.Connection.QueryFirstOrDefaultAsync<UserInfoResponse>(sqlCommand, param: parameters, transaction: DbContext.Transaction);
+            var userResponse = await DbContext.Connection.QueryFirstOrDefaultAsync<UserInfo>(sqlCommand, param: parameters, transaction: DbContext.Transaction);
             if (userResponse != null)
             {
                 userResponse.Roles = await DbContext.Connection.QueryAsync<Role>(sqlSelectRoles, param: parameters, transaction: DbContext.Transaction);
                 //user.Employee = await UnitOfWork.Connection.QueryFirstOrDefaultAsync<Employee>(sqlSelectEmployeeInfo, param: parameters, transaction: UnitOfWork.Transaction);
 
             }
-            var user = _mapper.Map<UserInfoResponse, User>(userResponse);
+            var user = _mapper.Map<UserInfo, User>(userResponse);
             return user;
         }
 
-        public new UserInfoResponse GetById(Guid id)
+        public new UserInfo GetById(Guid id)
         {
-            var sqlCommand = $"SELECT * FROM User WHERE UserId = @UserID";
+            var sqlCommand = $"SELECT u.*,c.AvatarLink FROM User u LEFT JOIN Contact c ON u.ContactId = c.ContactId WHERE u.UserId = @UserID";
             var sqlSelectRoles = $"SELECT anr.RoleId,anr.RoleValue," +
                                     "anr.Name, anr.OtherName FROM Role anr " +
-                                    "LEFT JOIN UserRole anur ON anr.UserRoleId = anur.RoleId " +
+                                    "LEFT JOIN UserRole anur ON anr.RoleId = anur.RoleId " +
                                     "WHERE anur.UserId = @UserID ORDER BY anr.RoleValue DESC";
             var sqlSelectEmployeeInfo = "SELECT * FROM View_Employee e WHERE e.UserId = @UserId";
             var parameters = new DynamicParameters();
             parameters.Add($"@UserID", id);
-            var user = DbContext.Connection.QueryFirstOrDefault<UserInfoResponse>(sqlCommand, param: parameters, transaction: DbContext.Transaction);
+            var user = DbContext.Connection.QueryFirstOrDefault<UserInfo>(sqlCommand, param: parameters, transaction: DbContext.Transaction);
             if (user != null)
             {
                 user.Roles = DbContext.Connection.Query<Role>(sqlSelectRoles, param: parameters, transaction: DbContext.Transaction);
@@ -225,6 +225,26 @@ namespace MS.Infrastructure.Data
             parameters.Add("@MobileNumber", phoneNumber);
             var data = await DbContext.Connection.QueryFirstOrDefaultAsync<UserRegisterResponse>(sql, param: parameters, transaction: DbContext.Transaction);
             return data;
+        }
+
+        public async Task<UserInfo> GetUserInfoResponseById(string id)
+        {
+            var sqlCommand = $"SELECT u.*,c.FirstName,c.LastName,c.FullName,c.AvatarLink FROM User u LEFT JOIN Contact c ON u.ContactId = c.ContactId WHERE u.UserId = @UserID";
+            var sqlSelectRoles = $"SELECT anr.RoleId,anr.RoleValue," +
+                                    "anr.RoleName, anr.OtherName FROM Role anr " +
+                                    "LEFT JOIN UserRole anur ON anr.RoleId = anur.RoleId " +
+                                    "WHERE anur.UserId = @UserID ORDER BY anr.RoleValue DESC";
+            var sqlSelectEmployeeInfo = "SELECT * FROM View_Employee e WHERE e.UserId = @UserId";
+            var parameters = new DynamicParameters();
+            parameters.Add($"@UserID", id);
+            var user = await DbContext.Connection.QueryFirstOrDefaultAsync<UserInfo>(sqlCommand, param: parameters, transaction: DbContext.Transaction);
+            if (user != null)
+            {
+                user.Roles = await DbContext.Connection.QueryAsync<Role>(sqlSelectRoles, param: parameters, transaction: DbContext.Transaction);
+                //user.Employee = UnitOfWork.Connection.QueryFirstOrDefault<Employee>(sqlSelectEmployeeInfo, param: parameters, transaction: UnitOfWork.Transaction);
+
+            }
+            return user;
         }
     }
 }

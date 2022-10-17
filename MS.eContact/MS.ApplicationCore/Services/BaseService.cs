@@ -123,5 +123,26 @@ namespace MS.ApplicationCore.Services
         {
 
         }
+
+        /// <summary>
+        /// Hàm thực hiện thêm mới thông tin lỗi vào Errors:
+        /// </summary>
+        /// <param name="key">Khóa để xác định lỗi</param>
+        /// <param name="errorMsg">Nội dung thông báo lỗi</param>
+        /// CreatedBy: NVMANH (17/10/2022)
+        protected void AddErrors(string key, string errorMsg)
+        {
+            // Kiểm tra xem key hiện tại đã có errors chưa?
+            // Nếu có thì thực hiện add thêm, nếu chưa thì tạo mới:
+            Errors.TryGetValue(key, out var error);
+            if (error != null)
+                error.Add(errorMsg);
+            else
+            {
+                error = new List<string>() { errorMsg };
+                Errors.Add(key, error);
+            }
+
+        }
     }
 }

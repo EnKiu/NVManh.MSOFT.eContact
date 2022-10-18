@@ -4,6 +4,7 @@
   <router-view name="LoginPage"></router-view>
   <router-view class="register" name="Register"></router-view>
   <MLoading v-if="isShowLoading" />
+  <home-page v-if="!isAuthenticated"></home-page>
 <!-- <MLoading /> -->
   <MDialogNotification
     v-if="isShowError"
@@ -18,6 +19,7 @@
 </template>
 
 <script>
+import HomePage from './views/Index.vue'
 import TheHeader from './components/layout/TheHeader.vue'
 import TheMain from './components/layout/TheMain.vue'
 import { USER_REQUEST } from "./store/actions/user";
@@ -27,7 +29,7 @@ import MToast from "./components/base/MToast.vue";
 export default {
   name: 'App',
   components: {
-    TheHeader,TheMain,MToast,MDialogNotification
+    TheHeader,TheMain,MToast,MDialogNotification,HomePage
   },
   computed: {
     ...mapGetters([

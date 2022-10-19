@@ -246,5 +246,14 @@ namespace MS.Infrastructure.Data
             }
             return user;
         }
+
+        public async Task<string> GetUserNameByContactId(Guid contactId)
+        {
+            var sql = "SELECT u.UserName FROM User u WHERE u.ContactId = @ContactId";
+            DynamicParameters parameters = new DynamicParameters();
+            parameters.Add("@ContactId", contactId);
+            var userName = await DbContext.Connection.QueryFirstOrDefaultAsync<string>(sql, param: parameters, transaction: DbContext.Transaction);
+            return userName;
+        }
     }
 }

@@ -74,7 +74,7 @@ namespace MS.eContact.Web.Controllers
                 if (role != null)
                 {
                     authenticateResponse.RoleValue = role.RoleValue;
-                    authenticateResponse.RoleName = role.Name;
+                    authenticateResponse.RoleName = role.RoleName;
                 }
 
 

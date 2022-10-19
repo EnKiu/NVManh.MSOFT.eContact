@@ -98,14 +98,15 @@ namespace MS.eContact.Web
                 options.AddPolicy(_specificOrigins,
                                       builder =>
                                       {
-                                          builder.WithOrigins("https://mf.nmanh.com",
-                                                              "https://wwww.mf.nmanh.com",
-                                                              "https://mfapi.nmanh.com",
-                                                              "https://nmanh.com",
-                                                              "https://www.nmanh.com",
-                                                              "http://localhost:5002",
+                                          builder.WithOrigins("http://localhost:5002",
                                                               "http://localhost:5003",
-                                                              "https://wwww.mfapi.nmanh.com")
+                                                              "http://a1.manhnv.net",
+                                                              "http://wwww.a1.manhnv.net",
+                                                              "https://a1.manhnv.net",
+                                                              "https://wwww.a1.manhnv.net",
+                                                              "http://a1api.nmanh.com",
+                                                              "https://wwww.a1api.nmanh.com",
+                                                              "https://a1api.nmanh.com")
                                                               .AllowAnyHeader()
                                                               .AllowAnyMethod()
                                                               .AllowCredentials();

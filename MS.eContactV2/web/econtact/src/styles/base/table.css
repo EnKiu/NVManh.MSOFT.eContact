@@ -10,6 +10,8 @@ thead th {
     margin-left: auto !important;
     margin-right: auto !important;
     width: 100% !important;
+    padding-left: 0px;
+    padding-right: 0px;
 }
 
 td img {

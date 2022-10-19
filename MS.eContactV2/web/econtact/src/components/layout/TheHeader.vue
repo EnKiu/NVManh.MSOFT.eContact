@@ -6,24 +6,22 @@
     <div class="logo"></div>
     <div class="navbar-list">
       <router-link to="/contacts" class="navbar-item">
-        <span class="navbar-item__text"
-          ><i class="icofont-contacts"></i> Danh bạ</span
-        >
+        <span class="navbar-item__text"><i class="icofont-contacts"></i></span>
+        <span class="item__text-label"> Danh bạ</span>
       </router-link>
       <router-link to="/events" class="navbar-item">
-        <span class="navbar-item__text"
-          ><i class="icofont-history"></i> Sự kiện</span
-        >
+        <span class="navbar-item__text"><i class="icofont-history"></i></span>
+        <span class="item__text-label"> Sự kiện</span>
       </router-link>
       <router-link to="/pictures" class="navbar-item">
-        <span class="navbar-item__text"
-          ><i class="icofont-image"></i> Kho ảnh</span
-        >
+        <span class="navbar-item__text"><i class="icofont-image"></i></span>
+        <span class="item__text-label"> Kho ảnh</span>
       </router-link>
       <a
         v-if="isAuthenticated"
-        class="navbar-item account"
+        class="navbar-item account" style="flex-direction: row;"
         @click="showAccountOption = !showAccountOption"
+        v-clickoutside="hideListAccountOption"
       >
         <div
           class="navbar-item__avatar"
@@ -55,9 +53,42 @@
   </nav>
 </template>
 <script>
+/* eslint-disable */
+/**
+ * Gán sự kiện nhấn click chuột ra ngoài combobox data (ẩn data list đi)
+ * NVMANH (31/07/2022)
+ */
+const clickoutside = {
+  mounted(el, binding, vnode, prevVnode) {
+    el.clickOutsideEvent = (event) => {
+      // Nếu element hiện tại không phải là element đang click vào
+      // Hoặc element đang click vào không phải là button trong combobox hiện tại thì ẩn đi.
+      if (
+        !(
+          (
+            el === event.target || // click phạm vi của combobox__data
+            el.contains(event.target) || //click vào element con của combobox__data
+            el.previousElementSibling.contains(event.target)
+          ) //click vào element button trước combobox data (nhấn vào button thì hiển thị)
+        )
+      ) {
+        // Thực hiện sự kiện tùy chỉnh:
+        binding.value(event, el);
+        // vnode.context[binding.expression](event); // vue 2
+      }
+    };
+    document.body.addEventListener("click", el.clickOutsideEvent);
+  },
+  beforeUnmount: (el) => {
+    document.body.removeEventListener("click", el.clickOutsideEvent);
+  },
+};
 import { AUTH_LOGOUT } from "../../store/actions/auth";
 export default {
   name: "TheHeader",
+  directives: {
+    clickoutside,
+  },
   props: ["isAuthenticated"],
   created() {
     if (this.isAuthenticated) {
@@ -79,6 +110,9 @@ export default {
     logOut() {
       this.$store.dispatch(AUTH_LOGOUT);
     },
+    hideListAccountOption(){
+      this.showAccountOption = false;
+    }
   },
   data() {
     return {
@@ -177,5 +211,15 @@ export default {
 
 .option-item:hover {
   background-color: #4a4a4a;
+}
+
+@media screen and (max-width: 411px) {
+  /* .item__text-label{
+    display: none;
+  } */
+  .navbar-item {
+    padding: 4px 10px;
+    box-sizing: border-box;
+  }
 }
 </style>

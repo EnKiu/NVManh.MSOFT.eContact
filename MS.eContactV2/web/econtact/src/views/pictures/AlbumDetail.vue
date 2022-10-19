@@ -29,7 +29,7 @@
         </button>
         <transition name="slide-fade">
           <!-- 			SRC comes from the array of images the :key is important for vue to believe its a 'new' DOM element and do the transition -->
-          <img v-bind:src="urlPath" v-bind:key="currentIndex" />
+          <img v-bind:src="urlPath" v-bind:key="currentIndex"  @touchstart="pictureTouchStart" @touchend="pictureTouchEnd" @touchmove="touchMoveImg"/>
         </transition>
         <div
           v-if="currentIndex > 0"
@@ -137,9 +137,20 @@ export default {
       this.currentIndex--;
       this.updatePictureTotalViews(this.pictures[this.currentIndex]);
     },
+    // pictureTouchStart(){
+    //   console.log("pictureTouchStart",event);
+    // },
+    // pictureTouchEnd(){
+    //   console.log("pictureTouchEnd",event);
+    // },
+    touchMoveImg(){
+      var touch = event.targetTouches[0];
+      console.log("pageX",touch.pageX<touch.screenX);
+    }
   },
   data() {
     return {
+      touchPosition:null,
       pictures: [],
       pictureTransition: null,
       showTransition: false,

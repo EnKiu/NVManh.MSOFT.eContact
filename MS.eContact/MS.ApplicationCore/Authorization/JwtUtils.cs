@@ -57,7 +57,7 @@ namespace MS.ApplicationCore.Authorization
 
             foreach (var userRole in userRoles)
             {
-                var userRoleString = userRole.Name;
+                var userRoleString = userRole.RoleName;
                 authClaims.Add(new Claim(ClaimTypes.Role, value: userRoleString));
             }
             var token = CreateToken(authClaims);

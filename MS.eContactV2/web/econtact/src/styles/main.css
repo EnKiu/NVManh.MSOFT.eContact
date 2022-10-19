@@ -90,7 +90,7 @@ label+* {
     right: 0;
     bottom: 0;
     background-color: rgba(0, 0, 0, 0.402);
-    z-index: 999;
+    z-index: 9999;
 }
 
 .loading-wrapper {
@@ -115,6 +115,10 @@ label+* {
     -webkit-text-fill-color: transparent;
     animation: spin 1000ms infinite linear;
     -webkit-animation: spin 1000ms infinite linear;
+}
+
+.main>* {
+    width: 100%;
 }
 
 .loading__text {

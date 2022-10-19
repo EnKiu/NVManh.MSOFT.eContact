@@ -12,7 +12,7 @@ const commonJs = {
         store
             .dispatch(AUTH_REQUEST, { username, password })
             .then(() => {
-                router.push("/");
+                router.push("/contacts");
                 commonJs.hideLoading();
             })
             // .catch((res) => {

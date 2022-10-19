@@ -65,12 +65,14 @@ export default {
   right: 0;
   bottom: 0;
   padding: 24px;
+  z-index: 1005;
 }
 .dialog-wrapper {
   position: relative;
   background-color: #fff;
   border-radius: 4px;
   max-width: 100%;
+  box-sizing: border-box;
 }
 
 .dialog__content {

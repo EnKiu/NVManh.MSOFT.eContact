@@ -37,6 +37,7 @@ namespace MS.ApplicationCore.Interfaces
         /// CreatedBy: NVMANH (10/09/2022)
         Task<bool> CheckUserNameExist(string userName);
 
+        Task<string> GetUserNameByContactId(Guid contactId);
         /// <summary>
         /// Kiểm tra số điện thoại đã đăng ký hay chưa?
         /// </summary>

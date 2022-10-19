@@ -6,10 +6,13 @@ import AlbumList from '../views/pictures/AlbumList.vue'
 import LoginPage from '../views/account/Login.vue'
 import Register from '../views/account/Register.vue'
 import AccountInfo from '../views/account/AccountInfo.vue'
+import HomePage from '../views/Index.vue'
 const routes = [{
         path: '/',
         name: 'HomePage',
-        component: ContactList,
+        components: {
+            HomePage: HomePage
+        },
     },
     {
         path: '/login',

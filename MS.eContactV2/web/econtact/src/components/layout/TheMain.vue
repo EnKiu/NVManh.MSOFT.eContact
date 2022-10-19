@@ -1,6 +1,8 @@
 <template>
     <div class="main">
-        <router-view></router-view>
+        <div class="main-container">
+            <router-view></router-view>
+        </div>
     </div>
 </template>
 <script>
@@ -21,5 +23,10 @@ export default {
     overflow-y: auto;
     background-color: #fff;
     z-index: 99;
+ }
+
+ .main-container{
+    max-width: 700px;
+    height:100%
  }
 </style>

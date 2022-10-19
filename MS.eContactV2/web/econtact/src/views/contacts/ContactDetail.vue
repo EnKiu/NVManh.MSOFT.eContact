@@ -242,7 +242,7 @@ export default {
   margin: 0 !important;
 }
 .contact-info {
-  width: 350px;
+  max-width: 350px;
 }
 .contact--general {
   display: grid;

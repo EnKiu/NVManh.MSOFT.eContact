@@ -190,6 +190,14 @@ export default {
 };
 </script>
 <style scoped>
+
+.event .input-wrapper{
+  margin: 0;
+}
+
+.event .event--content{
+  padding: 10px 0;
+}
 .ck.ck-editor__main > .ck-editor__editable {
   height: 500px !important;
 }

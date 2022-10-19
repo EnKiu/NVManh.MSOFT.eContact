@@ -18,44 +18,35 @@
       </form>
     </div>
     <div class="contact__list">
-      <table class="table" border="0" width="100%">
-        <thead>
-          <tr>
-            <th>#</th>
-            <th>Họ và tên</th>
-            <th>Số điện thoại</th>
-          </tr>
-        </thead>
-        <tbody>
-          <tr
-            v-for="(contact, index) in contactsFilter"
-            :key="index"
-            @dblclick="onSelectContact(contact)"
-          >
-            <td class="th-avatar">
-              <div @click="onSelectContact(contact)"
+      <m-table
+        ref="tbListDocument"
+        :data="contactsFilter"
+        empty-text="Không có dữ liệu"
+        @row-click="onSelectContact"
+        width="100%"
+        height="100%"
+      >
+        <m-column prop="FullName" label="#" width="68px">
+              <template #default="scope">
+                <div
                 class="avatar"
+                @click="onSelectContact(scope.row)"
                 :style="{
                   'background-image': `url(${
-                    contact.AvatarFullPath || 'avatar.png'
+                    scope.row.AvatarFullPath || 'avatar.png'
                   })`,
                 }"
               ></div>
-              <!-- <img
-                :src="contact.AvatarFullPath || 'avatar.png'"
-                alt=""
-                @click="onSelectContact(contact)"
-              /> -->
-            </td>
-            <td>
-              <a @click="onSelectContact(contact)"
-                >{{ contact.FirstName }} <b>{{ contact.LastName }}</b></a
-              >
-            </td>
-            <td>{{ contact.PhoneNumber }}<br />{{ contact.MobileNumber }}</td>
-          </tr>
-        </tbody>
-      </table>
+              </template>
+            </m-column>
+            <m-column prop="FullName" label="Họ và tên" width="160px"></m-column>
+            <m-column label="Số điện thoại">
+              <template #default="scope">
+                <div>{{scope.row.PhoneNumber}}</div>
+                <div>{{scope.row.MobileNumber}}</div>
+              </template>
+            </m-column>
+      </m-table>
     </div>
   </div>
   <contact-detail
@@ -137,6 +128,7 @@ export default {
 .contact-container {
   min-width: 300px;
   box-sizing: border-box;
+  height: 100%;
 }
 .contact__search {
   width: 100%;

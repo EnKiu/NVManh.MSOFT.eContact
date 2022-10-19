@@ -81,6 +81,7 @@ export default {
           url: "/api/v1/EventDetails",
           data: this.contact,
           method: "POST",
+          showToast:false
         }).then(() => {
           this.commonJs.showMessenger({
             title: "Thành công",

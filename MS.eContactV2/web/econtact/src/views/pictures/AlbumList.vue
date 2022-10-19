@@ -6,7 +6,43 @@
       </button>
     </div>
     <div class="album__list">
-      <div
+      <m-table
+        ref="tbListDocument"
+        :data="albums"
+        empty-text="Không có dữ liệu"
+        @row-click="showDetailAlbum"
+        width="100%"
+        height="100%"
+      >
+        <m-column prop="FullName" class="album-item">
+          <template #default="scope">
+            <div class="album-item">
+            <button
+              class="btn--remove-item"
+              @click.prevent="onRemoveAlbum(scope.row, index)"
+              title="Xóa Album"
+            >
+              <i class="icofont-ui-remove"></i>
+            </button>
+            <div class="album__title">{{ scope.row.AlbumName }}</div>
+            <div class="album__date">
+              <i class="icofont-ui-clock"></i> Ngày tạo:
+              {{ commonJs.formatDate(scope.row.CreatedDate) }}
+            </div>
+            <div class="album__total-pictures">
+              <i class="icofont-files-stack"></i>Tổng số ảnh:
+              {{ scope.row.TotalPictures }}
+            </div>
+            <div class="album__total-view">
+              <i class="icofont-eye-alt"></i>Tổng số lượt xem:
+              {{ scope.row.TotalViews }}
+            </div>
+          </div>
+          </template>
+        </m-column>
+      </m-table>
+      <!-- BẢNG CŨ -->
+      <!-- <div
         class="album-item"
         v-for="(album, index) in albums"
         :key="index"
@@ -32,7 +68,7 @@
           <i class="icofont-eye-alt"></i>Tổng số lượt xem:
           {{ album.TotalViews }}
         </div>
-      </div>
+      </div> -->
     </div>
   </div>
   <album-item
@@ -108,9 +144,10 @@ export default {
 </script>
 <style scoped>
 .album {
-  padding: 0 16px 16px 16px;
   box-sizing: border-box;
   max-width: 700px;
+  height: 100%;
+  box-sizing: border-box;
 }
 
 .album * {
@@ -122,6 +159,8 @@ export default {
 .album__list {
   max-width: 1366px;
   flex-wrap: wrap;
+  height: calc(100% - 36px);
+  overflow-y: auto;
 }
 .album-item {
   position: relative;
@@ -149,6 +188,7 @@ export default {
   border-color: #ff0000;
   border-style: solid;
   border: none;
+  z-index: 0;
 }
 .album-item:hover .btn--remove-item {
   display: flex;

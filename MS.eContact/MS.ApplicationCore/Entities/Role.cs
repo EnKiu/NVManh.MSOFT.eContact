@@ -9,8 +9,8 @@ namespace MS.ApplicationCore.Entities.Auth
 {
     public class Role:BaseEntity
     {
-        public Guid Id { get; set; }
-        public string? Name { get; set; }
+        public Guid RoleId { get; set; }
+        public string? RoleName { get; set; }
         public Enums.Role RoleValue { get; set; }
         public string? OtherName { get; set; }
     }

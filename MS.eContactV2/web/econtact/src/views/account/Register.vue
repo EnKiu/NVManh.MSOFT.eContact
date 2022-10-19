@@ -147,6 +147,7 @@ export default {
   background-color: #fff;
   padding: 24px;
   border-radius: 4px;
+  z-index: 1000;
 }
 .register-form > div + div {
   /* margin-top: 10px; */

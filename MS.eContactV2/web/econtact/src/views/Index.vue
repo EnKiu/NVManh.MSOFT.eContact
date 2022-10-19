@@ -1,18 +1,42 @@
 <template>
   <div class="page-not-authenticate">
     <div class="content">
-      Đây là website nội bộ dành cho cựu học sinh lớp 10A1, 11A1, 12A1 trường
-      THPT Tứ Sơn. Mọi thông tin về nhóm là bảo mật và chỉ dành cho các thành
-      viên nội bộ. Nếu bạn muốn sử dụng các tính năng như xem danh bạ, đăng ký
-      tham gia sự kiện, xem ảnh và các hoạt động khác. Xin vui lòng Đăng nhập hệ
-      thống! Xin lỗi vì sự bất tiện này! Thành viên A1, xin vui lòng Đăng nhập,
-      hoặc nếu bạn chưa có tài khoản xin hãy Tạo tài khoản.
+      <h1>Thông báo</h1>
+      <p class="content__text">
+        Kể từ 10/10/2022, do vấn đề bảo mật thông tin lớp và của các cá nhân, để có thể sử dụng đầy đủ các tính năng xin vui lòng nhấn <router-link to="/login"><b>đăng nhập</b>.</router-link>
+      </p>
+      <p class="content__text">
+        Nếu bạn chưa có tài khoản xin vui lòng bỏ ra 30s để <router-link to="/register"><b>Tạo tài khoản</b>.</router-link>.
+      </p>
+      <p class="content__text">
+        Website chính thức bổ sung thêm các tính năng, các bạn có thể:
+        <ul>
+          <li>Tra cứu số điện thoại của nhau.</li>
+          <li>Cập nhật số điện thoại của cá nhân.</li>
+          <li>Xem/ Đăng ký tham gia các sự kiện của lớp.</li>
+          <li>Xem ảnh hoạt động lớp theo các album của cá nhân upload lên.</li>
+        </ul>
+      </p>
+      <p class="content__text">
+        Xin vui lòng yên tâm sử dụng Website vì nó được thiết kế bởi Mr Mạnh - an toàn và 100% không có virut.
+      </p>
+      <p class="content__text">
+        Nếu các bạn có bất cứ góp ý nào xin vui lòng nói trực tiếp với Mr Mạnh (0961179969).
+      </p>
+      <p class="content__text">
+        Cám ơn và xin lỗi các bạn vì sự bất tiện này!
+      </p>
+      <div class="page-button">
+        <router-link to="/login" class="btn btn--default btn--link">Đăng nhập</router-link>
+        <div> hoặc <router-link to="/register"><b>Tạo tài khoản</b>.</router-link></div>
+      </div>
     </div>
   </div>
 </template>
 <script>
 export default {
   name: "HomePage",
+  props:["showHomePage"]
 };
 </script>
 <style scoped>
@@ -32,7 +56,21 @@ export default {
 .content{
     max-width: 300px;
     margin: 24px;
+    padding: 0 16px 16px;
     background-color: #fff;
     border-radius: 4px;
+}
+.page-button{
+  display:flex;
+  flex-direction: column;
+  justify-content: flex-end;
+}
+
+.btn--link{
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  text-decoration: none;
+  margin-bottom: 10px;
 }
 </style>

@@ -171,7 +171,7 @@ export default {
     display: flex;
     align-items: center;
     justify-content: center;
-    z-index: 99;
+    padding: 24px;
 }
 
 .dialog-wapper {
@@ -249,7 +249,7 @@ export default {
     background-color: #dddddd;
 }
 .dialog-notification{
- z-index:999;
+ z-index:1055;
 }
 .dialog__body {
   display: flex;

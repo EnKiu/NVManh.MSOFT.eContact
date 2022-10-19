@@ -82,7 +82,16 @@ namespace MS.ApplicationCore.Services
             if (user.Password.Trim() != user.RePassword.Trim())
                 AddErrors("RePassword", "Mật khẩu xác nhận không khớp.");
             if (await UnitOfWork.Users.CheckUserNameExist(user.UserName) == true)
-                AddErrors("UserName", "Tên tài khoản đã được đăng ký");
+                AddErrors("UserName", "Số điện thoại đã được đăng ký");
+            var userNameRegistedByContactId = await UnitOfWork.Users.GetUserNameByContactId(user.ContactId);
+            if (userNameRegistedByContactId  != null)
+            {
+                var length = userNameRegistedByContactId.Length;
+                var prevString = userNameRegistedByContactId.Substring(0, 3);
+                var subFixString = userNameRegistedByContactId.Substring(length - 3);
+                userNameRegistedByContactId = $"{prevString}xxx{subFixString}";
+                AddErrors("UserName", $"Thành viên này đã đăng ký số điện thoại {userNameRegistedByContactId} để đăng nhập hệ thống. Vui lòng đăng nhập với số điện thoại đã đã đăng ký. Nếu bạn muốn đăng ký số điện thoại mới hoặc lấy lại mật khẩu thì liên hệ với Mr Mạnh để được cấp lại.");
+            }
             if (Errors.Count > 0)
             {
                 return false;

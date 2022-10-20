@@ -15,7 +15,7 @@ module.exports = defineConfig({
         //     //     target: 'http://localhost:5003'
         //     // }
         // },
-        port: 5002
+        port: 5005
     },
     pages: {
         index: {

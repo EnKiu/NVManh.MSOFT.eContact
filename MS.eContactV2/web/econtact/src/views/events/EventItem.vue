@@ -7,8 +7,7 @@
     </div>
     <div class="event-info event__status">
       <span v-if="timeLeftInfo != null && item.IsCancel == false" class="time--left"
-        >Hạn đăng ký:
-        <span class="time--left-text">{{ timeLeftInfo }}</span></span
+        >Hạn đăng ký: <span class="time--left-text">{{ timeLeftInfo }}</span></span
       >
       <span v-if="timeLeftInfo == null && item.IsCancel == false" class="time--ended"
         >Đã kết thúc</span
@@ -57,15 +56,13 @@
       <span v-else>Không có ai tham gia.</span>
     </div>
   </div>
-  
 </template>
 <script>
-
 export default {
   name: "EventItem",
-  components:{},
+  components: {},
   props: ["item"],
-  emits: ["onRegister", "onShowList","onShowContentDetail"],
+  emits: ["onRegister", "onShowList", "onShowContentDetail"],
   computed: {
     eventDateFormat: function () {
       var eventDate = this.item.EventDate;
@@ -104,7 +101,7 @@ export default {
     onRegister() {
       this.$emit("onRegister", this.item);
     },
-    onShowContentDetail(){
+    onShowContentDetail() {
       this.$emit("onShowContentDetail", this.item);
     },
     interValTime() {
@@ -206,13 +203,14 @@ export default {
   text-decoration: line-through;
 }
 .event {
-  padding: 24px;
+  padding: 16px;
   border-radius: 4px;
-  box-shadow: 0 3px 6px #404040;
+  box-shadow: 0px 0px 10px #404040;
+  margin: 0 auto;
 }
 
 .event + .event {
-  margin-top: 10px;
+  margin-top: 16px;
 }
 
 .event-info {

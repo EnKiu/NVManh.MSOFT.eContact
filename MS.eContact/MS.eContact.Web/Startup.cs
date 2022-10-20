@@ -99,7 +99,7 @@ namespace MS.eContact.Web
                                       builder =>
                                       {
                                           builder.WithOrigins("http://localhost:5002",
-                                                              "http://localhost:5003",
+                                                              "http://localhost:5005",
                                                               "http://a1.manhnv.net",
                                                               "http://wwww.a1.manhnv.net",
                                                               "https://a1.manhnv.net",

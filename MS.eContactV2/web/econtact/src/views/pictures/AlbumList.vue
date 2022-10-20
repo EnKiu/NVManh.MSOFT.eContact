@@ -17,27 +17,27 @@
         <m-column prop="FullName" class="album-item">
           <template #default="scope">
             <div class="album-item">
-            <button
-              class="btn--remove-item"
-              @click.prevent="onRemoveAlbum(scope.row, index)"
-              title="Xóa Album"
-            >
-              <i class="icofont-ui-remove"></i>
-            </button>
-            <div class="album__title">{{ scope.row.AlbumName }}</div>
-            <div class="album__date">
-              <i class="icofont-ui-clock"></i> Ngày tạo:
-              {{ commonJs.formatDate(scope.row.CreatedDate) }}
+              <button
+                class="btn--remove-item"
+                @click.prevent="onRemoveAlbum(scope.row, index)"
+                title="Xóa Album"
+              >
+                <i class="icofont-ui-remove"></i>
+              </button>
+              <div class="album__title">{{ scope.row.AlbumName }}</div>
+              <div class="album__date">
+                <i class="icofont-ui-clock"></i> Ngày tạo:
+                {{ commonJs.formatDate(scope.row.CreatedDate) }}
+              </div>
+              <div class="album__total-pictures">
+                <i class="icofont-files-stack"></i>Tổng số ảnh:
+                {{ scope.row.TotalPictures }}
+              </div>
+              <div class="album__total-view">
+                <i class="icofont-eye-alt"></i>Tổng số lượt xem:
+                {{ scope.row.TotalViews }}
+              </div>
             </div>
-            <div class="album__total-pictures">
-              <i class="icofont-files-stack"></i>Tổng số ảnh:
-              {{ scope.row.TotalPictures }}
-            </div>
-            <div class="album__total-view">
-              <i class="icofont-eye-alt"></i>Tổng số lượt xem:
-              {{ scope.row.TotalViews }}
-            </div>
-          </div>
           </template>
         </m-column>
       </m-table>
@@ -106,19 +106,16 @@ export default {
     onRemoveAlbum(album, index) {
       console.log(album);
       console.log("album-index:", index);
-      this.commonJs.showConfirm(
-        "Bạn có chắc chắn muốn xóa Album này không?",
-        () => {
-          this.api({ url: "api/v1/albums/" + album.AlbumId, method: "DELETE" })
-            .then((res) => {
-              console.log(res);
-              this.loadAlbum();
-            })
-            .catch((res) => {
-              console.log(res);
-            });
-        }
-      );
+      this.commonJs.showConfirm("Bạn có chắc chắn muốn xóa Album này không?", () => {
+        this.api({ url: "api/v1/albums/" + album.AlbumId, method: "DELETE" })
+          .then((res) => {
+            console.log(res);
+            this.loadAlbum();
+          })
+          .catch((res) => {
+            console.log(res);
+          });
+      });
       event.stopPropagation();
     },
     showDetailAlbum(album) {
@@ -164,12 +161,12 @@ export default {
 }
 .album-item {
   position: relative;
-  min-width: 300px;
+  min-width: 250px;
   float: left;
   max-width: 100%;
   border: 1px solid #dedede;
   border-radius: 4px;
-  box-shadow: 0 3px 6px #404040;
+  box-shadow: 0 0 10px #404040;
   padding: 16px;
   margin: 10px;
   cursor: pointer;

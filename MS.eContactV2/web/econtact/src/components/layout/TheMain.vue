@@ -1,32 +1,30 @@
 <template>
-    <div class="main">
-        <div class="main-container">
-            <router-view></router-view>
-        </div>
+  <div class="main">
+    <div class="main-container">
+      <router-view></router-view>
     </div>
+  </div>
 </template>
 <script>
-export default {
-    
-}
+export default {};
 </script>
 
 <style scoped>
- .main{
-    margin-top: 80px;
-    width: 100%;
-    height:calc(100vh - 80px);
-    display: flex;
-    justify-content: center;
-    padding: 24px;
-    box-sizing: border-box;
-    overflow-y: auto;
-    background-color: #fff;
-    z-index: 99;
- }
+.main {
+  margin-top: 80px;
+  width: 100%;
+  height: calc(100vh - 80px);
+  display: flex;
+  justify-content: center;
+  padding: 16px;
+  box-sizing: border-box;
+  overflow-y: auto;
+  background-color: #fff;
+  z-index: 99;
+}
 
- .main-container{
-    max-width: 700px;
-    height:100%
- }
+.main-container {
+  max-width: 700px;
+  height: 100%;
+}
 </style>

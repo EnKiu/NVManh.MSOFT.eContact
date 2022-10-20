@@ -135,12 +135,16 @@ export default {
 <style scoped>
 .container {
   box-sizing: border-box;
+  margin: 0 auto;
+  max-width: 350px;
 }
 
 .toolbar {
-  position: relative;
+  position: sticky;
+  top: 0;
   display: flex;
   align-items: center;
+  background-color: #fff;
   justify-content: flex-start;
 }
 

@@ -35,11 +35,11 @@ namespace MS.Infrastructure
         /// <param name="fileName">Tên file</param>
         /// <returns>Đường dẫn đến tệp vừa upload</returns>
         /// CreatedBy: NVMANH (30/08/2022)
-        public async Task<string> UploadFile(IFormFile file, string folderName, string fileName)
+        public async Task<string> UploadFile(IFormFile file, string folderPath, string fileName)
         {
             try
             {
-                var path = await DoUploadFile(file, folderName, fileName);
+                var path = await DoUploadFile(file, folderPath, fileName);
                 return path;
 
             }
@@ -48,10 +48,10 @@ namespace MS.Infrastructure
                 FtpWebResponse newResponse = ex.Response as FtpWebResponse;
                 if (newResponse.StatusCode == FtpStatusCode.ActionNotTakenFileUnavailable)
                 {
-                    var res = MakeFolderInFileServer(folderName);
+                    var res = MakeFolderInFileServer(folderPath);
                     newResponse.Close();
                     if (res == true)
-                        return await DoUploadFile(file, folderName, fileName);
+                        return await DoUploadFile(file, folderPath, fileName);
                     else
                         throw new MISAException("Không thể upload file tới Server Files");
 
@@ -68,18 +68,18 @@ namespace MS.Infrastructure
         /// Thực hiện Upload File đến Server Files
         /// </summary>
         /// <param name="file">Tệp muốn upload</param>
-        /// <param name="folderName">Tên thư mục chứa tệp trên Server File</param>
+        /// <param name="folderPath">Thư mục chứa tệp trên Server File</param>
         /// <param name="fileName">Tên File</param>
         /// <returns>Đường dẫn đến File đã upload thành công</returns>
         /// CreatedBy: NVMANH (30/08/2022)
-        private async Task<string> DoUploadFile(IFormFile file, string folderName, string fileName)
+        private async Task<string> DoUploadFile(IFormFile file, string folderPath, string fileName)
         {
             var ext = file.FileName[file.FileName.LastIndexOf('.')..].ToLower();
             var fileNameWithExt = String.Format("{0}{1}", fileName, ext);
-            var subPath = String.Format("/{0}/{1}", folderName, fileNameWithExt);
-            var fullPath = $"/{_serverFilePath}{subPath}";
+            var subPath = String.Format("/{0}/{1}", folderPath, fileNameWithExt);// Ex: /folderName/abc.png
+            var fullPath = $"/{_serverFilePath}{subPath}";// Ex: /e-contact/folderName/abc.png
             // Thực hiện upload file sang server files:
-            var uploadUrl = String.Format("{0}{1}", _ftpHost, fullPath);
+            var uploadUrl = String.Format("{0}{1}", _ftpHost, fullPath);// Ex: https://192.168.1.1/e-contact/folderName/abc.png
 
             FtpWebRequest request = (FtpWebRequest)WebRequest.Create(uploadUrl);
 
@@ -110,7 +110,7 @@ namespace MS.Infrastructure
             try
             {
                 // Thực hiện upload file sang server files:
-                var deleteFileUrl = String.Format("{0}{1}", _ftpHost, filePath);
+                var deleteFileUrl = String.Format("{0}/{1}/{2}", _ftpHost,_serverFilePath, filePath);
 
                 FtpWebRequest request = WebRequest.Create(deleteFileUrl) as FtpWebRequest;
 
@@ -130,11 +130,64 @@ namespace MS.Infrastructure
                     return await Task.FromResult(false);
                 }
             }
-            catch (Exception)
+            catch (WebException ex)
+            {
+                FtpWebResponse newResponse = ex.Response as FtpWebResponse;
+                if (newResponse.StatusCode == FtpStatusCode.ActionNotTakenFileUnavailable)
+                {
+                        throw new MISAException("Tệp hoặc thư mục không tồn tại trên server files");
+                }
+                else
+                {
+                        throw new MISAException("Không thể xóa các files.");
+                }
+            }
+            catch(Exception ex)
             {
                 return await Task.FromResult(false);
             }
 
+        }
+
+        /// <summary>
+        /// Xóa thư mục trên Server Files
+        /// </summary>
+        /// <param name="folderPath">Tên thư mục muốn tạo (VD: folderPath)</param>
+        /// <returns>true- nếu thành công; false - nếu không thành công</returns>
+        /// CreatedBy: NVMANH (30/08/2022)
+        public bool RemoveFolderInFileServer(string folderPath)
+        {
+
+            var directoryPath = String.Format("{0}/{1}/{2}", _ftpHost, _serverFilePath, folderPath);
+            var request = (FtpWebRequest)WebRequest.Create(directoryPath);
+
+            // Khởi tạo request mới và tạo thư mục:  
+            request.Credentials = new NetworkCredential(_ftpUserName, _ftpPassword);
+            request.Proxy = null;
+            request.KeepAlive = true;
+            request.UseBinary = true;
+            request.Method = WebRequestMethods.Ftp.RemoveDirectory;
+
+            //// do không thể xóa thư mục nếu nó có không rỗng, nên cần kiểm tra trước;
+            //request.Method = WebRequestMethods.Ftp.ListDirectoryDetails;
+            using var resp = (FtpWebResponse)request.GetResponse();
+
+            //Stream responseStream = resp.GetResponseStream();
+            //StreamReader reader = new StreamReader(responseStream);
+            //string line = reader.ReadLine();
+
+            //while (!string.IsNullOrEmpty(line))
+            //{
+            //    line = reader.ReadLine();
+            //}
+            //return true;
+            if (resp.StatusCode == FtpStatusCode.FileActionOK)
+            {
+                Console.WriteLine(resp.StatusCode);
+                return true;
+            }
+            else
+                return false;
         }
 
         /// <summary>
@@ -145,7 +198,7 @@ namespace MS.Infrastructure
         /// CreatedBy: NVMANH (30/08/2022)
         public bool MakeFolderInFileServer(string folderName)
         {
-            
+
             var directoryPath = String.Format("{0}/{1}/{2}", _ftpHost, _serverFilePath, folderName);
             var request = (FtpWebRequest)WebRequest.Create(directoryPath);
 

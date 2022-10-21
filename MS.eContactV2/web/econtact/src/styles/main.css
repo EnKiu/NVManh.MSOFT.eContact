@@ -41,8 +41,8 @@ label+* {
 }
 
 ::-webkit-scrollbar {
-    width: 8px;
-    height: 8px
+    width: 4px;
+    height: 4px
 }
 
 ::-webkit-scrollbar-track {
@@ -65,13 +65,13 @@ label+* {
 }
 
 .dialog::-webkit-scrollbar {
-    width: 6px;
+    width: 3px;
     height: 10px
 }
 
 ::-webkit-scrollbar-thumb {
     /* background: #9aa4bb; */
-    width: 6px;
+    width: 3px;
     height: 10px;
     border-radius: 4px
 }

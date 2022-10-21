@@ -76,7 +76,8 @@ const apiCall = ({ url, data, method, showToast }) =>
                     } else {
                         if (statusCode == 500) {
                             res.devMsg = res.message;
-                            res.message = "Có lỗi xảy ra khi thực hiện xử lý yêu cầu, vui lòng thử lại hoặc liên hệ Quản trị viên để được trợ giúp."
+                            res.message = res.response.data.UserMsg;
+                            console.log(res);
                             commonJs.showErrorMessenger("Lỗi máy chủ", res.message)
 
                         }

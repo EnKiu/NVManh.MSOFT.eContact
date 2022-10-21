@@ -32,11 +32,7 @@ namespace MS.eContact.Web.Controllers
             _fileTransfer = fileTransfer;
             _baseService = baseService;
         }
-        [AllowAnonymous]
-        public async override Task<IActionResult> Get()
-        {
-            return await base.Get();
-        }
+        
         [HttpPut]
         public async Task<IActionResult> Put(string id)
         {

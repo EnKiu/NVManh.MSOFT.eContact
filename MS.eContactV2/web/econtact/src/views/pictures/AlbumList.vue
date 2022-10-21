@@ -6,7 +6,7 @@
       </button>
     </div>
     <div class="album__list">
-      <m-table
+      <!-- <m-table
         ref="tbListDocument"
         :data="albums"
         empty-text="Không có dữ liệu"
@@ -40,9 +40,9 @@
             </div>
           </template>
         </m-column>
-      </m-table>
+      </m-table> -->
       <!-- BẢNG CŨ -->
-      <!-- <div
+      <div
         class="album-item"
         v-for="(album, index) in albums"
         :key="index"
@@ -68,7 +68,7 @@
           <i class="icofont-eye-alt"></i>Tổng số lượt xem:
           {{ album.TotalViews }}
         </div>
-      </div> -->
+      </div>
     </div>
   </div>
   <album-item
@@ -155,9 +155,11 @@ export default {
 }
 .album__list {
   max-width: 1366px;
+  display: flex;
   flex-wrap: wrap;
-  height: calc(100% - 36px);
+  height: calc(100% - 46px);
   overflow-y: auto;
+  margin-top: 10px;
 }
 .album-item {
   position: relative;
@@ -170,6 +172,7 @@ export default {
   padding: 16px;
   margin: 10px;
   cursor: pointer;
+  flex: 1;
 }
 
 .album-item div + div {

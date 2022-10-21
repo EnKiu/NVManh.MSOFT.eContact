@@ -39,6 +39,9 @@ namespace MS.ApplicationCore.Services
             var addAlbumResult = await _repository.AddAsync(entity);
             if (addAlbumResult > 0)
             {
+                // Tạo tên album:
+                var albumFolderName = entity.AlbumId.ToString();
+
                 // Thêm mới ảnh vào album, sau đó thêm luôn object picture vào database:
                 var files = entity.PictureFiles;
                 var totalPicturesAdd = 0;
@@ -47,7 +50,7 @@ namespace MS.ApplicationCore.Services
                 foreach (var file in files)
                 {
                     var pic = new Picture() { PictureId = Guid.NewGuid(), AlbumId = entity.AlbumId };
-                    pic.UrlPath = await _fileTransfer.UploadFile(file, "pictures", pic.PictureId.ToString());
+                    pic.UrlPath = await _fileTransfer.UploadFile(file, $"pictures/{albumFolderName}", pic.PictureId.ToString());
                     totalPicturesAdd += await _pictureRepository.AddAsync(pic);
                 }
                 _unitOfWork.Commit();
@@ -55,6 +58,22 @@ namespace MS.ApplicationCore.Services
             }
 
             return addAlbumResult;
+        }
+
+        public override async Task RemoveAsync(object key)
+        {
+            Guid.TryParse(key.ToString(), out var albumId);
+            // Lấy toàn bộ thông tin ảnh có trong album:
+            UnitOfWork.BeginTransaction();
+            var pictures = await UnitOfWork.Albums.GetPicturesByAlbumId(albumId);
+            await base.RemoveAsync(key);
+            foreach (var pic in pictures)
+            {
+                _ = _fileTransfer.DeleteFile(pic.UrlPath);
+            }
+            _ = _fileTransfer.RemoveFolderInFileServer($"pictures/{albumId.ToString()}");
+            UnitOfWork.Commit();
+            //Thực hiện xóa ảnh từ service files
         }
     }
 }

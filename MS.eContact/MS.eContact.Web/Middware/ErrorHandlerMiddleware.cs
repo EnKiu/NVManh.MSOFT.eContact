@@ -5,6 +5,7 @@ using System.Net;
 using System.Threading.Tasks;
 using System;
 using System.Text.Json;
+using MS.ApplicationCore.DTOs;
 
 namespace MS.eContact.Web.Middware
 {
@@ -27,9 +28,26 @@ namespace MS.eContact.Web.Middware
             {
                 var response = context.Response;
                 response.ContentType = "application/json";
-
+                var responseObject = new ResponseObject()
+                {
+                    DevMsg = error.Message,
+                    UserMsg = MS.ApplicationCore.Resource.Resource.Exception_Message_General,
+                    errors = error.Data
+                };
                 switch (error)
                 {
+                    case WebException e:
+                        response.StatusCode = (int)HttpStatusCode.InternalServerError;
+                        //FtpWebResponse newResponse = e.Response as FtpWebResponse;
+                        //if (newResponse.StatusCode == FtpStatusCode.ActionNotTakenFileUnavailable)
+                        //{
+                        //    responseObject.UserMsg = "Tệp hoặc thư mục không tồn tại trên server files";
+                        //}
+                        //else
+                        //{
+                        //    responseObject.UserMsg = "Không thể thực hiện xóa các tệp, vui lòng thử lại.";
+                        //}
+                        break;
                     case MISAException e:
                         // custom application error
                         response.StatusCode = (int)HttpStatusCode.BadRequest;
@@ -50,12 +68,7 @@ namespace MS.eContact.Web.Middware
 #endif
                         break;
                 }
-                var responseObject = new
-                {
-                    DevMsg = error.Message,
-                    UserMsg = MS.ApplicationCore.Resource.Resource.Exception_Message_General,
-                    errors = error.Data
-                };
+                
                 var result = JsonSerializer.Serialize(responseObject);
                 await response.WriteAsync(result);
             }

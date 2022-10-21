@@ -28,5 +28,6 @@ namespace MS.ApplicationCore.Interfaces
         Task<bool> DeleteFile(string filePath);
 
         bool MakeFolderInFileServer(string folderName);
+        bool RemoveFolderInFileServer(string folderPath);
     }
 }

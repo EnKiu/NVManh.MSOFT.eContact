@@ -1,6 +1,6 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using MS.ApplicationCore.Authorization;
-using MS.ApplicationCore.Enums;
+using MS.ApplicationCore.MSEnums;
 using MS.ApplicationCore.Interfaces;
 using System;
 using System.Collections.Generic;
@@ -12,7 +12,7 @@ using System.Threading.Tasks;
 
 namespace MS.eContact.Web.Controllers
 {
-    [Authorize(Role.Administrator)]
+    
     [Route("/api/v1/[controller]")]
     [ApiController]
     public class BaseController<TEntity> : ControllerBase where TEntity: class
@@ -25,7 +25,7 @@ namespace MS.eContact.Web.Controllers
             _baseService = baseService;
         }
         // GET: api/<BaseController>
-        [AllowAnonymous]
+        [MSAuthorize(MSRole.Member)]
         [HttpGet]
         public async virtual Task<IActionResult> Get()
         {
@@ -34,8 +34,8 @@ namespace MS.eContact.Web.Controllers
         }
 
         // GET api/<BaseController>/5
+        [MSAuthorize(MSRole.Member)]
         [HttpGet("{id}")]
-        [AllowAnonymous]
         public async virtual Task<IActionResult> Get(string id)
         {
             var data = await _repository.FindAsync(id);
@@ -43,6 +43,7 @@ namespace MS.eContact.Web.Controllers
         }
 
         // POST api/<BaseController>
+        [MSAuthorize(MSRole.Administrator)]
         [HttpPost]
         public async virtual Task<IActionResult> Post([FromBody] TEntity entity)
         {
@@ -54,6 +55,7 @@ namespace MS.eContact.Web.Controllers
         }
 
         // PUT api/<BaseController>/5
+        [MSAuthorize(MSRole.Member)]
         [HttpPut("{id}")]
         public virtual async Task<IActionResult> Put(string id, [FromBody] TEntity entity)
         {
@@ -65,6 +67,7 @@ namespace MS.eContact.Web.Controllers
         }
 
         // DELETE api/<BaseController>/5
+        [MSAuthorize(MSRole.Administrator)]
         [HttpDelete("{id}")]
         public virtual async Task<IActionResult> Delete(string id)
         {

@@ -5,7 +5,7 @@
       <form class="register-form" id="FRM_REGISTER" @submit.prevent="onRegister">
         <m-combobox
           label="Chủ tài khoản"
-          url="/api/v1/contacts"
+          url="/api/v1/contacts/register"
           placeholder="Chọn thành viên sử dụng tài khoản này"
           v-model="user.ContactId"
           :required="true"

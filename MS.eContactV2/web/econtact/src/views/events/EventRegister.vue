@@ -15,6 +15,7 @@
           :url="url"
           v-model="contact.ContactId"
           :required="true"
+          :isDisabled="!isAdmin"
           propValue="ContactId"
           propText="FullName"
         >
@@ -49,9 +50,10 @@
 <script>
 export default {
   name: "EventRegister",
-  props: ["eventRegister"],
+  props: ["eventRegister", "isAdmin"],
   emits: ["onRegisterSuccess", "update:TotalAccompanying", "update:TotalMember"],
   created() {
+    this.contact.ContactId = localStorage.getItem("contactId");
     this.url = "/api/v1/events/contact-no-register?eventId=" + this.eventRegister.EventId;
     // this.loadData();
   },
@@ -81,7 +83,7 @@ export default {
           url: "/api/v1/EventDetails",
           data: this.contact,
           method: "POST",
-          showToast:false
+          showToast: false,
         }).then(() => {
           this.commonJs.showMessenger({
             title: "Thành công",

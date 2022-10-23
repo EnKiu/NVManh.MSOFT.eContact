@@ -1,5 +1,13 @@
 <template>
   <div class="event">
+    <button
+      v-if="isAdmin"
+      class="btn--remove-item"
+      @click.prevent="onRemoveEvent"
+      title="Xóa sự kiện"
+    >
+      <i class="icofont-ui-remove"></i>
+    </button>
     <div class="event-info event__title">
       <div class="event__text" :class="{ '--cancel': item.IsCancel == true }">
         {{ item.EventName }}
@@ -13,6 +21,25 @@
         >Đã kết thúc</span
       >
       <span v-if="item.IsCancel == true" class="--cancel">Đã hủy bỏ</span>
+    </div>
+    <div class="event-info event__status">
+      <div class="event__text">
+        (
+        <span v-if="item.NotRegisted" class="register-status--not">
+          <span v-if="timeLeftInfo != null && item.IsCancel == false"
+            >Bạn chưa đăng ký tham gia sự kiện này.</span
+          >
+          <span v-else>Bạn không tham gia sự kiện này.</span>
+        </span>
+
+        <span v-else class="register-status--yes">
+          <span v-if="timeLeftInfo == null && item.IsCancel == false" class="time--ended"
+            >Đã tham dự</span
+          >
+          <span v-else>Đã đăng ký</span>
+        </span>
+        )
+      </div>
     </div>
     <div class="event-info event__date">
       <div class="event__label"><i class="icofont-clock-time"></i> Ngày:</div>
@@ -38,12 +65,15 @@
       </button>
     </div>
     <div v-if="timeLeftInfo != null && item.IsCancel == false" class="event__button">
-      <button class="btn btn--default" @click="onRegister">
+      <button v-if="item.NotRegisted" class="btn btn--default" @click="onRegister">
         <div>Đăng ký tham gia ngay</div>
         <div>
           (Còn <span class="--color-red --bold">{{ timeLeftInfo }}</span
           >)
         </div>
+      </button>
+      <button v-else class="btn dialog__button--cancel" @click="onCancelRegister">
+        <div>Hủy đăng ký</div>
       </button>
     </div>
 
@@ -61,8 +91,14 @@
 export default {
   name: "EventItem",
   components: {},
-  props: ["item"],
-  emits: ["onRegister", "onShowList", "onShowContentDetail"],
+  props: ["item", "isAdmin"],
+  emits: [
+    "onRegister",
+    "onShowList",
+    "onShowContentDetail",
+    "onCancelRegister",
+    "onRemoveEvent",
+  ],
   computed: {
     eventDateFormat: function () {
       var eventDate = this.item.EventDate;
@@ -101,8 +137,14 @@ export default {
     onRegister() {
       this.$emit("onRegister", this.item);
     },
+    onCancelRegister() {
+      this.$emit("onCancelRegister", this.item);
+    },
     onShowContentDetail() {
       this.$emit("onShowContentDetail", this.item);
+    },
+    onRemoveEvent() {
+      this.$emit("onRemoveEvent", this.item);
     },
     interValTime() {
       this.calculatorTimeInfo();
@@ -117,7 +159,7 @@ export default {
       //   console.log(this.timeLeftInfo);
       try {
         var currentDate = new Date();
-        var value = new Date(self.item.StartTime);
+        var value = new Date(self.item.ExpireRegisterDate);
         var timeBetween = value - currentDate;
         if (timeBetween < 0) {
           self.timeLeftInfo = null;
@@ -203,6 +245,7 @@ export default {
   text-decoration: line-through;
 }
 .event {
+  position: relative;
   padding: 16px;
   border-radius: 4px;
   box-shadow: 0px 0px 10px #404040;
@@ -277,5 +320,30 @@ export default {
   color: #3395ff;
   font-weight: 700;
   cursor: pointer;
+}
+
+.register-status--not {
+  color: #ff0000;
+}
+
+.register-status--yes {
+  color: #00b87a;
+}
+
+.btn--remove-item {
+  position: absolute;
+  top: -10px;
+  right: -10px;
+  border-radius: 50%;
+  width: 30px;
+  height: 30px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  z-index: 2;
+  color: #ff0000;
+  border-color: #ff0000;
+  border-style: solid;
 }
 </style>

@@ -18,6 +18,7 @@ namespace MS.ApplicationCore.Interfaces
         IEventRepository Events { get; }
         IPictureRepository Pictures { get; }
         IUserRepository Users { get; }
+        IUserRolesRepository UserRoles { get; }
 
     }
 }

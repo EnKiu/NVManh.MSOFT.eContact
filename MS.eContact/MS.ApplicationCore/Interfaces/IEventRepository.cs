@@ -9,6 +9,8 @@ namespace MS.ApplicationCore.Interfaces
     public interface IEventRepository: IAsyncRepository<Event>, IRepository<Event>
     {
         Task<IEnumerable<Contact>> GetContactNotYetRegisterEventByEventId(int eventId);
-        
+
+        Task<int> DeleteEventDetailByEventIdAndUserId(int eventId, string userId);
+
     }
 }

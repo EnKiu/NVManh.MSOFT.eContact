@@ -39,21 +39,32 @@
                 <div class="cell__row">{{ scope.row.FullName }}</div>
                 <div
                   v-if="scope.row.NumberAccompanying > 0 || scope.row.Note"
-                  class="cell__row --mini flex"
+                  class="cell__row --mini"
                 >
-                  <span v-if="scope.row.NumberAccompanying > 0"
-                    >(Đi kèm: {{ scope.row.NumberAccompanying }})</span
-                  >
+                  <div v-if="scope.row.NumberAccompanying > 0">
+                    - Đi kèm: {{ scope.row.NumberAccompanying }}
+                  </div>
                   <div class="flex" v-if="scope.row.Note">
                     <span>- Ý kiến:</span>
-                    <div class="show-note" :title="scope.row.Note" @click="commentSelected=scope.row.Note;fullNameComment=scope.row.FullName">
+                    <div
+                      class="show-note"
+                      :title="scope.row.Note"
+                      @click="
+                        commentSelected = scope.row.Note;
+                        fullNameComment = scope.row.FullName;
+                      "
+                    >
                       {{ scope.row.Note }}
                     </div>
                   </div>
                 </div>
               </template>
             </m-column>
-            <m-column v-if="eventOutTime==false" label="Hủy đăng ký" width="120">
+            <m-column
+              v-if="eventOutTime == false && isAdmin"
+              label="Hủy đăng ký"
+              width="120"
+            >
               <template #header>
                 <button class="btn btn--default" @click="onRegister">Đăng ký thêm</button>
               </template>
@@ -77,19 +88,22 @@
       </button>
     </template>
   </m-dialog>
-  <event-comment v-if="commentSelected!=null" v-model:comment="commentSelected" :fullName="fullNameComment"></event-comment>
+  <event-comment
+    v-if="commentSelected != null"
+    v-model:comment="commentSelected"
+    :fullName="fullNameComment"
+  ></event-comment>
 </template>
 <script>
-import EventComment from './EventComment.vue'
+import EventComment from "./EventComment.vue";
 export default {
   name: "EventDetail",
-  components: {EventComment},
-  emits: ["onCloseDetail","onRegisterFromDetail","afterCancelRegisterSuccess"],
-  props: ["eventItem"],
+  components: { EventComment },
+  emits: ["onCloseDetail", "onRegisterFromDetail", "afterCancelRegisterSuccess"],
+  props: ["eventItem", "isAdmin"],
   created() {
-    console.log(this.eventItem);
     var eventDate = new Date(this.eventItem.EventDate);
-    if(eventDate && eventDate< new Date()){
+    if (eventDate && eventDate < new Date()) {
       this.eventOutTime = true;
     }
     this.eventDetail = this.eventItem;
@@ -108,9 +122,9 @@ export default {
     onClose() {
       this.$emit("onCloseDetail");
     },
-    onRegister(){
+    onRegister() {
       this.$emit("onCloseDetail");
-      this.$emit("onRegisterFromDetail",this.eventItem);
+      this.$emit("onRegisterFromDetail", this.eventItem);
     },
     onCancelRegister(register) {
       var me = this;
@@ -122,8 +136,8 @@ export default {
             method: "DELETE",
           }).then((res) => {
             console.log(res);
-            this.eventDetail.TotalAccompanying-=register.NumberAccompanying;
-            this.eventDetail.TotalMember-=1;
+            this.eventDetail.TotalAccompanying -= register.NumberAccompanying;
+            this.eventDetail.TotalMember -= 1;
             this.loadRegisters();
             me.$emit("afterCancelRegisterSuccess", register);
           });
@@ -135,9 +149,9 @@ export default {
     return {
       registers: [],
       eventDetail: {},
-      commentSelected:null,
+      commentSelected: null,
       fullNameComment: null,
-      eventOutTime: false
+      eventOutTime: false,
     };
   },
 };
@@ -162,7 +176,7 @@ export default {
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
-  max-width: 100px;
+  max-width: 150px;
   margin-left: 4px;
 }
 
@@ -186,5 +200,9 @@ export default {
 
 .el-table__header button {
   height: 30px !important;
+}
+
+.el-table__row .cell {
+  padding: 10px 0 !important;
 }
 </style>

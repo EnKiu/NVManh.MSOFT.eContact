@@ -12,11 +12,14 @@
       </div>
       <div class="dialog__footer">
         <slot name="footer"></slot>
+        <button v-if="showButton" class="btn btn--cancel dialog__button--close"></button>
         <button
           v-if="showButton"
-          class="btn btn--cancel dialog__button--close"
-        ></button>
-        <button v-if="showButton" class="btn btn-default dialog__button--save" @click="onSubmit">{{submitText}}</button>
+          class="btn btn-default dialog__button--save"
+          @click="onSubmit"
+        >
+          {{ submitText }}
+        </button>
       </div>
     </div>
   </div>
@@ -24,7 +27,7 @@
 <script>
 export default {
   name: "BaseDialog",
-  emits:["onSubmit","onClose"],
+  emits: ["onSubmit", "onClose"],
   props: {
     title: {
       type: String,
@@ -43,12 +46,12 @@ export default {
     },
   },
   methods: {
-    onSubmit(){
-        this.$emit("onSubmit");
+    onSubmit() {
+      this.$emit("onSubmit");
     },
-    onClose(){
-        this.$emit("onClose");
-    }
+    onClose() {
+      this.$emit("onClose");
+    },
   },
 };
 </script>
@@ -85,7 +88,7 @@ export default {
   font-weight: 700;
 }
 
-.dialog__button-close {
+/* .dialog__button-close {
   position: absolute;
     display: flex;
     align-items: center;
@@ -98,6 +101,24 @@ export default {
     font-size: 24px;
     cursor: pointer;
     font-weight: 700;
+} */
+
+.dialog__button-close {
+  position: absolute;
+  top: -10px;
+  right: -10px;
+  border-radius: 50%;
+  width: 30px;
+  height: 30px;
+  font-size: 24px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  color: #ff0000;
+  border-color: #ff0000;
+  outline: none;
+  border-style: solid;
 }
 
 .dialog__button-close:hover {

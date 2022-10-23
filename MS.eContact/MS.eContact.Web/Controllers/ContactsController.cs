@@ -32,7 +32,16 @@ namespace MS.eContact.Web.Controllers
             _fileTransfer = fileTransfer;
             _baseService = baseService;
         }
+
+        [AllowAnonymous]
+        [HttpGet("register")]
+        public async Task<IActionResult> GetListContacts()
+        {
+            var data = await _repository.AllAsync();
+            return Ok(data);
+        }
         
+
         [HttpPut]
         public async Task<IActionResult> Put(string id)
         {

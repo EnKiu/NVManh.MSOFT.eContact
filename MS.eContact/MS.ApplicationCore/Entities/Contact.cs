@@ -1,5 +1,5 @@
 ﻿using MS.ApplicationCore.Entities.Auth;
-using MS.ApplicationCore.Enums;
+using MS.ApplicationCore.MSEnums;
 using MS.ApplicationCore.Utilities;
 using System;
 using System.Collections.Generic;
@@ -30,22 +30,22 @@ namespace MS.ApplicationCore.Entities
                
                 switch ((MaritalStatus)value)
                 {
-                    case Enums.MaritalStatus.Engaged:
+                    case MSEnums.MaritalStatus.Engaged:
                         MaritalStatusText = "Đã đính hôn";
                         break;
-                    case Enums.MaritalStatus.Married:
+                    case MSEnums.MaritalStatus.Married:
                         MaritalStatusText = "Đã kết hôn";
                         break;
-                    case Enums.MaritalStatus.Separated:
+                    case MSEnums.MaritalStatus.Separated:
                         MaritalStatusText = "Đã ly hôn";
                         break;
-                    case Enums.MaritalStatus.Divorced:
+                    case MSEnums.MaritalStatus.Divorced:
                         MaritalStatusText = "Ly thân";
                         break;
-                    case Enums.MaritalStatus.Widow:
+                    case MSEnums.MaritalStatus.Widow:
                         MaritalStatusText = "Góa chồng";
                         break;
-                    case Enums.MaritalStatus.Widower:
+                    case MSEnums.MaritalStatus.Widower:
                         MaritalStatusText = "Góa vợ";
                         break;
                     default:

@@ -55,6 +55,7 @@ const actions = {
                 apiCall({ url: `/api/v1/accounts/revoke/${userName}`, data: null, method: "POST" })
                     .then(() => {
                         console.log("logout success!");
+                        localStorage.clear();
                     })
                     .catch(() => {
 

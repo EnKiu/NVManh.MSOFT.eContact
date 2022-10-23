@@ -37,6 +37,7 @@ namespace MS.eContact.Web
             service.AddTransient<IAlbumRepository, AlbumRepository>();
             service.AddTransient<IUserService, UserService>();
             service.AddTransient<IUserRepository, UserRepository>();
+            service.AddTransient<IUserRolesRepository, UserRolesRepository>();
 
             service.AddTransient<IJwtUtils, JwtUtils>();
             service.AddHttpContextAccessor();

@@ -4,7 +4,7 @@ using Microsoft.AspNetCore.Mvc.Filters;
 using MS.ApplicationCore.DTOs;
 using MS.ApplicationCore.Entities;
 using MS.ApplicationCore.Entities.Auth;
-using MS.ApplicationCore.Enums;
+using MS.ApplicationCore.MSEnums;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -14,13 +14,14 @@ using System.Threading.Tasks;
 namespace MS.ApplicationCore.Authorization
 {
     [AttributeUsage(AttributeTargets.Class | AttributeTargets.Method)]
-    public class AuthorizeAttribute : Attribute, IAuthorizationFilter
+    public class MSAuthorizeAttribute : Attribute, IAuthorizationFilter
     {
-        private readonly IList<Enums.Role> _roles;
+        //private readonly IList<MSEnums.MSRole> _roles;
+        private readonly MSEnums.MSRole _role;
 
-        public AuthorizeAttribute(params Enums.Role[] roles)
+        public MSAuthorizeAttribute(MSEnums.MSRole role)
         {
-            _roles = roles ?? new Enums.Role[] { };
+            _role = role;
         }
         public void OnAuthorization(AuthorizationFilterContext context)
         {
@@ -39,8 +40,7 @@ namespace MS.ApplicationCore.Authorization
             }
             else
             {
-                var userRoles = user.Roles.Where(r => _roles.Contains(r.RoleValue));
-                var hasNotPermission = (userRoles == null || userRoles.Count() == 0);
+                var hasNotPermission = (user.HighestRole == null || user.HighestRole > _role);
                 // Chỉ quản lý hoặc người dùng thông thường được phép sửa thông tin liên hệ:
                 var path = context.HttpContext.Request.Path.Value;
                 var method = context.HttpContext.Request.Method;

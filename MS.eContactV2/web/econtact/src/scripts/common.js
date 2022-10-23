@@ -15,15 +15,21 @@ const commonJs = {
                 router.push("/contacts");
                 commonJs.hideLoading();
             })
-            // .catch((res) => {
-            //     var msg = "Có lỗi xảy ra vui lòng liên hệ MISA để được trợ giúp.";
-            //     if (res.status == 401) {
-            //         msg = "Vui lòng kiểm tra lại thông tin tài khoản hoặc mật khẩu."
-            //     }
-            //     commonJs.showMessenger({ title: "Lỗi", msg: msg, type: MISAEnum.MsgType.Error })
-            //         // this.showConfirmDialog = true;
-            //     commonJs.hideLoading();
-            // });
+            .catch((res) => {
+                var msg = null;
+                if (res.status == 403) {
+                    msg = "Tài khoản của bạn chưa được cấp quyền truy cập tài nguyên hiện tại. Vui lòng liên hệ Mr Mạnh để được cấp quyền."
+                    commonJs.showMessenger({
+                        title: "Truy cập bị từ chối",
+                        msg: msg,
+                        type: MISAEnum.MsgType.Error,
+                        confirm: () => {
+                            router.push("/");
+                        }
+                    })
+                }
+                commonJs.hideLoading();
+            });
     },
     change_alias: function(alias) {
         var str = alias;

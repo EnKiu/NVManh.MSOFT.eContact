@@ -31,8 +31,7 @@ namespace MS.eContact.Web.Controllers
             _unitOfWork = unitOfWork;
             _mapper = mapper;
         }
-
-        [AllowAnonymous]
+        [MSAuthorize(ApplicationCore.MSEnums.MSRole.Member)]
         public async override Task<IActionResult> Get(string id)
         {
             var data = await _unitOfWork.Users.GetUserInfoResponseById(id);
@@ -166,7 +165,6 @@ namespace MS.eContact.Web.Controllers
             });
         }
 
-        [AllowAnonymous]
         [HttpPost]
         [Route("revoke/{username}")]
         public async Task<IActionResult> Revoke(string username)

@@ -1,5 +1,6 @@
 ﻿using MS.ApplicationCore.Entities;
 using MS.ApplicationCore.Entities.Auth;
+using MS.ApplicationCore.MSEnums;
 using MS.ApplicationCore.Utilities;
 using System;
 using System.Collections.Generic;
@@ -37,6 +38,7 @@ namespace MS.ApplicationCore.DTOs
         [JsonIgnore]
         public string? PasswordHash { get; set; }
 
+        public MSRole? HighestRole { get; set; }
         public string? RoleName { get; set; }
 
         //public string? RefreshToken { get; set; }

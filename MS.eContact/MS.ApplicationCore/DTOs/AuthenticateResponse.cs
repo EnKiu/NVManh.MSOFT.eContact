@@ -1,6 +1,6 @@
 ﻿using MS.ApplicationCore.DTOs;
 using MS.ApplicationCore.Entities.Auth;
-using MS.ApplicationCore.Enums;
+using MS.ApplicationCore.MSEnums;
 using System;
 using System.Collections.Generic;
 using System.Text;
@@ -24,7 +24,7 @@ namespace MS.ApplicationCore.Entities
         public string Token { get; set; }
         public string? RefreshToken { get; set; }
         public DateTime? Expiration { get; set; }
-        public Enums.Role? RoleValue { get; set; }
+        public MSEnums.MSRole? RoleValue { get; set; }
         public string? RoleName { get; set; }
     }
 }

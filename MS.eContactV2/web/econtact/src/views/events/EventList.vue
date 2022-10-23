@@ -10,17 +10,21 @@
     <div class="event-list">
       <event-item
         v-for="(item, index) in events"
+        :isAdmin="isAdmin"
         :key="index"
         :item="item"
         @onRegister="onRegister(item)"
+        @onCancelRegister="onCancelRegister(item)"
         @onShowList="onShowList(item)"
         @onShowContentDetail="onShowContentDetail(item)"
+        @onRemoveEvent="onRemoveEvent(item)"
       ></event-item>
     </div>
 
     <!-- ĐĂNG KÝ SỰ KIỆN -->
     <event-register
       v-if="showRegister"
+      :isAdmin="isAdmin"
       @onClose="showRegister = false"
       @onRegisterSuccess="onCloseRegister"
       v-model:TotalAccompanying="eventRegister.TotalAccompanying"
@@ -31,6 +35,7 @@
     <!-- DANH SÁCH CHI TIẾT THAM GIA SỰ KIỆN -->
     <event-detail-list
       v-if="showDetailList"
+      :isAdmin="isAdmin"
       @onCloseDetail="onCloseDetail"
       @onRegisterFromDetail="onRegister"
       @afterCancelRegisterSuccess="onCancelRegisterSuccess(eventDetail)"
@@ -69,6 +74,10 @@ export default {
   emits: [],
   props: [],
   created() {
+    var roleValue = localStorage.getItem("userRoleValue");
+    if (roleValue == 1) {
+      this.isAdmin = true;
+    }
     this.loadData();
   },
   methods: {
@@ -77,6 +86,7 @@ export default {
     },
     onAddEventSuccess() {
       this.loadData();
+      this.showDetail = false;
     },
     onShowList(event) {
       console.log(event);
@@ -87,6 +97,25 @@ export default {
       this.showRegister = true;
       this.eventRegister = currentEvent;
     },
+    onCancelRegister(currentEvent) {
+      // Hỏi:
+      console.log(currentEvent);
+      var eventId = currentEvent.EventId;
+      this.commonJs.showConfirm(
+        "Bạn có chắc chắn muốn hủy tham gia sự kiện này không?",
+        () => {
+          this.api({
+            url: "/api/v1/events/register?eventId=" + eventId,
+            method: "DELETE",
+          }).then((res) => {
+            console.log(res);
+            this.loadData();
+          });
+        }
+      );
+      // this.showRegister = true;
+      this.eventRegister = currentEvent;
+    },
     onShowContentDetail(event) {
       this.showContentDetail = true;
       this.eventDetailSelected = event;
@@ -94,11 +123,22 @@ export default {
     async onCloseRegister(contactRegister, eventRegister) {
       // Cập nhật lại thông tin event đăng ký:
       this.eventRegister = eventRegister;
+      eventRegister.NotRegisted = false;
       // Đóng form đăng ký
       this.showRegister = false;
       // Hiển thị form chi tiết danh sách đăng ký
       this.eventDetailSelected = eventRegister;
       this.showDetailList = true;
+    },
+    onRemoveEvent(event) {
+      this.commonJs.showConfirm("Bạn có chắc chắn muốn xóa sự kiện này không?", () => {
+        this.api({
+          url: "/api/v1/events/" + event.EventId,
+          method: "DELETE",
+        }).then(() => {
+          this.loadData();
+        });
+      });
     },
     onCancelRegisterSuccess() {
       this.loadData();
@@ -108,19 +148,22 @@ export default {
     },
 
     loadData() {
-      var baseUrl = process.env.VUE_APP_BASE_URL;
-      fetch(baseUrl + "/api/v1/events")
-        .then((res) => res.json())
-        .then((res) => {
-          this.events = res;
-        })
-        .catch((res) => {
-          console.log(res);
-        });
+      this.api({ url: "/api/v1/events" }).then((res) => {
+        this.events = res;
+      });
+      // fetch(baseUrl + "/api/v1/events")
+      //   .then((res) => res.json())
+      //   .then((res) => {
+      //     this.events = res;
+      //   })
+      //   .catch((res) => {
+      //     console.log(res);
+      //   });
     },
   },
   data() {
     return {
+      isAdmin: false,
       events: [],
       eventRegister: {},
       eventDetailSelected: null,

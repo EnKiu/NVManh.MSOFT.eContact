@@ -13,6 +13,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Filters;
 using MS.ApplicationCore.Helpers;
 using MS.ApplicationCore.Interface.Service;
+using MS.ApplicationCore.Entities.Auth;
 
 namespace MS.ApplicationCore.Authorization
 {
@@ -46,8 +47,12 @@ namespace MS.ApplicationCore.Authorization
                     var userId = jwtUtils.ValidateJwtToken(token);
                     if (userId != null)
                     {
+                        context.Items.Add("userId", userId);
                         // Trích xuất thông tin người dùng, gắn nó vào context để sử dụng khi cần
-                        context.Items["User"] = await userService.GetUserInfoById(userId);
+                        var userInfo = await userService.GetUserInfoById(userId);
+                        userInfo.HighestRole = userInfo.Roles.FirstOrDefault()?.RoleValue;
+                        context.Items["User"] = userInfo;
+
                     }
                 }
                 catch(Microsoft.IdentityModel.Tokens.SecurityTokenExpiredException)

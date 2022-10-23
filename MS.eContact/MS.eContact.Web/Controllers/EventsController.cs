@@ -5,6 +5,7 @@ using Microsoft.Extensions.Configuration;
 using MS.ApplicationCore.Authorization;
 using MS.ApplicationCore.Entities;
 using MS.ApplicationCore.Interfaces;
+using System.Linq;
 using System.Threading.Tasks;
 
 namespace MS.eContact.Web.Controllers
@@ -18,7 +19,6 @@ namespace MS.eContact.Web.Controllers
         readonly IFileTransfer _fileTransfer;
         private readonly IWebHostEnvironment _env;
         IEventService _service;
-
         public EventsController(IConfiguration configuration, IWebHostEnvironment env, IFileTransfer fileTransfer, IEventRepository repository, IEventService service) : base(repository, service)
         {
             _configuration = configuration;
@@ -45,5 +45,20 @@ namespace MS.eContact.Web.Controllers
                 return StatusCode(500, res);
         }
 
+        /// <summary>
+        /// Hủy đăng ký tham gia sự kiện
+        /// </summary>
+        /// <param name="eventId">Id sự kiện</param>
+        /// <returns></returns>
+        [HttpDelete("register")]
+        public async Task<IActionResult> CanCelRegister(int eventId)
+        {
+            var userId = HttpContext.User?.Claims?.First(x => x.Type == "id").Value;
+            var res = await _repository.DeleteEventDetailByEventIdAndUserId(eventId, userId);
+            if (res > 0)
+                return StatusCode(201, res);
+            else
+                return StatusCode(500, res);
+        }
     }
 }

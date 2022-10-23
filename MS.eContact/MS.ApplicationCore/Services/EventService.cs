@@ -27,20 +27,20 @@ namespace MS.ApplicationCore.Services
             // Kiểm tra các thông tin bắt buộc nhập:
             if (String.IsNullOrEmpty(entity.EventName))
             {
-                Errors.Add("EventName", new List<string>() { "Tên sự kiện không được phép để trống." });
+                AddErrors("EventName", "Tên sự kiện không được phép để trống.");
             }
 
             // Ngày hết hạn đăng ký phải nhỏ hơn ngày bắt đầu sự kiện:
             if (entity.EventDate < entity.ExpireRegisterDate)
             {
-                Errors.Add("EventDate", new List<string>() { "Hạn đăng ký không được phép lớn hơn ngày bắt đầu sự kiện." });
+                AddErrors("ExpireRegisterDate", "Hạn đăng ký không được phép lớn hơn ngày bắt đầu sự kiện.");
             }
             // Ngày bắt đầu sự kiện và hạn đăng ký phải nhỏ hơn ngày hiện tại:
-            var dateNow = TimeZoneInfo.ConvertTimeBySystemTimeZoneId(DateTime.Now, "SE Asia Standard Time"); ;
-            if (entity.EventDate < dateNow)
-            {
-                Errors.Add("EventDate", new List<string>() { "Ngày bắt đầu sự kiện phải lớn hơn ngày hiện tại." });
-            }
+            //var dateNow = TimeZoneInfo.ConvertTimeBySystemTimeZoneId(DateTime.Now, "SE Asia Standard Time"); ;
+            //if (entity.EventDate < dateNow)
+            //{
+            //    AddErrors("EventDate", "Ngày bắt đầu sự kiện phải lớn hơn ngày hiện tại.");
+            //}
         }
     }
 }

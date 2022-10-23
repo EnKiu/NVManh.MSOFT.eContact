@@ -25,7 +25,7 @@
             <label for="">Hạn đăng ký:</label>
             <el-date-picker
               v-model="event.ExpireRegisterDate"
-              type="datetime"
+              type="date"
               format="DD-MM-YYYY HH:mm:ss"
               placeholder="Chọn ngày giờ hết hạn"
             />
@@ -34,10 +34,7 @@
             <m-input label="Địa điểm" v-model="event.EventPlace"></m-input>
           </div>
           <div class="event__spend">
-            <m-input
-              label="Kinh phí dự kiến/người"
-              v-model="event.Spends"
-            ></m-input>
+            <m-input label="Kinh phí dự kiến/người" v-model="event.Spends"></m-input>
           </div>
         </div>
         <div class="event--content">
@@ -91,7 +88,7 @@ export default {
   name: "EventDetail",
   components: {},
   props: [],
-  emits: ["onClose"],
+  emits: ["onClose", "onAddSuccess"],
   created() {},
   methods: {
     onSave() {
@@ -120,7 +117,7 @@ export default {
           type: Enum.MsgType.Error,
         });
         return false;
-      }else{
+      } else {
         return true;
       }
     },
@@ -190,12 +187,11 @@ export default {
 };
 </script>
 <style scoped>
-
-.event .input-wrapper{
+.event .input-wrapper {
   margin: 0;
 }
 
-.event .event--content{
+.event .event--content {
   padding: 10px 0;
 }
 .ck.ck-editor__main > .ck-editor__editable {

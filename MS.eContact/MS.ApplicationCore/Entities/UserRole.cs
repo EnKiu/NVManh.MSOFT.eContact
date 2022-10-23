@@ -1,4 +1,4 @@
-﻿using MS.ApplicationCore.Enums;
+﻿using MS.ApplicationCore.MSEnums;
 using MS.ApplicationCore.Helpers;
 using System;
 using System.Collections.Generic;
@@ -14,6 +14,6 @@ namespace MS.ApplicationCore.Entities.Auth
         public Guid RoleId { get; set; }
 
         [NotMapQuery]
-        public Enums.Role? RoleValue { get; set; }
+        public MSEnums.MSRole? RoleValue { get; set; }
     }
 }

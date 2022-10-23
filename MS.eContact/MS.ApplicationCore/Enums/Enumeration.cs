@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.Text;
 
-namespace MS.ApplicationCore.Enums
+namespace MS.ApplicationCore.MSEnums
 {
     /// <summary>
     /// Enum giới tính
@@ -45,16 +45,11 @@ namespace MS.ApplicationCore.Enums
         UPDATE = 2,
         DELETE = 3,
     }
-    public enum Role
+    public enum MSRole
     {
         Administrator = 1,
-        Management = 5,
-        Employee = 10,
-        Teacher = 15,
-        Advisor = 20,
-        HRIntern = 21,
-        Fresher = 25,
-        Intern = 30,
-        Newbie = 35
+        Mod = 10,
+        Member = 100,
+        NewUser = 999
     }
 }

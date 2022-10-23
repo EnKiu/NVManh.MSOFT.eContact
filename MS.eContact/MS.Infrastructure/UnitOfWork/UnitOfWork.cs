@@ -16,6 +16,8 @@ namespace MS.Infrastructure.UnitOfWork
         public IEventRepository Events { get; }
         public IPictureRepository Pictures { get; }
         public IUserRepository Users { get; }
+
+        public IUserRolesRepository UserRoles { get; }
         #endregion
 
         private readonly MySqlDbContext _dbContext;
@@ -26,7 +28,8 @@ namespace MS.Infrastructure.UnitOfWork
             IEventRepository events,
             IPictureRepository pictures,
             IUserRepository users,
-            MySqlDbContext dbContext)
+            MySqlDbContext dbContext,
+            IUserRolesRepository userRoles)
         {
             _id = Guid.NewGuid();
             Albums = albums;
@@ -35,6 +38,7 @@ namespace MS.Infrastructure.UnitOfWork
             Pictures = pictures;
             Users = users;
             _dbContext = dbContext;
+            UserRoles = userRoles;
         }
 
         public Guid Id

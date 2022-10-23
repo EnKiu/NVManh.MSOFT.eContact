@@ -123,7 +123,8 @@ namespace MS.Infrastructure.Data
         {
             try
             {
-                var rowAffects = await DbContext.Connection.ExecuteAsync($"Proc_Update{_tableName}", entity, transaction: DbContext.Transaction, commandType: System.Data.CommandType.StoredProcedure);
+                var rowAffects = await DbContext.UpdateAsync<TEntity>(entity);
+                //var rowAffects = await DbContext.Connection.ExecuteAsync($"Proc_Update{_tableName}", entity, transaction: DbContext.Transaction, commandType: System.Data.CommandType.StoredProcedure);
                 return rowAffects;
             }
             catch (Exception)

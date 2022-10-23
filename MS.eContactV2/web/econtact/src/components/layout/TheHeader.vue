@@ -19,16 +19,15 @@
       </router-link>
       <a
         v-if="isAuthenticated"
-        class="navbar-item account" style="flex-direction: row;"
+        class="navbar-item account"
+        style="flex-direction: row"
         @click="showAccountOption = !showAccountOption"
         v-clickoutside="hideListAccountOption"
       >
         <div
           class="navbar-item__avatar"
           :style="{
-            'background-image': `url(${
-              account.AvatarFullPath || 'avatar.png'
-            })`,
+            'background-image': `url(${account.AvatarFullPath || 'avatar.png'})`,
           }"
         ></div>
         <span>{{ account.LastName }}</span>
@@ -36,18 +35,14 @@
           <router-link to="/account" class="option-item"
             ><i class="icofont-info-circle"></i> Thông tin</router-link
           >
-          <div class="option-item">
-            <i class="icofont-key"></i> Đổi mật khẩu
-          </div>
+          <div class="option-item"><i class="icofont-key"></i> Đổi mật khẩu</div>
           <div class="option-item" @click="logOut">
             <i class="icofont-sign-out"></i> Đăng xuất
           </div>
         </div>
       </a>
       <router-link v-else to="/login" class="navbar-item">
-        <span class="navbar-item__text"
-          ><i class="icofont-login"></i> Đăng nhập</span
-        >
+        <span class="navbar-item__text"><i class="icofont-login"></i> Đăng nhập</span>
       </router-link>
     </div>
   </nav>
@@ -89,7 +84,7 @@ export default {
   directives: {
     clickoutside,
   },
-  props: ["isAuthenticated"],
+  props: ["isAuthenticated", "isProfileLoaded"],
   created() {
     if (this.isAuthenticated) {
       this.account.AvatarFullPath = localStorage.getItem("avatar");
@@ -98,7 +93,7 @@ export default {
     }
   },
   watch: {
-    isAuthenticated: function (newValue) {
+    isProfileLoaded: function (newValue) {
       if (newValue) {
         this.account.AvatarFullPath = localStorage.getItem("avatar");
         this.account.LastName = localStorage.getItem("lastName");
@@ -110,9 +105,9 @@ export default {
     logOut() {
       this.$store.dispatch(AUTH_LOGOUT);
     },
-    hideListAccountOption(){
+    hideListAccountOption() {
       this.showAccountOption = false;
-    }
+    },
   },
   data() {
     return {

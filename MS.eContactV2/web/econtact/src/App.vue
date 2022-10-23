@@ -1,12 +1,15 @@
 <template>
-  <the-header :isAuthenticated="isAuthenticated"></the-header>
+  <the-header
+    :isAuthenticated="isAuthenticated"
+    :isProfileLoaded="isProfileLoaded"
+  ></the-header>
   <the-main></the-main>
   <router-view name="LoginPage"></router-view>
   <router-view class="register" name="Register"></router-view>
   <MLoading v-if="isShowLoading" />
   <router-view name="HomePage"></router-view>
   <!-- <home-page v-if="!isAuthenticated && showHomePage" v-model:showHomePage="showHomePage"></home-page> -->
-<!-- <MLoading /> -->
+  <!-- <MLoading /> -->
   <MDialogNotification
     v-if="isShowError"
     :showCancelButton="showCancelButton"
@@ -17,20 +20,27 @@
     @confirmFunction="confirmFunction"
   />
   <m-toast v-if="isShowToast" :msg="msgToast" :type="msgToastType"></m-toast>
+
+  <news-list v-if="isAuthenticated && showNew" @onClose="showNew = false"></news-list>
 </template>
 
 <script>
 // import HomePage from './views/Index.vue'
-import TheHeader from './components/layout/TheHeader.vue'
-import TheMain from './components/layout/TheMain.vue'
+import TheHeader from "./components/layout/TheHeader.vue";
+import TheMain from "./components/layout/TheMain.vue";
+import NewsList from "./News.vue";
 import { USER_REQUEST } from "./store/actions/user";
 import { mapGetters, mapState } from "vuex";
 import MDialogNotification from "./components/base/MDialogNotification.vue";
 import MToast from "./components/base/MToast.vue";
 export default {
-  name: 'App',
+  name: "App",
   components: {
-    TheHeader,TheMain,MToast,MDialogNotification
+    TheHeader,
+    TheMain,
+    MToast,
+    MDialogNotification,
+    NewsList,
   },
   computed: {
     ...mapGetters([
@@ -69,10 +79,11 @@ export default {
   },
   data() {
     return {
-      showHomePage: false
-    }
+      showHomePage: false,
+      showNew: true,
+    };
   },
-}
+};
 </script>
 
 <style>

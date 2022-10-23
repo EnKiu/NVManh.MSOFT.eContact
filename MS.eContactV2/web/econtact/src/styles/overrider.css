@@ -1,8 +1,16 @@
 .ck.ck-editor__main>.ck-editor__editable {
     min-height: 300px;
+    max-height: 500px
 }
 
-;
+.el-date-picker__header {
+    margin: 2px !important;
+}
+
+.el-picker-panel__content {
+    margin: 2px auto !important;
+}
+
 .el-input-number {
     width: 100% !important;
 }
@@ -55,10 +63,6 @@
     font-size: 13px !important;
 }
 
-.el-table__row .cell .cell__row {
-    height: 20px;
-}
-
 .el-table__body tr.hover-row.current-row>td.el-table__cell,
 .el-table__body tr.hover-row.el-table__row--striped.current-row>td.el-table__cell,
 .el-table__body tr.hover-row.el-table__row--striped>td.el-table__cell,
@@ -81,7 +85,7 @@
 }
 
 .el-table .cell {
-    padding: 4px 4px !important;
+    padding: 8px 4px !important;
     white-space: nowrap !important;
 }
 

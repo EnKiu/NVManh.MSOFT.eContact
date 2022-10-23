@@ -21,22 +21,11 @@ const apiCall = ({ url, data, method, showToast }) =>
                 .then(res => {
                     resolve(res.data);
                     if (method && method != "GET") {
-                        var actionName = "Thêm mới";
-                        switch (method) {
-                            case "DELETE":
-                                actionName = "Xóa dữ liệu";
-                                break;
-                            case "PUT":
-                                actionName = "Cập nhật dữ liệu";
-                                break
-                            default:
-                                break;
-                        }
                         if (showToast == undefined) {
                             showToast = true;
                         }
                         if (window.location.pathname != "/login" && showToast)
-                            commonJs.showToast(`${actionName} thành công!`, MISAEnum.MsgType.Success);
+                            commonJs.showToast(`Thành công!`, MISAEnum.MsgType.Success);
                     }
                     commonJs.hideLoading();
                 })
@@ -77,6 +66,7 @@ const apiCall = ({ url, data, method, showToast }) =>
                         if (statusCode == 500) {
                             res.devMsg = res.message;
                             res.message = res.response.data.UserMsg;
+                            res.message = res.message || "Có lỗi phía máy chủ, vui lòng liên hệ Quản trị viên để được trợ giúp.";
                             console.log(res);
                             commonJs.showErrorMessenger("Lỗi máy chủ", res.message)
 

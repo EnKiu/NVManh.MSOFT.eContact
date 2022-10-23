@@ -1,4 +1,4 @@
-﻿using MS.ApplicationCore.Enums;
+﻿using MS.ApplicationCore.MSEnums;
 using MS.ApplicationCore.Helpers;
 using System;
 using System.Collections.Generic;

@@ -4,7 +4,10 @@
       >{{ label }} <span v-if="required">(<span class="required">*</span>)</span>:</label
     >
     <div class="combobox">
-      <span v-if="isShowClear" class="clear-button" @click="clearButtonOnClick"
+      <span
+        v-if="isShowClear && !isDisabled"
+        class="clear-button"
+        @click="clearButtonOnClick"
         ><i class="icofont-close"></i
       ></span>
       <input
@@ -18,6 +21,7 @@
         @keydown="selecItemUpDown"
       />
       <button
+        v-if="!isDisabled"
         class="button combobox__button"
         @click="btnSelectDataOnClick"
         type="button"
@@ -325,17 +329,14 @@ export default {
         this.isShowClear = false;
       }
     },
-    showLoadingData: function(newValue){
-      if(!this.isDisabled && !newValue)
-          this.setFocusDefault();
-    }
+    showLoadingData: function (newValue) {
+      if (!this.isDisabled && !newValue) this.setFocusDefault();
+    },
   },
   created() {
     this.loadData();
   },
-  mounted() {
-     
-  },
+  mounted() {},
   data() {
     return {
       data: [], // data gốc
@@ -409,6 +410,10 @@ select {
 .combobox__button:focus {
   background-color: #e6f2ff;
   color: #000;
+}
+
+.combobox__button:disabled {
+  pointer-events: none;
 }
 
 .combobox__data {

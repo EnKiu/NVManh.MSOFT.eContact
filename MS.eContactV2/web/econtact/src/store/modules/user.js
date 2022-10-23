@@ -3,6 +3,7 @@ import apiCall from "../../utils/api";
 // import { createApp } from 'vue'
 import { AUTH_LOGOUT } from "../actions/auth";
 // const app = createApp({});
+import router from "@/router";
 
 const state = {
     status: "",
@@ -13,10 +14,10 @@ const state = {
 
 const getters = {
     getProfile: state => state['profile'],
-    isProfileLoaded: state => !!state.profile.name,
+    isProfileLoaded: state => !!state.profile.UserName,
     role: state => {
         if (state.isReload)
-            return localStorage.getItem("userRole");
+            return localStorage.getItem("userRoleValue");
         else
             return state.role;
     }
@@ -33,12 +34,18 @@ const actions = {
             var userId = localStorage.getItem('user-id');
             apiCall({ url: `/api/v1/accounts/${userId}`, method: "GET" })
                 .then(resp => {
-                    commit(USER_SUCCESS, resp);
+                    var roles = resp.Roles;
+                    if (roles && roles.length > 0) {
+                        localStorage.setItem("userRoleValue", roles[0].RoleValue);
+                        resp.RoleValue = roles[0].RoleValue;
+                    }
                     localStorage.setItem("userName", resp.UserName);
                     localStorage.setItem("avatar", resp.AvatarFullPath);
                     localStorage.setItem("firstName", resp.firstName);
                     localStorage.setItem("lastName", resp.LastName);
                     localStorage.setItem("fullName", resp.FullName);
+                    localStorage.setItem("contactId", resp.ContactId);
+                    commit(USER_SUCCESS, resp);
                     resolve(resp);
                 })
                 .catch((res) => {
@@ -61,7 +68,7 @@ const mutations = {
         state['profile'] = resp;
         state.role = resp.RoleValue;
         state['isReload'] = false;
-        localStorage.setItem("userRole", resp.RoleValue);
+        // localStorage.setItem("userRole", resp.RoleValue);
         // app.$set(state, "profile", resp);
 
     },
@@ -72,6 +79,7 @@ const mutations = {
         state.profile = {};
         state.role = null;
         state.isReload = true;
+        router.push("/login");
     }
 };
 

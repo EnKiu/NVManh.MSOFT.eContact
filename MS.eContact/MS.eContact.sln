@@ -1,13 +1,13 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
-# Visual Studio Version 16
-VisualStudioVersion = 16.0.30717.126
+# Visual Studio Version 17
+VisualStudioVersion = 17.3.32804.467
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MS.eContact.Web", "MS.eContact.Web\MS.eContact.Web.csproj", "{86EA4955-6FBE-4DFB-A796-3C255280CF64}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "MS.eContact.Web", "MS.eContact.Web\MS.eContact.Web.csproj", "{86EA4955-6FBE-4DFB-A796-3C255280CF64}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MS.Infrastructure", "MS.Infrastructure\MS.Infrastructure.csproj", "{D25C2816-C39A-4A77-8312-418D47AA0CDF}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "MS.Infrastructure", "MS.Infrastructure\MS.Infrastructure.csproj", "{D25C2816-C39A-4A77-8312-418D47AA0CDF}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MS.ApplicationCore", "MS.ApplicationCore\MS.ApplicationCore.csproj", "{C5DC625A-A4BB-49F4-827D-1E3C507AEBC9}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "MS.ApplicationCore", "MS.ApplicationCore\MS.ApplicationCore.csproj", "{C5DC625A-A4BB-49F4-827D-1E3C507AEBC9}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Files", "Solution Files", "{F8D0B542-2D38-4540-B004-A52F54AED02D}"
 	ProjectSection(SolutionItems) = preProject

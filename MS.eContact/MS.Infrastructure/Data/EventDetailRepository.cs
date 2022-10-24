@@ -1,6 +1,8 @@
 ﻿using Dapper;
+using Microsoft.AspNetCore.SignalR;
 using MS.ApplicationCore.Entities;
 using MS.ApplicationCore.Interfaces;
+using MS.eContact.Core;
 using MS.Infrastructure.UnitOfWork;
 using System;
 using System.Collections.Generic;
@@ -11,8 +13,10 @@ namespace MS.Infrastructure.Data
 {
     public class EventDetailRepository:DapperRepository<EventDetail>, IEventDetailRepository
     {
-        public EventDetailRepository(MySqlDbContext dbContext) : base(dbContext)
+        private readonly IHubContext<NotificationHub> _notificationHub;
+        public EventDetailRepository(MySqlDbContext dbContext, IHubContext<NotificationHub> notificationHub) : base(dbContext)
         {
+            _notificationHub = notificationHub;
         }
 
         public async Task<bool> CheckRegisted(EventDetail eventDetail)

@@ -25,6 +25,7 @@ namespace MS.ApplicationCore.Services
         public int Add(TEntity entity)
         {
             ValidateObject(entity);
+            BeforeSave(entity);
             if (Errors.Count == 0)
                 return _repository.Add(entity);
             else
@@ -42,6 +43,7 @@ namespace MS.ApplicationCore.Services
         public virtual async Task<int> AddAsync(TEntity entity)
         {
             ValidateObject(entity);
+            BeforeSave(entity);
             if (Errors.Count == 0)
                 return await _repository.AddAsync(entity);
             else
@@ -73,6 +75,7 @@ namespace MS.ApplicationCore.Services
 
         public int InstertOrUpdate(TEntity entity, object pks)
         {
+            BeforeSave(entity);
             if (Errors.Count == 0)
                 return _repository.InstertOrUpdate(entity, pks);
             else
@@ -82,6 +85,7 @@ namespace MS.ApplicationCore.Services
 
         public async Task<int> InstertOrUpdateAsync(TEntity entity, object pks)
         {
+            BeforeSave(entity);
             if (Errors.Count == 0)
                 return await _repository.InstertOrUpdateAsync(entity, pks);
             else
@@ -101,6 +105,7 @@ namespace MS.ApplicationCore.Services
 
         public int Update(TEntity entity, object pks)
         {
+            BeforeSave(entity);
             if (Errors.Count == 0)
                 return _repository.Update(entity, pks);
             else
@@ -109,10 +114,16 @@ namespace MS.ApplicationCore.Services
 
         public async Task<int> UpdateAsync(TEntity entity, object pks)
         {
+            BeforeSave(entity);
             if (Errors.Count == 0)
                 return await _repository.UpdateAsync(entity, pks);
             else
                 throw new MISAException(System.Net.HttpStatusCode.BadRequest, Errors);
+        }
+
+        protected virtual void BeforeSave(TEntity entity)
+        {
+
         }
 
         protected virtual void ValidateObject(TEntity entity)

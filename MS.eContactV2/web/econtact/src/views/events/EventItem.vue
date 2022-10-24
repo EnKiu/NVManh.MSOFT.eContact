@@ -1,13 +1,23 @@
 <template>
   <div class="event">
-    <button
-      v-if="isAdmin"
-      class="btn--remove-item"
-      @click.prevent="onRemoveEvent"
-      title="Xóa sự kiện"
-    >
-      <i class="icofont-ui-remove"></i>
-    </button>
+    <div class="event__toolbar">
+      <button
+        v-if="isAdmin"
+        class="btn--remove-item"
+        @click.prevent="onRemoveEvent"
+        title="Xóa sự kiện"
+      >
+        <i class="icofont-ui-remove"></i>
+      </button>
+      <button
+        v-if="isAdmin"
+        class="btn--edit-item"
+        @click.prevent="onEditEvent"
+        title="Sửa sự kiện"
+      >
+        <i class="icofont-ui-edit"></i>
+      </button>
+    </div>
     <div class="event-info event__title">
       <div class="event__text" :class="{ '--cancel': item.IsCancel == true }">
         {{ item.EventName }}
@@ -98,6 +108,7 @@ export default {
     "onShowContentDetail",
     "onCancelRegister",
     "onRemoveEvent",
+    "onEditEvent",
   ],
   computed: {
     eventDateFormat: function () {
@@ -145,6 +156,9 @@ export default {
     },
     onRemoveEvent() {
       this.$emit("onRemoveEvent", this.item);
+    },
+    onEditEvent() {
+      this.$emit("onEditEvent", this.item);
     },
     interValTime() {
       this.calculatorTimeInfo();
@@ -330,10 +344,17 @@ export default {
   color: #00b87a;
 }
 
-.btn--remove-item {
+.event__toolbar {
   position: absolute;
-  top: -10px;
-  right: -10px;
+  top: 0px;
+  right: 0px;
+}
+
+.event__toolbar button + button {
+  margin-top: 4px;
+}
+.btn--remove-item {
+  position: relative;
   border-radius: 50%;
   width: 30px;
   height: 30px;
@@ -344,6 +365,23 @@ export default {
   z-index: 2;
   color: #ff0000;
   border-color: #ff0000;
+  border-style: solid;
+}
+
+.btn--edit-item {
+  position: relative;
+  top: -10px;
+  right: -10px;
+  border-radius: 50%;
+  width: 30px;
+  height: 30px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  z-index: 2;
+  color: #005c20;
+  border-color: #005c20;
   border-style: solid;
 }
 </style>

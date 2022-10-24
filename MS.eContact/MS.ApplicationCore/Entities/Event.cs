@@ -1,4 +1,5 @@
-﻿using System;
+﻿using MS.ApplicationCore.Helpers;
+using System;
 using System.Collections.Generic;
 using System.Text;
 
@@ -6,6 +7,13 @@ namespace MS.ApplicationCore.Entities
 {
     public class Event: BaseEntity
     {
+        public Event()
+        {
+            if (ExpireRegisterDate == null)
+            {
+                ExpireRegisterDate = EventDate;
+            }
+        }
         public int EventId { get; set; }
         public string EventName { get; set; }
         public string EventContent { get; set; }
@@ -18,6 +26,8 @@ namespace MS.ApplicationCore.Entities
         public decimal Spends { get; set; }
         public string Note { get; set; }
         public bool? IsCancel { get; set; }
+
+        [NotMapQuery]
         public string StartTimeText
         {
             get
@@ -25,6 +35,8 @@ namespace MS.ApplicationCore.Entities
                 return String.Format("{0:t}", StartTime); ;
             }
         }
+
+        [NotMapQuery]
         public string EndTimeText
         {
             get
@@ -32,9 +44,17 @@ namespace MS.ApplicationCore.Entities
                 return String.Format("{0:t}", EndTime); ;
             }
         }
+
+        [NotMapQuery]
         public List<EventDetail> EventDetails { get; set; }
+
+        [NotMapQuery]
         public int? TotalMember { get; set; }
+
+        [NotMapQuery]
         public int? TotalAccompanying { get; set; }
+
+        [NotMapQuery]
         public bool? NotRegisted { get; set; }
 
     }

@@ -13,7 +13,7 @@ using System.Threading.Tasks;
 
 namespace MS.Infrastructure.UnitOfWork
 {
-    public class MySqlDbContext
+    public class MySqlDbContext:IDisposable
     {
         protected readonly string ConnectionString;
         public IDbConnection Connection { get; }
@@ -24,7 +24,7 @@ namespace MS.Infrastructure.UnitOfWork
             Connection = new MySqlConnection(ConnectionString);
             Connection.Open();
         }
-        //public void Dispose() => Connection?.Dispose();
+        public void Dispose() => Connection?.Dispose();
 
         #region Methods
         public virtual async Task<IReadOnlyList<T>> GetAllAsync<T>()

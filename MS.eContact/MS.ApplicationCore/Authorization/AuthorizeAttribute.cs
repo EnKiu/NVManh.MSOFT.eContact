@@ -14,12 +14,17 @@ using System.Threading.Tasks;
 namespace MS.ApplicationCore.Authorization
 {
     [AttributeUsage(AttributeTargets.Class | AttributeTargets.Method)]
-    public class MSAuthorizeAttribute : Attribute, IAuthorizationFilter
+    public class AuthorizeAttribute : Attribute, IAuthorizationFilter
     {
         //private readonly IList<MSEnums.MSRole> _roles;
         private readonly MSEnums.MSRole _role;
+        private readonly IList<Role> _roles;
 
-        public MSAuthorizeAttribute(MSEnums.MSRole role)
+        public AuthorizeAttribute(params Role[] roles)
+        {
+            _roles = roles ?? new Role[] { };
+        }
+        public AuthorizeAttribute(MSEnums.MSRole role)
         {
             _role = role;
         }

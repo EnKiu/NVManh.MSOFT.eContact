@@ -18,6 +18,7 @@
         @onShowList="onShowList(item)"
         @onShowContentDetail="onShowContentDetail(item)"
         @onRemoveEvent="onRemoveEvent(item)"
+        @onEditEvent="onEditEvent(item)"
       ></event-item>
     </div>
 
@@ -45,8 +46,10 @@
     <!-- CHI TIẾT SỰ KIỆN -->
     <event-detail
       v-if="showDetail"
+      :eventItem="eventDetailSelected"
+      :formMode="detailFormMode"
       @onClose="showDetail = false"
-      @onAddSuccess="onAddEventSuccess"
+      @onSaveSuccess="onSaveSuccess"
     ></event-detail>
 
     <EventItemContent
@@ -62,6 +65,7 @@ import EventRegister from "./EventRegister.vue";
 import EventDetail from "./EventDetail.vue";
 import EventDetailList from "./EventDetailList.vue";
 import EventItemContent from "./EventItemContent.vue";
+import Enum from "@/scripts/enum";
 export default {
   name: "EventList",
   components: {
@@ -83,10 +87,12 @@ export default {
   methods: {
     addNewEvent() {
       this.showDetail = true;
+      this.detailFormMode = Enum.FormMode.ADD;
     },
-    onAddEventSuccess() {
+    onSaveSuccess() {
       this.loadData();
       this.showDetail = false;
+      this.detailFormMode = null;
     },
     onShowList(event) {
       console.log(event);
@@ -140,6 +146,12 @@ export default {
         });
       });
     },
+    onEditEvent(event) {
+      console.log(event);
+      this.eventDetailSelected = event;
+      this.detailFormMode = Enum.FormMode.UPDATE;
+      this.showDetail = true;
+    },
     onCancelRegisterSuccess() {
       this.loadData();
     },
@@ -164,6 +176,7 @@ export default {
   data() {
     return {
       isAdmin: false,
+      detailFormMode: null,
       events: [],
       eventRegister: {},
       eventDetailSelected: null,

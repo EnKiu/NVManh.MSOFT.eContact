@@ -18,6 +18,7 @@ using MS.ApplicationCore.Interface.Service;
 using MS.ApplicationCore.Interfaces;
 using MS.ApplicationCore.Services;
 using MS.ApplicationCore.Utilities;
+using MS.eContact.Core;
 using MS.eContact.Web.Middware;
 using MS.Infrastructure;
 using MS.Infrastructure.Data;
@@ -112,6 +113,7 @@ namespace MS.eContact.Web
                                                               .AllowCredentials();
                                       });
             });
+            services.AddSignalR();
             services.AddApplication();
             services.AddControllers()
                .AddNewtonsoftJson(options =>
@@ -169,8 +171,10 @@ namespace MS.eContact.Web
             //app.UseFileServer();
             //app.UseStaticFiles();
             //app.UseDefaultFiles(new DefaultFilesOptions { DefaultFileNames = new List<string> { "index.html" } });
+            app.UseWebSockets();
             app.UseEndpoints(endpoints =>
             {
+                endpoints.MapHub<NotificationHub>("NotificationHub");
                 endpoints.MapControllers();
             });
         }

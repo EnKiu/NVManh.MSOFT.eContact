@@ -1,15 +1,26 @@
 ﻿using Microsoft.AspNetCore.Http;
+using MS.ApplicationCore.Interfaces;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Net.Http;
 using System.Text;
 using System.Threading.Tasks;
 
 namespace MS.ApplicationCore.Utilities
 {
-    public static class CommonFunction
+    public class CommonFunction: ICommonFunction
     {
-        private readonly static IHttpContextAccessor _httpContextAccessor;
+        private readonly IHttpContextAccessor _httpContextAccessor;
+        public CommonFunction(IHttpContextAccessor httpContextAccessor)
+        {
+            _httpContextAccessor = httpContextAccessor;
+        }
 
+        public string GetCurrentUserId()
+        {
+            var userId = _httpContextAccessor.HttpContext.User?.Claims?.First(x => x.Type == "id").Value;
+            return userId;
+        }
     }
 }

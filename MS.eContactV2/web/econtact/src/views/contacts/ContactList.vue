@@ -32,7 +32,10 @@
               class="avatar"
               @click="onSelectContact(scope.row)"
               :style="{
-                'background-image': `url(${scope.row.AvatarFullPath || 'avatar.png'})`,
+                'background-image': `url(${
+                  scope.row.AvatarFullPath ||
+                  'https://file.nmanh.com/e-contact/Content/imgs/avatar.png'
+                })`,
               }"
             ></div>
           </template>

@@ -60,11 +60,7 @@
                 </div>
               </template>
             </m-column>
-            <m-column
-              v-if="eventOutTime == false && isAdmin"
-              label="Hủy đăng ký"
-              width="120"
-            >
+            <m-column v-if="!expireTime && isAdmin" label="Hủy đăng ký" width="120">
               <template #header>
                 <button class="btn btn--default" @click="onRegister">Đăng ký thêm</button>
               </template>
@@ -102,9 +98,9 @@ export default {
   emits: ["onCloseDetail", "onRegisterFromDetail", "afterCancelRegisterSuccess"],
   props: ["eventItem", "isAdmin"],
   created() {
-    var eventDate = new Date(this.eventItem.EventDate);
-    if (eventDate && eventDate < new Date()) {
-      this.eventOutTime = true;
+    var registerDate = new Date(this.eventItem.ExpireRegisterDate);
+    if (registerDate && registerDate < new Date()) {
+      this.expireTime = true;
     }
     this.eventDetail = this.eventItem;
     this.loadRegisters();
@@ -151,7 +147,7 @@ export default {
       eventDetail: {},
       commentSelected: null,
       fullNameComment: null,
-      eventOutTime: false,
+      expireTime: false,
     };
   },
 };

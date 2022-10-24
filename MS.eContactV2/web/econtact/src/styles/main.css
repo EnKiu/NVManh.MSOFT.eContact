@@ -40,6 +40,39 @@ label+* {
     margin-top: 4px;
 }
 
+.uploading {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background-color: #00000065;
+    z-index: 11510;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.uploading__content {
+    position: relative;
+    top: 30px;
+    color: #fff;
+}
+
+.uploading__info {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    white-space: nowrap;
+}
+
+progress {
+    height: 30px;
+    width: 200px;
+    border-radius: 0;
+}
+
 ::-webkit-scrollbar {
     width: 4px;
     height: 4px

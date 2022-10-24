@@ -89,7 +89,6 @@ export default {
     if (this.isAuthenticated) {
       this.account.AvatarFullPath = localStorage.getItem("avatar");
       this.account.LastName = localStorage.getItem("lastName");
-      console.log(this.account);
     }
   },
   watch: {
@@ -97,7 +96,6 @@ export default {
       if (newValue) {
         this.account.AvatarFullPath = localStorage.getItem("avatar");
         this.account.LastName = localStorage.getItem("lastName");
-        console.log(this.account);
       }
     },
   },
@@ -179,10 +177,11 @@ export default {
 .navbar-item__avatar {
   width: 24px;
   height: 24px;
-  background-size: contain;
+  background-size: cover;
   background-position: center;
   border-radius: 50%;
   margin-right: 10px;
+  background-repeat: no-repeat;
 }
 
 .account {

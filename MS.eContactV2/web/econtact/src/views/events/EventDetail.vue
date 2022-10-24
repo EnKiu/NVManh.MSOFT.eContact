@@ -87,21 +87,32 @@ import Enum from "@/scripts/enum";
 export default {
   name: "EventDetail",
   components: {},
-  props: [],
-  emits: ["onClose", "onAddSuccess"],
-  created() {},
+  props: ["eventItem", "formMode"],
+  emits: ["onClose", "onSaveSuccess"],
+  created() {
+    console.log(this.eventItem);
+    if (this.formMode == Enum.FormMode.UPDATE) {
+      this.event = this.eventItem;
+    }
+  },
   methods: {
     onSave() {
       this.isValid = this.doValidate();
-      console.log(`Ngày bắt đầu: `, this.event.StartTime);
       if (!this.isValid) return;
       else {
+        var method = "POST";
+        var url = "/api/v1/events";
+        this.event.EventDate = this.event.StartTime;
+        if (this.formMode == Enum.FormMode.UPDATE) {
+          method = "PUT";
+          url += `/${this.eventItem.EventId}`;
+        }
         this.api({
-          url: "/api/v1/events",
+          url: url,
           data: this.event,
-          method: "POST",
+          method: method,
         }).then(() => {
-          this.$emit("onAddSuccess");
+          this.$emit("onSaveSuccess");
         });
       }
     },

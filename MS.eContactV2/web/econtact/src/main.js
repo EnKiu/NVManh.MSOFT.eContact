@@ -22,6 +22,8 @@ import ElementPlus from 'element-plus'
 import CKEditor from '@ckeditor/ckeditor5-vue'
 import { ElTable, ElTableColumn } from 'element-plus'
 
+// store.commit("CREATE_CONNECTION");
+
 const app = createApp(App);
 app.component("MInput", MInput);
 app.component("MButton", MButton);
@@ -38,7 +40,7 @@ app.component("MColumn", ElTableColumn);
 app.config.globalProperties.commonJs = commonJs;
 app.config.globalProperties.api = api;
 app.config.globalProperties.Enum = Enum;
-
+app.config.globalProperties.hubConnection = commonJs.createHubConnection();
 document.addEventListener("DOMContentLoaded", function() {
     var elements = document.getElementsByTagName("INPUT");
     for (var i = 0; i < elements.length; i++) {

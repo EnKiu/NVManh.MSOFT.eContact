@@ -1,6 +1,7 @@
 import {
     SHOW_LOADING,
     HIDE_LOADING
+
 } from "../actions/loading";
 
 const state = {

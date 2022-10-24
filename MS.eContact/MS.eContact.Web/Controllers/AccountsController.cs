@@ -31,7 +31,7 @@ namespace MS.eContact.Web.Controllers
             _unitOfWork = unitOfWork;
             _mapper = mapper;
         }
-        [MSAuthorize(ApplicationCore.MSEnums.MSRole.Member)]
+        [Authorize(ApplicationCore.MSEnums.MSRole.Member)]
         public async override Task<IActionResult> Get(string id)
         {
             var data = await _unitOfWork.Users.GetUserInfoResponseById(id);

@@ -5,6 +5,8 @@ using MS.ApplicationCore.Authorization;
 using MS.ApplicationCore.Interface.Service;
 using MS.ApplicationCore.Interfaces;
 using MS.ApplicationCore.Services;
+using MS.ApplicationCore.Utilities;
+using MS.eContact.Core;
 using MS.Infrastructure;
 using MS.Infrastructure.Data;
 using MS.Infrastructure.UnitOfWork;
@@ -38,6 +40,7 @@ namespace MS.eContact.Web
             service.AddTransient<IUserService, UserService>();
             service.AddTransient<IUserRepository, UserRepository>();
             service.AddTransient<IUserRolesRepository, UserRolesRepository>();
+            service.AddTransient<ICommonFunction, CommonFunction>();
 
             service.AddTransient<IJwtUtils, JwtUtils>();
             service.AddHttpContextAccessor();

@@ -49,6 +49,7 @@
         @click="showDetailAlbum(album)"
       >
         <button
+          v-if="isAdmin"
           class="btn--remove-item"
           @click.prevent="onRemoveAlbum(album, index)"
           title="Xóa Album"
@@ -83,6 +84,14 @@
     v-model:totalViews="albumSelected.TotalViews"
     :key="albumSelected.AlbumId"
   ></album-detail>
+  <div v-if="deleting" class="uploading">
+    <div class="uploading__content">
+      <progress :value="indexFileDelete" :max="totalFileDelete"></progress>
+      <div class="uploading__info">
+        Đã xóa <b>{{ indexFileDelete }}/{{ totalFileDelete }}</b> ảnh trong Album.
+      </div>
+    </div>
+  </div>
 </template>
 <script>
 import AlbumItem from "./AlbumItem.vue";
@@ -94,6 +103,10 @@ export default {
   emits: [],
   created() {
     this.loadAlbum();
+    var roleValue = localStorage.getItem("userRoleValue");
+    if (roleValue == 1) {
+      this.isAdmin = true;
+    }
   },
   methods: {
     onAddNewAlbum() {
@@ -103,18 +116,12 @@ export default {
       this.showAddNew = false;
       this.loadAlbum();
     },
-    onRemoveAlbum(album, index) {
-      console.log(album);
-      console.log("album-index:", index);
+    onRemoveAlbum(album) {
       this.commonJs.showConfirm("Bạn có chắc chắn muốn xóa Album này không?", () => {
-        this.api({ url: "api/v1/albums/" + album.AlbumId, method: "DELETE" })
-          .then((res) => {
-            console.log(res);
-            this.loadAlbum();
-          })
-          .catch((res) => {
-            console.log(res);
-          });
+        this.totalFileDelete = album.TotalPictures;
+        this.api({ url: "api/v1/albums/" + album.AlbumId, method: "DELETE" }).then(() => {
+          this.loadAlbum();
+        });
       });
       event.stopPropagation();
     },
@@ -125,7 +132,6 @@ export default {
       this.api({
         url: "/api/v1/Albums",
       }).then((res) => {
-        console.log(res);
         this.albums = res;
       });
     },
@@ -135,6 +141,10 @@ export default {
       showAddNew: false,
       albums: [],
       albumSelected: null,
+      deleting: false,
+      indexFileDelete: 0,
+      totalFileDelete: 0,
+      isAdmin: false,
     };
   },
 };
@@ -183,16 +193,16 @@ export default {
   margin-right: 10px;
 }
 .album-item .btn--remove-item {
-  display: none;
+  display: flex;
   color: #ff0000;
   border-color: #ff0000;
   border-style: solid;
   border: none;
   z-index: 0;
 }
-.album-item:hover .btn--remove-item {
+/* .album-item:hover .btn--remove-item {
   display: flex;
-}
+} */
 
 .album__title {
   font-size: 16px;

@@ -10,6 +10,7 @@
   "dependencies": {
     "@ckeditor/ckeditor5-build-classic": "^35.2.0",
     "@ckeditor/ckeditor5-vue": "^4.0.1",
+    "@microsoft/signalr": "^6.0.10",
     "axios": "^0.27.2",
     "core-js": "^3.8.3",
     "element-plus": "^2.2.17",

@@ -1,11 +1,14 @@
 /* eslint-disable */
 import store from "@/store";
 import router from "@/router";
+import webSocket from "@/http/WebSocket";
 import MISAEnum from "./enum";
 import { AUTH_REQUEST } from "@/store/actions/auth";
 import { CLEAR_ERROR_MSG, SET_ERROR_MSG } from '@/store/actions/notification.js';
 import { SHOW_LOADING, HIDE_LOADING } from '@/store/actions/loading.js';
 import { CLEAR_TOAST, SET_TOAST } from '@/store/actions/toast.js';
+import { SET_CONNECTING_HUB } from "@/store/actions/signalR";
+import { HIDE_PROGRESS, SHOW_PROGRESS } from "@/store/actions/progressbar";
 const commonJs = {
     login: function(username, password) {
         commonJs.showLoading();
@@ -30,6 +33,60 @@ const commonJs = {
                 }
                 commonJs.hideLoading();
             });
+    },
+    createHubConnection() {
+        var hubConnection = webSocket.createHub();
+        commonJs.showConnectingHub();
+        hubConnection
+            .start()
+            .then(() => {
+                console.log("Đã kết nối tới Hub...");
+                commonJs.hideConnectingHub();
+            })
+            .catch((err) => {
+                console.error(err);
+                commonJs.hideConnectingHub();
+            });
+
+        hubConnection.on("ReceiveNotificationWhenDisconnected", (username) => {
+            console.log(`${username} đã ngắt kết nối!`);
+        })
+        hubConnection.on("ShowAlertWhenOnline", (username) => {
+            console.log(`${username} đã kết nối!`);
+        })
+
+        hubConnection.on("ShowPecentUpload", (currentFileUpload, totalFileUpload, isFinish) => {
+            var progressInfo = {
+                Value: currentFileUpload,
+                Max: totalFileUpload,
+                Message: `Đang tải lên ${currentFileUpload}/${totalFileUpload} ảnh.`
+            }
+            commonJs.showLoading();
+            commonJs.showProgress(progressInfo);
+            if (isFinish) {
+                setTimeout(function() {
+                    commonJs.hideLoading();
+                    commonJs.hideProgress();
+                }, 500)
+            }
+        });
+
+        hubConnection.on("ShowPecentDeleted", (indexFileDelete, totalFileDelete, isFinish) => {
+            var progressInfo = {
+                Value: indexFileDelete,
+                Max: totalFileDelete,
+                Message: `Đang xóa ${indexFileDelete}/${totalFileDelete} ảnh.`
+            }
+            commonJs.showProgress(progressInfo);
+            if (isFinish) {
+                setTimeout(function() {
+                    commonJs.hideLoading();
+                    commonJs.hideProgress();
+                }, 500)
+            }
+        });
+
+        return hubConnection;
     },
     change_alias: function(alias) {
         var str = alias;
@@ -148,7 +205,12 @@ const commonJs = {
         }, 5000)
 
     },
-
+    showProgress(progressInfo) {
+        store.dispatch(SHOW_PROGRESS, progressInfo);
+    },
+    hideProgress() {
+        store.dispatch(HIDE_PROGRESS);
+    },
     /**
      * Hiển thị cảnh báo
      * Authror: NVMANH (16/08/2022)
@@ -213,6 +275,12 @@ const commonJs = {
     },
     hideLoading() {
         store.dispatch(HIDE_LOADING);
-    }
+    },
+    showConnectingHub() {
+        store.dispatch(SET_CONNECTING_HUB, true);
+    },
+    hideConnectingHub() {
+        store.dispatch(SET_CONNECTING_HUB, false);
+    },
 }
 export default commonJs;

@@ -7,6 +7,7 @@
   <router-view name="LoginPage"></router-view>
   <router-view class="register" name="Register"></router-view>
   <MLoading v-if="isShowLoading" />
+  <MLoading v-if="connectingHub" />
   <router-view name="HomePage"></router-view>
   <!-- <home-page v-if="!isAuthenticated && showHomePage" v-model:showHomePage="showHomePage"></home-page> -->
   <!-- <MLoading /> -->
@@ -22,6 +23,12 @@
   <m-toast v-if="isShowToast" :msg="msgToast" :type="msgToastType"></m-toast>
 
   <news-list v-if="isAuthenticated && showNew" @onClose="showNew = false"></news-list>
+  <progress-bar
+    v-if="isShowProgressBar"
+    :value="processInfo.Value"
+    :max="processInfo.Max"
+    :message="processInfo.Message"
+  ></progress-bar>
 </template>
 
 <script>
@@ -33,6 +40,8 @@ import { USER_REQUEST } from "./store/actions/user";
 import { mapGetters, mapState } from "vuex";
 import MDialogNotification from "./components/base/MDialogNotification.vue";
 import MToast from "./components/base/MToast.vue";
+import ProgressBar from "./components/base/ProgressBar.vue";
+// import notification from "./http/WebSocket";
 export default {
   name: "App",
   components: {
@@ -41,6 +50,7 @@ export default {
     MToast,
     MDialogNotification,
     NewsList,
+    ProgressBar,
   },
   computed: {
     ...mapGetters([
@@ -52,12 +62,15 @@ export default {
       "titleNotification",
       "showCancelButton",
       "isShowLoading",
+      "connectingHub",
       "msgType",
       "confirmFunction",
       "role",
       "isShowToast",
       "msgToast",
       "msgToastType",
+      "isShowProgressBar",
+      "processInfo",
     ]),
     ...mapState({
       authLoading: (state) => state.auth.status === "loading",
@@ -67,6 +80,14 @@ export default {
   async created() {
     if (this.$store.getters.isAuthenticated) {
       await this.$store.dispatch(USER_REQUEST);
+      // this.hubConnection = notification.createHub();
+      // // this.hubConnection = notification.CreateHubProxy();
+      // this.hubConnection
+      //   .start()
+      //   .then(() => {
+      //     console.log("Đã kết nối tới Hub...");
+      //   })
+      //   .catch((err) => console.error(err));
     }
   },
   methods: {
@@ -81,6 +102,8 @@ export default {
     return {
       showHomePage: false,
       showNew: true,
+      hubConnection: null,
+      progressing: false,
     };
   },
 };

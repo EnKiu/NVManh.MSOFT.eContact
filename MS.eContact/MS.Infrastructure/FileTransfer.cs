@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Http;
+﻿using Microsoft.AspNetCore.Hosting.Server;
+using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.Configuration;
 using MS.ApplicationCore.Exceptions;
 using MS.ApplicationCore.Interfaces;
@@ -8,6 +9,7 @@ using System.IO;
 using System.Net;
 using System.Text;
 using System.Threading.Tasks;
+using static System.Net.WebRequestMethods;
 
 namespace MS.Infrastructure
 {
@@ -110,7 +112,7 @@ namespace MS.Infrastructure
             try
             {
                 // Thực hiện upload file sang server files:
-                var deleteFileUrl = String.Format("{0}/{1}/{2}", _ftpHost,_serverFilePath, filePath);
+                var deleteFileUrl = String.Format("{0}/{1}/{2}", _ftpHost, _serverFilePath, filePath);
 
                 FtpWebRequest request = WebRequest.Create(deleteFileUrl) as FtpWebRequest;
 
@@ -135,14 +137,19 @@ namespace MS.Infrastructure
                 FtpWebResponse newResponse = ex.Response as FtpWebResponse;
                 if (newResponse.StatusCode == FtpStatusCode.ActionNotTakenFileUnavailable)
                 {
-                        throw new MISAException("Tệp hoặc thư mục không tồn tại trên server files");
+                    Console.OutputEncoding = Encoding.UTF8;
+                    Console.WriteLine($"{filePath} không tồn tại");
+                    //throw new MISAException("Tệp hoặc thư mục không tồn tại trên server files");
                 }
                 else
                 {
-                        throw new MISAException("Không thể xóa các files.");
+                    Console.OutputEncoding = Encoding.UTF8;
+                    Console.WriteLine($"{filePath} không thể xóa");
+                    //throw new MISAException("Không thể xóa các files.");
                 }
+                return await Task.FromResult(false);
             }
-            catch(Exception ex)
+            catch (Exception ex)
             {
                 return await Task.FromResult(false);
             }
@@ -170,24 +177,47 @@ namespace MS.Infrastructure
 
             //// do không thể xóa thư mục nếu nó có không rỗng, nên cần kiểm tra trước;
             //request.Method = WebRequestMethods.Ftp.ListDirectoryDetails;
-            using var resp = (FtpWebResponse)request.GetResponse();
-
-            //Stream responseStream = resp.GetResponseStream();
-            //StreamReader reader = new StreamReader(responseStream);
-            //string line = reader.ReadLine();
-
-            //while (!string.IsNullOrEmpty(line))
-            //{
-            //    line = reader.ReadLine();
-            //}
-            //return true;
-            if (resp.StatusCode == FtpStatusCode.FileActionOK)
+            try
             {
-                Console.WriteLine(resp.StatusCode);
-                return true;
+                using var resp = (FtpWebResponse)request.GetResponse();
+                //Stream responseStream = resp.GetResponseStream();
+                //StreamReader reader = new StreamReader(responseStream);
+                //string line = reader.ReadLine();
+
+                //while (!string.IsNullOrEmpty(line))
+                //{
+                //    line = reader.ReadLine();
+                //}
+                //return true;
+                if (resp.StatusCode == FtpStatusCode.FileActionOK)
+                {
+                    Console.OutputEncoding = Encoding.UTF8;
+                    Console.WriteLine(resp.StatusCode);
+                    return true;
+                }
+                else
+                    return false;
+
             }
-            else
+            catch (WebException ex)
+            {
+                FtpWebResponse newResponse = ex.Response as FtpWebResponse;
+                if (newResponse.StatusCode == FtpStatusCode.ActionNotTakenFileUnavailable)
+                {
+                    Console.OutputEncoding = Encoding.UTF8;
+                    Console.WriteLine($"{folderPath} không tồn tại");
+                    //throw new MISAException("Tệp hoặc thư mục không tồn tại trên server files");
+                }
+                else
+                {
+                    Console.OutputEncoding = Encoding.UTF8;
+                    Console.WriteLine($"{folderPath} không thể xóa");
+                    //throw new MISAException("Không thể xóa các files.");
+                }
                 return false;
+            }
+
+
         }
 
         /// <summary>

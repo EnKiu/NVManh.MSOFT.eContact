@@ -25,7 +25,7 @@ namespace MS.eContact.Web.Controllers
             _baseService = baseService;
         }
         // GET: api/<BaseController>
-        [MSAuthorize(MSRole.Member)]
+        [Authorize(MSRole.Member)]
         [HttpGet]
         public async virtual Task<IActionResult> Get()
         {
@@ -34,7 +34,7 @@ namespace MS.eContact.Web.Controllers
         }
 
         // GET api/<BaseController>/5
-        [MSAuthorize(MSRole.Member)]
+        [Authorize(MSRole.Member)]
         [HttpGet("{id}")]
         public async virtual Task<IActionResult> Get(string id)
         {
@@ -43,7 +43,7 @@ namespace MS.eContact.Web.Controllers
         }
 
         // POST api/<BaseController>
-        [MSAuthorize(MSRole.Administrator)]
+        [Authorize(MSRole.Administrator)]
         [HttpPost]
         public async virtual Task<IActionResult> Post([FromBody] TEntity entity)
         {
@@ -55,7 +55,7 @@ namespace MS.eContact.Web.Controllers
         }
 
         // PUT api/<BaseController>/5
-        [MSAuthorize(MSRole.Member)]
+        [Authorize(MSRole.Member)]
         [HttpPut("{id}")]
         public virtual async Task<IActionResult> Put(string id, [FromBody] TEntity entity)
         {
@@ -67,7 +67,7 @@ namespace MS.eContact.Web.Controllers
         }
 
         // DELETE api/<BaseController>/5
-        [MSAuthorize(MSRole.Administrator)]
+        [Authorize(MSRole.Administrator)]
         [HttpDelete("{id}")]
         public virtual async Task<IActionResult> Delete(string id)
         {

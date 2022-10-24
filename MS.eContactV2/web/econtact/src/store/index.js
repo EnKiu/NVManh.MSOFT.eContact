@@ -6,6 +6,7 @@ import notification from './modules/notification'
 import loading from './modules/loading'
 import toast from './modules/toast'
 import signalR from './modules/signalR'
+import progressbar from './modules/progressbar'
 const store = createStore({
     state: {},
     mutations: {},
@@ -17,7 +18,8 @@ const store = createStore({
         notification,
         loading,
         toast,
-        signalR
+        signalR,
+        progressbar
     }
 })
 export default store

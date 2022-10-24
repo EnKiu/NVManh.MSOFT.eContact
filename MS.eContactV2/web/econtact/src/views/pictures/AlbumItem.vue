@@ -1,5 +1,5 @@
 <template>
-  <m-dialog title="Thêm mới Album" @onClose="onClose">
+  <m-dialog title="Thông tin Album" @onClose="onClose">
     <template v-slot:content>
       <div class="album-info">
         <m-input
@@ -7,6 +7,7 @@
           :validated="validated"
           v-model="album.AlbumName"
           :required="true"
+          :isFocus="true"
         ></m-input>
         <m-text-area label="Mô tả" v-model="album.Description"></m-text-area>
       </div>
@@ -25,12 +26,10 @@
       <div class="picture__list">
         <div v-for="(pic, index) in pictures" :key="index" class="picture">
           <div class="picture__thumb"><img :src="getFile(pic)" alt="" /></div>
-          <div class="picture__name">{{ pic.name }}</div>
-          <div class="picture__length">{{ pic.size }} B</div>
+          <!-- <div class="picture__name">{{ pic.name }}</div>
+          <div class="picture__length">{{ pic.size }} B</div> -->
           <div class="picture__action">
-            <button class="btn btn--table" @click="onRemovePicture(index)">
-              Xóa
-            </button>
+            <button class="btn btn--table" @click="onRemovePicture(index)">Xóa</button>
           </div>
         </div>
       </div>
@@ -45,33 +44,39 @@
 <script>
 export default {
   name: "PictureDetail",
-  emits: ["onCloseAddNewDialog","afterAddAlbum"],
+  emits: ["onCloseAddNewDialog", "afterAddAlbum"],
   props: [],
-  computed: {},
   methods: {
-    onAddAlbum() {
+    async onAddAlbum() {
       this.validated = true;
       // Thực hiện validate:
       var isValid = this.validateAlbum();
       if (isValid) {
         var formData = new FormData();
         formData.append("album", JSON.stringify(this.album));
+        this.totalFileUpload = this.pictures.length;
         for (let i = 0; i < this.pictures.length; i++) {
           formData.append(`file_${i}`, this.pictures[i]);
         }
-
+        if (this.hubConnection.state != "Connected") {
+          await this.hubConnection.start();
+        }
         this.api({
-            url: "/api/v1/Albums",
-            data: formData,
-            method: "POST",
-          })
+          url: "/api/v1/Albums",
+          data: formData,
+          method: "POST",
+          showMsg: false,
+        })
           .then((res) => {
             console.log(res);
             this.$emit("afterAddAlbum");
+          })
+          .catch((res) => {
+            console.log(res);
           });
       }
     },
-    onAddPicture() {
+    async onAddPicture() {
       this.$refs.filePictures.click();
     },
     onRemovePicture(index) {
@@ -80,7 +85,6 @@ export default {
     onSelectPictures() {
       //   var formData = new FormData();
       var file = this.$refs.filePictures;
-      console.log(file);
       for (let fileItem of file.files) {
         this.pictures.push(fileItem);
       }
@@ -101,10 +105,7 @@ export default {
   data() {
     return {
       pictures: [],
-      album: {
-        AlbumName: "Tên của Album",
-        Description: "Đây là mô tả của Album",
-      },
+      album: {},
       validated: false,
     };
   },
@@ -112,7 +113,7 @@ export default {
 </script>
 <style scoped>
 .picture__list {
-  max-height: calc(100vh - 250px);
+  max-height: 200px;
   overflow-y: auto;
   box-sizing: border-box;
   margin-top: 10px;

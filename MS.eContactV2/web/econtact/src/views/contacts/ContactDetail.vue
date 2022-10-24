@@ -7,8 +7,11 @@
             class="contact__avatar"
             :class="{ 'edit-able': formMode != 3 }"
             @click="avatarOnClick"
+            :style="{
+              'background-image': `url(${contact.AvatarFullPath})`,
+            }"
           >
-            <img :src="contact.AvatarFullPath" alt="" />
+            <!-- <img :src="contact.AvatarFullPath" alt="" /> -->
           </div>
           <div class="contact__info">
             <div class="contact__info--name">
@@ -141,7 +144,7 @@
 export default {
   name: "BaseDialog",
   components: {},
-  emits:["afterSave","update:formMode"],
+  emits: ["afterSave", "update:formMode"],
   props: {
     title: {
       type: String,
@@ -189,8 +192,7 @@ export default {
           this.$emit("afterSave", res);
         })
         .catch((res) => {
-          if(res.status == 403)
-          this.$emit("update:formMode", this.Enum.FormMode.VIEW);
+          if (res.status == 403) this.$emit("update:formMode", this.Enum.FormMode.VIEW);
           this.$emit("afterSave", res);
         });
     },
@@ -234,11 +236,11 @@ export default {
 };
 </script>
 <style scoped>
-.input-wrapper{
+.input-wrapper {
   max-width: unset;
 }
 
-.margin-0{
+.margin-0 {
   margin: 0 !important;
 }
 .contact-info {
@@ -262,6 +264,9 @@ export default {
   align-items: center;
   justify-content: center;
   pointer-events: none;
+  background-repeat: no-repeat;
+  background-position: center;
+  background-size: cover;
 }
 
 .contact__avatar img {

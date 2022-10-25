@@ -29,14 +29,14 @@
         @click="showDetailAlbum(album)"
       >
         <button
-          v-if="isAdmin"
+          v-if="isAdmin && !album.IsDeleting"
           class="btn--remove-item"
           @click.prevent="onRemoveAlbum(album, index)"
           title="Xóa Album"
         >
           <i class="icofont-ui-remove"></i>
         </button>
-        <div class="album__title">{{ album.AlbumName }}</div>
+        <div class="album__title">{{ album.AlbumName }} <span v-if="album.IsDeleting">(Đang xóa...)</span></div>
         <div class="album__date">
           <i class="icofont-ui-clock"></i> Ngày tạo:
           {{ commonJs.formatDate(album.CreatedDate) }}
@@ -80,6 +80,7 @@
 import AlbumItem from "./AlbumItem.vue";
 import AlbumDetail from "./AlbumDetail.vue";
 import { mapGetters } from "vuex";
+import { forIn } from "lodash";
 export default {
   name: "AlbumList",
   components: { AlbumItem, AlbumDetail },
@@ -114,6 +115,27 @@ export default {
         }
         if (isFinish) {
           this.creating = false;
+          this.loadAlbum();
+        }
+      }
+    );
+    this.hubConnection.on(
+      "ShowPecentDeleted",
+      (
+        indexFileDelete,
+        totalFileDelete,
+        isFinish,
+        totalTimes,
+        progressInfo
+      ) => {
+        
+        for (const album of this.albums) {
+          if (album.AlbumId == progressInfo.id) {
+            console.log(true);
+            album.IsDeleting = true;
+          }
+        }
+        if (isFinish) {
           this.loadAlbum();
         }
       }

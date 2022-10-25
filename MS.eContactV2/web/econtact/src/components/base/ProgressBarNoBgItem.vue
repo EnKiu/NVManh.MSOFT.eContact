@@ -8,9 +8,19 @@
   </div>
 </template>
 <script>
+// import Enum from "@/scripts/enum";
 export default {
   name: "ProgressBarBG",
   props: ["progess"],
+  created() {},
+  watch: {
+    // progress: {
+    //   handler(newValue) {
+    //     console.log("runbg:", newValue);
+    //   },
+    //   deep: true,
+    // },
+  },
 };
 </script>
 <style scoped>

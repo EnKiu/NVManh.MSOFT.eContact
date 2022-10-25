@@ -59,7 +59,7 @@ namespace MS.ApplicationCore.Authorization
                 {
                     // Token hết hạn:
                     var requestUrl = context.Request.Path.Value?.ToLower();
-                    if (!requestUrl.Contains("/authenticate/login") && !requestUrl.Contains("authenticate/register"))
+                    if (!requestUrl.Contains("/account/login") && !requestUrl.Contains("account/register"))
                     {
                         throw new UnauthorizedException("Thông tin xác thực không hợp lệ hoặc đã hết hạn. Vui lòng đăng nhập lại!");
                     }

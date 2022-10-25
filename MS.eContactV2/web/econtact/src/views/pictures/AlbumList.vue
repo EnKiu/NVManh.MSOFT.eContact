@@ -1,4 +1,3 @@
- 
 <template>
   <div class="album">
     <div class="album__toolbar">
@@ -36,7 +35,9 @@
         >
           <i class="icofont-ui-remove"></i>
         </button>
-        <div class="album__title">{{ album.AlbumName }} <span v-if="album.IsDeleting">(Đang xóa...)</span></div>
+        <div class="album__title">
+          {{ album.AlbumName }} <span v-if="album.IsDeleting">(Đang xóa...)</span>
+        </div>
         <div class="album__date">
           <i class="icofont-ui-clock"></i> Ngày tạo:
           {{ commonJs.formatDate(album.CreatedDate) }}
@@ -69,8 +70,7 @@
     <div class="uploading__content">
       <progress :value="indexFileDelete" :max="totalFileDelete"></progress>
       <div class="uploading__info">
-        Đã xóa <b>{{ indexFileDelete }}/{{ totalFileDelete }}</b> ảnh trong
-        Album.
+        Đã xóa <b>{{ indexFileDelete }}/{{ totalFileDelete }}</b> ảnh trong Album.
       </div>
     </div>
   </div>
@@ -98,45 +98,33 @@ export default {
     }
     this.hubConnection.on(
       "ShowPecentUpload",
-      (
-        currentFileUpload,
-        totalFileUpload,
-        isFinish,
-        totalTimes,
-        progressInfo
-      ) => {
+      (currentFileUpload, totalFileUpload, isFinish, totalTimes, progressInfo) => {
         if (totalTimes > 10) {
           this.showAddNew = false;
           this.creating = true;
           this.progressPecent =
-            Math.round(
-              ((currentFileUpload / totalFileUpload) * 100).toFixed(2)
-            ) + "%";
+            Math.round(((currentFileUpload / totalFileUpload) * 100).toFixed(2)) + "%";
         }
         if (isFinish) {
           this.creating = false;
-          this.loadAlbum();
+          if (this.processList.length == 0) {
+            this.loadAlbum();
+          }
         }
       }
     );
     this.hubConnection.on(
       "ShowPecentDeleted",
-      (
-        indexFileDelete,
-        totalFileDelete,
-        isFinish,
-        totalTimes,
-        progressInfo
-      ) => {
-        
+      (indexFileDelete, totalFileDelete, isFinish, totalTimes, progressInfo) => {
         for (const album of this.albums) {
           if (album.AlbumId == progressInfo.id) {
-            console.log(true);
             album.IsDeleting = true;
           }
         }
         if (isFinish) {
-          this.loadAlbum();
+          if (this.processList.length == 0) {
+            this.loadAlbum();
+          }
         }
       }
     );
@@ -151,20 +139,17 @@ export default {
       this.loadAlbum();
     },
     onRemoveAlbum(album) {
-      this.commonJs.showConfirm(
-        "Bạn có chắc chắn muốn xóa Album này không?",
-        () => {
-          this.totalFileDelete = album.TotalPictures;
-          this.api({
-            url: "api/v1/albums/" + album.AlbumId,
-            method: "DELETE",
-            showToast: false,
-            showMsg: false,
-          }).then(() => {
-            this.loadAlbum();
-          });
-        }
-      );
+      this.commonJs.showConfirm("Bạn có chắc chắn muốn xóa Album này không?", () => {
+        this.totalFileDelete = album.TotalPictures;
+        this.api({
+          url: "api/v1/albums/" + album.AlbumId,
+          method: "DELETE",
+          showToast: false,
+          showMsg: false,
+        }).then(() => {
+          this.loadAlbum();
+        });
+      });
       event.stopPropagation();
     },
     showDetailAlbum(album) {

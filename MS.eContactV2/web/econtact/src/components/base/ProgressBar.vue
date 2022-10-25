@@ -32,15 +32,19 @@ export default {
     this.progressNotBGs = this.processList.filter((e) => !e.RunBackground);
   },
   watch: {
-    processList: function (newValue) {
-      this.progressBGs = newValue.filter((e) => e.RunBackground == true);
-      this.progressNotBGs = this.processList.filter((e) => !e.RunBackground);
+    processList: {
+      handler(newValue) {
+        this.progressBGs = newValue.filter((e) => e.RunBackground == true);
+        this.progressNotBGs = this.processList.filter((e) => !e.RunBackground);
+      },
+      deep: true,
     },
     runBackground: function (newValue) {
       if (newValue == true) {
         commonJs.showMessenger({
           title: "Thông báo",
-          msg: "Quá trình sẽ tiếp tục được xử lý trong ít phút. Hệ thống sẽ thông báo cho bạn khi hoàn thành.",
+          msg:
+            "Quá trình sẽ tiếp tục được xử lý trong ít phút. Hệ thống sẽ thông báo cho bạn khi hoàn thành.",
           type: Enum.MsgType.Info,
           showCancelButton: false,
         });
@@ -87,8 +91,7 @@ export default {
   justify-content: center;
 }
 
-.loading-progressbar{
+.loading-progressbar {
   position: relative;
 }
-
 </style>

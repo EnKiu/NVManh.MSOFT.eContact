@@ -28,9 +28,20 @@ const mutations = {
     [SHOW_PROGRESS]: (state, processInfo) => {
         state.isShow = true;
         // var isExits = (state.processList.map(e => e.Id == processInfo.Id).indexOf(true) > -1);
-        var newList = state.processList.filter(e => e.Id != processInfo.Id);
-        newList.push(processInfo);
-        state.processList = newList;
+        var hasInList = false;
+        for (const processItem of state.processList) {
+            if (processItem.Id == processInfo.Id) {
+                processItem.Value = processInfo.Value;
+                processItem.Max = processInfo.Max;
+                processItem.RunBackground = processInfo.RunBackground;
+                processItem.Message = processInfo.Message;
+                hasInList = true;
+                break;
+            }
+        }
+        if (!hasInList) {
+            state.processList.push(processInfo);
+        }
     },
     [HIDE_PROGRESS]: (state) => {
         state.isShow = false;

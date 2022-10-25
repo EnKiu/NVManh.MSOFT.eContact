@@ -6,13 +6,13 @@ import {
 
 const state = {
     isShow: false,
-    processInfo: { Value: 0, Max: 0, Message: "" }
+    processList: []
 };
 
 
 const getters = {
     isShowProgressBar: state => !!state.isShow,
-    processInfo: state => state.processInfo
+    processList: state => state.processList
 };
 
 const actions = {
@@ -27,11 +27,14 @@ const actions = {
 const mutations = {
     [SHOW_PROGRESS]: (state, processInfo) => {
         state.isShow = true;
-        state.processInfo = processInfo;
+        // var isExits = (state.processList.map(e => e.Id == processInfo.Id).indexOf(true) > -1);
+        var newList = state.processList.filter(e => e.Id != processInfo.Id);
+        newList.push(processInfo);
+        state.processList = newList;
     },
     [HIDE_PROGRESS]: (state) => {
         state.isShow = false;
-        state.processInfo = { Value: 0, Max: 0 }
+        state.processList = []
     },
 };
 

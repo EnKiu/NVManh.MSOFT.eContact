@@ -263,7 +263,7 @@ export default {
   background-color: #dddddd;
 }
 .dialog-notification {
-  z-index: 1055;
+  z-index: 11055;
 }
 .dialog__body {
   display: flex;

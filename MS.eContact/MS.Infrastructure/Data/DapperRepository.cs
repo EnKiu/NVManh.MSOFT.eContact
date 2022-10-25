@@ -82,12 +82,15 @@ namespace MS.Infrastructure.Data
 
         public TEntity Find(object pksFields)
         {
-            throw new NotImplementedException();
+            var sql = $"SELECT * FROM {_tableName} WHERE {_tableName}Id = @Id";
+            DynamicParameters parameters = new DynamicParameters();
+            parameters.Add("@Id", pksFields);
+            return DbContext.Connection.QueryFirstOrDefault<TEntity>(sql,param:parameters,transaction:DbContext.Transaction, commandType: System.Data.CommandType.Text);
         }
 
         public virtual async Task<TEntity> FindAsync(object pksFields)
         {
-            throw new NotImplementedException();
+            return await DbContext.GetByIdAsync<TEntity>(pksFields.ToString());
         }
 
         public IEnumerable<TEntity> GetData(string qry, object parameters)

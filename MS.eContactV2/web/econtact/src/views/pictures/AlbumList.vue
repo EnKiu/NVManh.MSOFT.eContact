@@ -1,3 +1,4 @@
+ 
 <template>
   <div class="album">
     <div class="album__toolbar">
@@ -6,42 +7,21 @@
       </button>
     </div>
     <div class="album__list">
-      <!-- <m-table
-        ref="tbListDocument"
-        :data="albums"
-        empty-text="Không có dữ liệu"
-        @row-click="showDetailAlbum"
-        width="100%"
-        height="100%"
-      >
-        <m-column prop="FullName" class="album-item">
-          <template #default="scope">
-            <div class="album-item">
-              <button
-                class="btn--remove-item"
-                @click.prevent="onRemoveAlbum(scope.row, index)"
-                title="Xóa Album"
-              >
-                <i class="icofont-ui-remove"></i>
-              </button>
-              <div class="album__title">{{ scope.row.AlbumName }}</div>
-              <div class="album__date">
-                <i class="icofont-ui-clock"></i> Ngày tạo:
-                {{ commonJs.formatDate(scope.row.CreatedDate) }}
-              </div>
-              <div class="album__total-pictures">
-                <i class="icofont-files-stack"></i>Tổng số ảnh:
-                {{ scope.row.TotalPictures }}
-              </div>
-              <div class="album__total-view">
-                <i class="icofont-eye-alt"></i>Tổng số lượt xem:
-                {{ scope.row.TotalViews }}
-              </div>
-            </div>
-          </template>
-        </m-column>
-      </m-table> -->
-      <!-- BẢNG CŨ -->
+      <!-- BẢNG XEM TRƯỚC KHI THỰC HIỆN THÊM MỚI ĐANG TRONG TRẠNG THÁI CHỜ -->
+      <div v-if="creating" class="album-item">
+        <div class="album__title">(Đang tạo... {{ progressPecent }})</div>
+        <div class="album__date">
+          <i class="icofont-ui-clock"></i> Ngày tạo: Đang hoàn thiện...
+        </div>
+        <div class="album__total-pictures">
+          <i class="icofont-files-stack"></i>Tổng số ảnh: Đang hoàn thiện...
+        </div>
+        <div class="album__total-view">
+          <i class="icofont-eye-alt"></i>Tổng số lượt xem: Đang hoàn thiện...
+        </div>
+      </div>
+
+      <!-- DANH SÁCH ALBUM -->
       <div
         class="album-item"
         v-for="(album, index) in albums"
@@ -74,6 +54,7 @@
   </div>
   <album-item
     v-if="showAddNew"
+    @onAddAlbum="creating = true"
     @onCloseAddNewDialog="showAddNew = false"
     @afterAddAlbum="onAfterAddAlbum"
   ></album-item>
@@ -88,25 +69,55 @@
     <div class="uploading__content">
       <progress :value="indexFileDelete" :max="totalFileDelete"></progress>
       <div class="uploading__info">
-        Đã xóa <b>{{ indexFileDelete }}/{{ totalFileDelete }}</b> ảnh trong Album.
+        Đã xóa <b>{{ indexFileDelete }}/{{ totalFileDelete }}</b> ảnh trong
+        Album.
       </div>
     </div>
   </div>
 </template>
 <script>
+/* eslint-disable */
 import AlbumItem from "./AlbumItem.vue";
 import AlbumDetail from "./AlbumDetail.vue";
+import { mapGetters } from "vuex";
 export default {
   name: "AlbumList",
   components: { AlbumItem, AlbumDetail },
   props: [],
   emits: [],
+  computed: {
+    ...mapGetters(["processList"]),
+  },
   created() {
+    console.log(this.processList);
     this.loadAlbum();
     var roleValue = localStorage.getItem("userRoleValue");
     if (roleValue == 1) {
       this.isAdmin = true;
     }
+    this.hubConnection.on(
+      "ShowPecentUpload",
+      (
+        currentFileUpload,
+        totalFileUpload,
+        isFinish,
+        totalTimes,
+        progressInfo
+      ) => {
+        if (totalTimes > 10) {
+          this.showAddNew = false;
+          this.creating = true;
+          this.progressPecent =
+            Math.round(
+              ((currentFileUpload / totalFileUpload) * 100).toFixed(2)
+            ) + "%";
+        }
+        if (isFinish) {
+          this.creating = false;
+          this.loadAlbum();
+        }
+      }
+    );
   },
   methods: {
     onAddNewAlbum() {
@@ -114,15 +125,24 @@ export default {
     },
     onAfterAddAlbum() {
       this.showAddNew = false;
+      this.creating = false;
       this.loadAlbum();
     },
     onRemoveAlbum(album) {
-      this.commonJs.showConfirm("Bạn có chắc chắn muốn xóa Album này không?", () => {
-        this.totalFileDelete = album.TotalPictures;
-        this.api({ url: "api/v1/albums/" + album.AlbumId, method: "DELETE" }).then(() => {
-          this.loadAlbum();
-        });
-      });
+      this.commonJs.showConfirm(
+        "Bạn có chắc chắn muốn xóa Album này không?",
+        () => {
+          this.totalFileDelete = album.TotalPictures;
+          this.api({
+            url: "api/v1/albums/" + album.AlbumId,
+            method: "DELETE",
+            showToast: false,
+            showMsg: false,
+          }).then(() => {
+            this.loadAlbum();
+          });
+        }
+      );
       event.stopPropagation();
     },
     showDetailAlbum(album) {
@@ -145,6 +165,8 @@ export default {
       indexFileDelete: 0,
       totalFileDelete: 0,
       isAdmin: false,
+      creating: false,
+      progressPecent: "0%",
     };
   },
 };

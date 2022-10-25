@@ -25,9 +25,7 @@
   <news-list v-if="isAuthenticated && showNew" @onClose="showNew = false"></news-list>
   <progress-bar
     v-if="isShowProgressBar"
-    :value="processInfo.Value"
-    :max="processInfo.Max"
-    :message="processInfo.Message"
+    :processList="processList"
   ></progress-bar>
 </template>
 
@@ -70,7 +68,7 @@ export default {
       "msgToast",
       "msgToastType",
       "isShowProgressBar",
-      "processInfo",
+      "processList",
     ]),
     ...mapState({
       authLoading: (state) => state.auth.status === "loading",

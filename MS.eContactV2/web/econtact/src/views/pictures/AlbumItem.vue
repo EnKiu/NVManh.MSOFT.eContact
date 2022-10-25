@@ -44,10 +44,11 @@
 <script>
 export default {
   name: "PictureDetail",
-  emits: ["onCloseAddNewDialog", "afterAddAlbum"],
+  emits: ["onCloseAddNewDialog", "afterAddAlbum","onAddAlbum"],
   props: [],
   methods: {
     async onAddAlbum() {
+      this.$emit("onAddAlbum");
       this.validated = true;
       // Thực hiện validate:
       var isValid = this.validateAlbum();
@@ -65,6 +66,7 @@ export default {
           url: "/api/v1/Albums",
           data: formData,
           method: "POST",
+          showToast:false,
           showMsg: false,
         })
           .then((res) => {

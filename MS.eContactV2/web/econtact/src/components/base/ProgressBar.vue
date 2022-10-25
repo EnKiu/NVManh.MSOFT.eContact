@@ -1,39 +1,63 @@
 <template>
-  <div class="progressbar">
-    <div class="progressbar__content">
-      <progress :value="value" :max="max"></progress>
-      <div class="progressbar__info">
-        <span v-if="message">{{ message }}</span
-        ><span v-else>Đang xử lý {{ value }}/{{ max }} tệp</span>
-      </div>
+  <div v-if="progressNotBGs.length > 0" class="progressbar">
+    <div class="loading-progressbar">
+      <div class="loading__icon"><i class="icofont-spinner-alt-1"></i></div>
     </div>
+    <ProgressBarNoBG
+      v-for="progress in progressNotBGs"
+      :progess="progress"
+      :key="progress.Id"
+    ></ProgressBarNoBG>
+  </div>
+  <div v-if="progressBGs.length > 0" class="progressbar-bg">
+    <ProgressBarBG
+      v-for="progress in progressBGs"
+      :progress="progress"
+      :key="progress.Id"
+    ></ProgressBarBG>
   </div>
 </template>
 <script>
+import commonJs from "@/scripts/common";
+import Enum from "@/scripts/enum";
+import ProgressBarBG from "./ProgressBarBGItem.vue";
+import ProgressBarNoBG from "./ProgressBarNoBgItem.vue";
 export default {
   name: "ProgressBar",
-  props: {
-    value: {
-      type: Number,
-      default: 0,
-      required: false,
+  components: { ProgressBarBG, ProgressBarNoBG },
+  props: ["processList"],
+  emits: [],
+  created() {
+    this.progressBGs = this.processList.filter((e) => e.RunBackground == true);
+    this.progressNotBGs = this.processList.filter((e) => !e.RunBackground);
+  },
+  watch: {
+    processList: function (newValue) {
+      this.progressBGs = newValue.filter((e) => e.RunBackground == true);
+      this.progressNotBGs = this.processList.filter((e) => !e.RunBackground);
     },
-    max: {
-      type: Number,
-      default: 0,
-      required: false,
+    runBackground: function (newValue) {
+      if (newValue == true) {
+        commonJs.showMessenger({
+          title: "Thông báo",
+          msg: "Quá trình sẽ tiếp tục được xử lý trong ít phút. Hệ thống sẽ thông báo cho bạn khi hoàn thành.",
+          type: Enum.MsgType.Info,
+          showCancelButton: false,
+        });
+      }
     },
-    message: {
-      type: String,
-      default: null,
-      required: false,
+    value: function (newValue) {
+      if (newValue == this.max) {
+        commonJs.showToast("Đã hoàn thành", Enum.MsgType.Success);
+      }
     },
   },
-  emits: [],
-  created() {},
   methods: {},
   data() {
-    return {};
+    return {
+      progressNotBGs: [],
+      progressBGs: [],
+    };
   },
 };
 </script>
@@ -47,27 +71,24 @@ export default {
   background-color: #00000065;
   z-index: 11510;
   display: flex;
+  flex-direction: column;
   align-items: center;
   justify-content: center;
 }
 
-.progressbar__content {
+.progressbar-bg {
+  position: fixed;
+  bottom: 8px;
+  right: 8px;
+  z-index: 11510;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+}
+
+.loading-progressbar{
   position: relative;
-  top: 30px;
-  color: #fff;
 }
 
-.progressbar__info {
-  position: absolute;
-  top: 50%;
-  left: 50%;
-  transform: translate(-50%, -50%);
-  white-space: nowrap;
-}
-
-progress {
-  height: 30px;
-  width: 200px;
-  border-radius: 0;
-}
 </style>

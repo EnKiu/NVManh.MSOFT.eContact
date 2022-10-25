@@ -30,11 +30,11 @@ namespace MS.Infrastructure.UnitOfWork
         public virtual async Task<IReadOnlyList<T>> GetAllAsync<T>()
         {
             var tableName = GetTableName<T>();
-            var data = await Connection.QueryAsync<T>($"select * from {tableName}");
+            var data = await Connection.QueryAsync<T>($"select * from {tableName}", transaction: Transaction);
             return data.ToList();
         }
 
-        public virtual async Task<T> GetByIdAsync<T>(Guid id)
+        public virtual async Task<T> GetByIdAsync<T>(string id)
         {
             var tableName = GetTableName<T>();
             var propKeyName = GetPrimaryKeyName<T>();
@@ -42,7 +42,7 @@ namespace MS.Infrastructure.UnitOfWork
             var sqlCommand = $"SELECT * FROM {tableName} WHERE {propKeyName} = @Id";
             var parameters = new DynamicParameters();
             parameters.Add($"@Id", id);
-            var entity = await Connection.QueryFirstOrDefaultAsync<T>(sqlCommand, param: parameters);
+            var entity = await Connection.QueryFirstOrDefaultAsync<T>(sqlCommand, param: parameters,transaction: Transaction);
             return entity;
         }
 

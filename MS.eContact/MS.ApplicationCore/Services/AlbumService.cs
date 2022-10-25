@@ -62,6 +62,13 @@ namespace MS.ApplicationCore.Services
                 var userId = _commonFunction.GetCurrentUserId();
                 var connections = NotificationHub._connections;
                 var isFinish = false;
+                var timeStart = DateTime.Now;
+                double totalTimes = 0;
+                var progressInfo = new
+                {
+                    Id = entity.AlbumId,
+                    Name = entity.AlbumName
+                };
                 for (int i = 0; i < files.Count; i++)
                 {
                     if (i == files.Count() - 1)
@@ -74,7 +81,8 @@ namespace MS.ApplicationCore.Services
                     //await _notificationHub.Clients.All.SendAsync("ShowPecentUpload", i + 1, totalFiles, userId);
                     foreach (var connectionId in connections.GetConnections(userId))
                     {
-                        await _notificationHub.Clients.Client(connectionId).SendAsync("ShowPecentUpload", i + 1, totalFiles, isFinish);
+                        totalTimes = (DateTime.Now - timeStart).TotalSeconds;
+                        await _notificationHub.Clients.Client(connectionId).SendAsync("ShowPecentUpload", i + 1, totalFiles, isFinish, totalTimes, progressInfo);
                     }
                 }
                 _unitOfWork.Commit();
@@ -89,12 +97,20 @@ namespace MS.ApplicationCore.Services
             // Lấy toàn bộ thông tin ảnh có trong album:
             UnitOfWork.BeginTransaction();
             var pictures = await UnitOfWork.Albums.GetPicturesByAlbumId(albumId);
+            var album = await UnitOfWork.Albums.FindAsync(albumId);
             await base.RemoveAsync(key);
             var count = 1;
             var totalFiles = pictures.Count();
             var userId = _commonFunction.GetCurrentUserId();
             var connections = NotificationHub._connections;
             var isFinish = false;
+            var timeStart = DateTime.Now;
+            double totalTimes = 0;
+            var progressInfo = new
+            {
+                Id = albumId,
+                Name = album.AlbumName
+            };
             foreach (var pic in pictures)
             {
                 if (count == pictures.Count())
@@ -102,11 +118,17 @@ namespace MS.ApplicationCore.Services
                 _ = _fileTransfer.DeleteFile(pic.UrlPath);
                 foreach (var connectionId in connections.GetConnections(userId))
                 {
-                    await _notificationHub.Clients.Client(connectionId).SendAsync("ShowPecentDeleted", count, totalFiles, isFinish);
+                    totalTimes = (DateTime.Now - timeStart).TotalSeconds;
+                    await _notificationHub.Clients.Client(connectionId).SendAsync("ShowPecentDeleted", count, totalFiles, isFinish, totalTimes, progressInfo);
                 }
                 count++;
             }
             _ = _fileTransfer.RemoveFolderInFileServer($"pictures/{albumId.ToString()}");
+            foreach (var connectionId in connections.GetConnections(userId))
+            {
+                totalTimes = (DateTime.Now - timeStart).TotalSeconds;
+                await _notificationHub.Clients.Client(connectionId).SendAsync("ShowPecentDeleted", count, totalFiles, isFinish, totalTimes, progressInfo);
+            }
             UnitOfWork.Commit();
             //Thực hiện xóa ảnh từ service files
         }

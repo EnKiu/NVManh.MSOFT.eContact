@@ -62,12 +62,16 @@
       </div>
     </div>
     <div class="event-info event__place">
-      <div class="event__label"><i class="icofont-ui-map"></i> Địa điểm:</div>
+      <div class="event__label"><i class="icofont-google-map"></i> Địa điểm:</div>
       <div class="event__text">{{ item.EventPlace }}</div>
     </div>
     <div class="event-info event__spend">
-      <div class="event__label"><i class="icofont-money"></i> Kinh phí:</div>
+      <div class="event__label"><i class="icofont-money-bag"></i> Kinh phí:</div>
       <div class="event__text">{{ moneyFormat }}</div>
+    </div>
+    <div class="event-info event__spendtotals">
+      <div class="event__label"><i class="icofont-money"></i> Kinh phí đã thu:</div>
+      <div class="event__text"><b>{{ moneyTotalFormat }}</b></div>
     </div>
     <div class="event-info event__content">
       <button class="link--show-content" @click="onShowContentDetail">
@@ -121,6 +125,9 @@ export default {
     },
     moneyFormat: function () {
       return this.commonJs.formatMoney(this.item.Spends);
+    },
+    moneyTotalFormat: function () {
+      return this.commonJs.formatMoney(this.item.SpendsTotal);
     },
     calculatorTimeLeft: function () {
       var startTime = new Date(this.item.StartTime);

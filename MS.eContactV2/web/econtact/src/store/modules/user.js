@@ -1,4 +1,5 @@
 import { USER_REQUEST, USER_ERROR, USER_SUCCESS } from "../actions/user";
+import { CREATE_CONNECTION } from "../actions/signalR";
 import apiCall from "../../utils/api";
 // import { createApp } from 'vue'
 import { AUTH_LOGOUT } from "../actions/auth";
@@ -45,6 +46,9 @@ const actions = {
                     localStorage.setItem("lastName", resp.LastName);
                     localStorage.setItem("fullName", resp.FullName);
                     localStorage.setItem("contactId", resp.ContactId);
+
+                    // Tạo kết nối signalR:
+                    dispatch(CREATE_CONNECTION);
                     commit(USER_SUCCESS, resp);
                     resolve(resp);
                 })

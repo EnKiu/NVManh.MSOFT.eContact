@@ -14,7 +14,7 @@ const ifNotAuthenticated = (to, from, next) => {
         next();
         return;
     }
-    next("/");
+    next("/contacts");
 };
 
 const ifAuthenticated = (to, from, next) => {

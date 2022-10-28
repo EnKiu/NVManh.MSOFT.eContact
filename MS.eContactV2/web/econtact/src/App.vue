@@ -1,14 +1,16 @@
 <template>
   <the-header
+    v-if="isAuthenticated"
     :isAuthenticated="isAuthenticated"
     :isProfileLoaded="isProfileLoaded"
+    :hubConnection="hubConnection"
   ></the-header>
   <the-main></the-main>
   <router-view name="LoginPage"></router-view>
   <router-view class="register" name="Register"></router-view>
+  <router-view name="HomePage"></router-view>
   <MLoading v-if="isShowLoading" />
   <MLoading v-if="connectingHub" />
-  <router-view name="HomePage"></router-view>
   <!-- <home-page v-if="!isAuthenticated && showHomePage" v-model:showHomePage="showHomePage"></home-page> -->
   <!-- <MLoading /> -->
   <MDialogNotification
@@ -69,6 +71,7 @@ export default {
       "msgToastType",
       "isShowProgressBar",
       "processList",
+      "hubConnection"
     ]),
     ...mapState({
       authLoading: (state) => state.auth.status === "loading",
@@ -100,7 +103,6 @@ export default {
     return {
       showHomePage: false,
       showNew: true,
-      hubConnection: null,
       progressing: false,
     };
   },

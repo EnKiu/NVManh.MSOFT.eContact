@@ -97,5 +97,12 @@ namespace MS.ApplicationCore.Interfaces
         /// </summary>
         /// <returns>Danh sách Roles trong hệ thống</returns>
         Task<IEnumerable<Role>> GetRoles();
+
+        /// <summary>
+        /// Lấy thông tin lớp (sĩ số; tiền quỹ)
+        /// </summary>
+        /// <param name="id"></param>
+        /// <returns></returns>
+        Task<ClassInfo> GetClassInfoById(string id);
     }
 }

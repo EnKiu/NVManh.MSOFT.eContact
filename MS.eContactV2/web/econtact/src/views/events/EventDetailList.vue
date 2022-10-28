@@ -38,9 +38,34 @@
               <template #default="scope">
                 <div class="cell__row">{{ scope.row.FullName }}</div>
                 <div
-                  v-if="scope.row.NumberAccompanying > 0 || scope.row.Note"
+                  v-if="
+                    !expireTime ||
+                    scope.row.NumberAccompanying > 0 ||
+                    scope.row.Note
+                  "
                   class="cell__row --mini"
                 >
+                  <div v-if="scope.row.SpendsTotal > 0" style="color: #00b87a">
+                    + Nộp quỹ:
+                    {{ commonJs.formatMoney(scope.row.SpendsTotal) }}
+                    <button
+                      id="btnRemoveSpend"
+                      title="Hủy nộp tiền"
+                      @click="onRemoveSpends(scope.row)"
+                    >
+                      <i class="icofont-ui-close"></i>
+                    </button>
+                  </div>
+                  <div v-else style="color: #ff0000">
+                    - Chưa đóng quỹ.
+                    <button
+                      id="btnAddMoney"
+                      title="Nộp tiền"
+                      @click="onAddMoney(scope.row)"
+                    >
+                      <i class="icofont-ui-add"></i>
+                    </button>
+                  </div>
                   <div v-if="scope.row.NumberAccompanying > 0">
                     - Đi kèm: {{ scope.row.NumberAccompanying }}
                   </div>
@@ -60,9 +85,15 @@
                 </div>
               </template>
             </m-column>
-            <m-column v-if="!expireTime && isAdmin" label="Hủy đăng ký" width="120">
+            <m-column
+              v-if="!expireTime && isAdmin"
+              label="Hủy đăng ký"
+              width="120"
+            >
               <template #header>
-                <button class="btn btn--default" @click="onRegister">Đăng ký thêm</button>
+                <button class="btn btn--default" @click="onRegister">
+                  Đăng ký thêm
+                </button>
               </template>
               <template #default="scope">
                 <button
@@ -79,7 +110,7 @@
       </div>
     </template>
     <template v-slot:footer>
-      <button class="btn btn--default" @click="onClose">
+      <button class="btn btn--default dialog__button--cancel" @click="onClose">
         <i class="icofont-ui-close"></i> Đóng
       </button>
     </template>
@@ -89,13 +120,48 @@
     v-model:comment="commentSelected"
     :fullName="fullNameComment"
   ></event-comment>
+  <m-dialog
+    title="Nộp tiền"
+    v-if="showAddMoneyForm"
+    @onClose="showAddMoneyForm = false"
+  >
+    <template v-slot:content>
+      <div class="add-money">
+        <m-input
+          label="Thành viên nộp tiền"
+          :disabled="true"
+          v-model="registerForUpdate.FullName"
+        ></m-input>
+        <m-input
+          label="Số tiền"
+          :isFocus="true"
+          :required="true"
+          class="mg-bottom-0"
+          type="number"
+          v-model="registerForUpdate.SpendsTotal"
+        ></m-input>
+        <div style="text-align: right">
+          <b>{{ moneyFormat }}</b>
+        </div>
+      </div>
+    </template>
+    <template v-slot:footer>
+      <button class="btn btn--default" @click="onSaveEventDetail">
+        <i class="icofont-ui-check"></i> Nộp tiền
+      </button>
+    </template>
+  </m-dialog>
 </template>
 <script>
 import EventComment from "./EventComment.vue";
 export default {
   name: "EventDetail",
   components: { EventComment },
-  emits: ["onCloseDetail", "onRegisterFromDetail", "afterCancelRegisterSuccess"],
+  emits: [
+    "onCloseDetail",
+    "onRegisterFromDetail",
+    "afterCancelRegisterSuccess",
+  ],
   props: ["eventItem", "isAdmin"],
   created() {
     var registerDate = new Date(this.eventItem.ExpireRegisterDate);
@@ -105,6 +171,11 @@ export default {
     this.eventDetail = this.eventItem;
     this.loadRegisters();
   },
+  computed: {
+    moneyFormat: function () {
+      return this.commonJs.formatMoney(this.registerForUpdate.SpendsTotal);
+    },
+  },
   methods: {
     loadRegisters() {
       // Lấy danh sách đăng ký:
@@ -113,6 +184,30 @@ export default {
         method: "GET",
       }).then((res) => {
         this.registers = res;
+      });
+    },
+    onAddMoney(register) {
+      this.registerForUpdate = register;
+      this.registerForUpdate.SpendsTotal = this.eventItem.Spends;
+      this.showAddMoneyForm = true;
+    },
+    onRemoveSpends(register) {
+      this.commonJs.showConfirm(
+        `Bạn chắc chắn muốn xóa <b>${register.LastName}</b> khỏi danh sách đã nộp tiền?`,
+        () => {
+          this.registerForUpdate = register;
+          this.registerForUpdate.SpendsTotal = 0;
+          this.onSaveEventDetail();
+        }
+      );
+    },
+    onSaveEventDetail() {
+      this.api({
+        url: "/api/v1/EventDetails/" + this.eventItem.EventId,
+        method: "PUT",
+        data: this.registerForUpdate,
+      }).then(() => {
+        this.showAddMoneyForm = false;
       });
     },
     onClose() {
@@ -145,6 +240,8 @@ export default {
     return {
       registers: [],
       eventDetail: {},
+      registerForUpdate: {},
+      showAddMoneyForm: false,
       commentSelected: null,
       fullNameComment: null,
       expireTime: false,
@@ -153,6 +250,16 @@ export default {
 };
 </script>
 <style scoped>
+div.add-money .input-wrapper:first-child {
+  margin-top: 0px;
+}
+
+.mg-bottom-0 {
+  margin-bottom: 4px !important;
+}
+div.add-money .input-wrapper:last-child {
+  margin-bottom: 0px;
+}
 .register__header {
   border: 1px solid #dedede;
   border-radius: 4px;
@@ -192,6 +299,8 @@ export default {
 
 .--mini {
   font-size: 11px;
+  background-color: #cdddf7;
+  padding: 2px;
 }
 
 .el-table__header button {
@@ -200,5 +309,18 @@ export default {
 
 .el-table__row .cell {
   padding: 10px 0 !important;
+}
+
+#btnAddMoney,
+#btnRemoveSpend {
+  color: #00b87a;
+  border: unset;
+  background: none;
+  font-size: 13px;
+  cursor: pointer;
+}
+
+#btnRemoveSpend {
+  color: #ff0000;
 }
 </style>

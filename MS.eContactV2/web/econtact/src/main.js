@@ -40,7 +40,8 @@ app.component("MColumn", ElTableColumn);
 app.config.globalProperties.commonJs = commonJs;
 app.config.globalProperties.api = api;
 app.config.globalProperties.Enum = Enum;
-app.config.globalProperties.hubConnection = commonJs.createHubConnection();
+// app.config.globalProperties.hubConnection = commonJs.createHubConnection();
+app.config.globalProperties.hubConnection = store.getters.hubConnection;
 document.addEventListener("DOMContentLoaded", function() {
     var elements = document.getElementsByTagName("INPUT");
     for (var i = 0; i < elements.length; i++) {

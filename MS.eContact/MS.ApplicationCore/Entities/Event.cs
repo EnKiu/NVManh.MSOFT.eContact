@@ -57,5 +57,8 @@ namespace MS.ApplicationCore.Entities
         [NotMapQuery]
         public bool? NotRegisted { get; set; }
 
+        [NotMapQuery]
+        public decimal? SpendsTotal { get; set; }
+
     }
 }

@@ -255,5 +255,14 @@ namespace MS.Infrastructure.Data
             var userName = await DbContext.Connection.QueryFirstOrDefaultAsync<string>(sql, param: parameters, transaction: DbContext.Transaction);
             return userName;
         }
+
+        public async Task<ClassInfo> GetClassInfoById(string id)
+        {
+            var sql = "Proc_GetClass_Info";
+            DynamicParameters parameters = new DynamicParameters();
+            parameters.Add("@UserId", id);
+            var result = await DbContext.Connection.QueryFirstOrDefaultAsync<ClassInfo>(sql, param: parameters, transaction: DbContext.Transaction,commandType:System.Data.CommandType.StoredProcedure);
+            return result;
+        }
     }
 }

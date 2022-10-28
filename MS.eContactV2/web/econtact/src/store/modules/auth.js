@@ -22,6 +22,7 @@ const getters = {
 const actions = {
     [AUTH_REQUEST]: ({ commit, dispatch }, user) => {
         return new Promise((resolve, reject) => {
+            console.log("AUTH_REQUEST");
             commit(AUTH_REQUEST);
             apiCall({ url: "/api/v1/Accounts/login", data: user, method: "POST" })
                 .then(resp => {

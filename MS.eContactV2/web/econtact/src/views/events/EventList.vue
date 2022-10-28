@@ -95,7 +95,6 @@ export default {
       this.detailFormMode = null;
     },
     onShowList(event) {
-      console.log(event);
       this.eventDetailSelected = event;
       this.showDetailList = true;
     },

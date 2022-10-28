@@ -29,8 +29,11 @@ namespace MS.eContact.Core
             var userId = Context.User?.Claims?.First(x => x.Type == "id").Value;
             Console.WriteLine(userId);
             if (userId != null)
+            {
                 _connections.Add(userId, Context.ConnectionId);
-
+                var classInfo = await _unitOfWork.Users.GetClassInfoById(userId);
+                await Clients.All.SendAsync("UpdateClassInfo", classInfo);
+            }
             //await Clients.Caller.SendAsync("ReceiveNotification", notifications, Context.ConnectionId);
             await Clients.All.SendAsync("ShowAlertWhenOnline", userName);
         }

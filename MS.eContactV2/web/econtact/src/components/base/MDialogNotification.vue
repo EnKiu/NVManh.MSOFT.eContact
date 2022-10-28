@@ -25,8 +25,7 @@
           <div class="dialog__text">
             <ul :class="{ 'dialog__text--single': arrayMsgs.length == 1 }">
               <li v-for="(item, index) in arrayMsgs" :key="index" class="text__item">
-                <span>
-                  {{ item }}
+                <span v-html="item">
                 </span>
               </li>
             </ul>

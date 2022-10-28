@@ -20,7 +20,7 @@ module.exports = defineConfig({
     pages: {
         index: {
             // entry for the page
-            entry: 'src/main.js',
+            entry: 'src/main.js?v=1',
             // the source template
             template: 'public/index.html',
             // output as dist/index.html

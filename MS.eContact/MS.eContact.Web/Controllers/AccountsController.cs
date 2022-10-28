@@ -51,7 +51,7 @@ namespace MS.eContact.Web.Controllers
         [Route("login")]
         public async Task<IActionResult> Login([FromBody] LoginModel model)
         {
-            var userInfo = await _repository.GetUserAuthenticate(model.Username, _jwtUntils.HashPassword(model.Password));
+            var userInfo = await _unitOfWork.Users.GetUserAuthenticate(model.Username, _jwtUntils.HashPassword(model.Password));
             if (userInfo != null)
             {
 
@@ -76,6 +76,7 @@ namespace MS.eContact.Web.Controllers
                     authenticateResponse.RoleName = role.RoleName;
                 }
 
+                // Lấy thông tin lớp báo cho các client:
 
                 return Ok(authenticateResponse);
             }

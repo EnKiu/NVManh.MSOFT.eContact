@@ -1,6 +1,6 @@
 <template>
-  <div class="page-title" style="">
-    Website nội bộ cựu học sinh A1 (2004-2007) - trường thpt tứ sơn
+  <div class="page-title animate-charcter" style="">
+    Cựu học sinh A1 (2004-2007) - trường thpt tứ sơn
   </div>
   <nav class="navbar">
     <div class="logo"></div>
@@ -27,7 +27,9 @@
         <div
           class="navbar-item__avatar"
           :style="{
-            'background-image': `url(${account.AvatarFullPath || 'avatar.png'})`,
+            'background-image': `url(${
+              account.AvatarFullPath || 'avatar.png'
+            })`,
           }"
         ></div>
         <span>{{ account.LastName }}</span>
@@ -35,17 +37,29 @@
           <router-link to="/account" class="option-item"
             ><i class="icofont-info-circle"></i> Thông tin</router-link
           >
-          <div class="option-item"><i class="icofont-key"></i> Đổi mật khẩu</div>
+          <div class="option-item">
+            <i class="icofont-key"></i> Đổi mật khẩu
+          </div>
           <div class="option-item" @click="logOut">
             <i class="icofont-sign-out"></i> Đăng xuất
           </div>
         </div>
       </a>
       <router-link v-else to="/login" class="navbar-item">
-        <span class="navbar-item__text"><i class="icofont-login"></i> Đăng nhập</span>
+        <span class="navbar-item__text"
+          ><i class="icofont-login"></i> Đăng nhập</span
+        >
       </router-link>
     </div>
   </nav>
+  <div class="class-info">
+    <div class="info-item">Sĩ số: {{ classInfo.totalMembers }}</div>
+    <div class="info-item">
+      <span class="flipX"
+        >Quỹ lớp: {{ commonJs.formatMoney(classInfo.totalMoneys) }}</span
+      >
+    </div>
+  </div>
 </template>
 <script>
 /* eslint-disable */
@@ -84,7 +98,7 @@ export default {
   directives: {
     clickoutside,
   },
-  props: ["isAuthenticated", "isProfileLoaded"],
+  props: ["isAuthenticated", "isProfileLoaded", "hubConnection"],
   created() {
     if (this.isAuthenticated) {
       this.account.AvatarFullPath = localStorage.getItem("avatar");
@@ -97,6 +111,20 @@ export default {
         this.account.AvatarFullPath = localStorage.getItem("avatar");
         this.account.LastName = localStorage.getItem("lastName");
       }
+    },
+    hubConnection: {
+      handler: function (newValue) {
+        console.log(newValue);
+        if (newValue) {
+          this.hubConnection.on("UpdateClassInfo", (classInfo) => {
+            console.log(classInfo);
+            this.classInfo = classInfo;
+          });
+        } else {
+          this.hubConnection.off("UpdateClassInfo");
+        }
+      },
+      deep:true
     },
   },
   methods: {
@@ -111,6 +139,7 @@ export default {
     return {
       account: { AvatarFullPath: null },
       showAccountOption: false,
+      classInfo: {},
     };
   },
 };
@@ -121,8 +150,9 @@ export default {
   position: fixed;
   top: 0;
   width: 100%;
-  height: 40px;
+  height: 20px;
   display: flex;
+  flex-direction: column;
   align-items: center;
   justify-content: center;
   background-color: black;
@@ -133,7 +163,7 @@ export default {
 }
 .navbar {
   position: fixed;
-  top: 40px;
+  top: 20px;
   width: 100%;
   display: flex;
   align-items: center;
@@ -207,6 +237,21 @@ export default {
   background-color: #4a4a4a;
 }
 
+.class-info {
+  height: 25px;
+  width: 100%;
+  top: 60px;
+  position: fixed;
+  background-color: #fffb02;
+  display: flex;
+  align-items: center;
+  font-weight: 700;
+  padding: 0 24px;
+}
+
+.info-item + .info-item {
+  margin-left: 10px;
+}
 @media screen and (max-width: 411px) {
   /* .item__text-label{
     display: none;

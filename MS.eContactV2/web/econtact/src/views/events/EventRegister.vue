@@ -125,7 +125,6 @@ export default {
       fetch(baseUrl + "/api/v1/events/contact-no-register?eventId=" + 1)
         .then((res) => res.json())
         .then((res) => {
-          console.log(res);
           this.contacts = res;
         })
         .catch((res) => console.log(res));

@@ -7,7 +7,7 @@ import { AUTH_REQUEST } from "@/store/actions/auth";
 import { CLEAR_ERROR_MSG, SET_ERROR_MSG } from '@/store/actions/notification.js';
 import { SHOW_LOADING, HIDE_LOADING } from '@/store/actions/loading.js';
 import { CLEAR_TOAST, SET_TOAST } from '@/store/actions/toast.js';
-import { SET_CONNECTING_HUB } from "@/store/actions/signalR";
+import { SET_CONNECTING_HUB, SET_NEW_HUB_CONNECTION } from "@/store/actions/signalR";
 import { HIDE_PROGRESS, SHOW_PROGRESS } from "@/store/actions/progressbar";
 const commonJs = {
     login: function(username, password) {
@@ -34,26 +34,27 @@ const commonJs = {
                 commonJs.hideLoading();
             });
     },
+    /**
+     * Kết nối với signalR
+     * @returns hubConnection
+     */
     createHubConnection() {
         var hubConnection = webSocket.createHub();
-        commonJs.showConnectingHub();
-        hubConnection
-            .start()
-            .then(() => {
-                console.log("Đã kết nối tới Hub...");
-                commonJs.hideConnectingHub();
-            })
-            .catch((err) => {
-                console.error(err);
-                commonJs.hideConnectingHub();
-            });
+        hubConnection.on("UpdateClassInfo", (classInfo) => {
+            // state.classInfo = classInfo;
+            store.dispatch("UPDATE_CLASS_INFO", classInfo);
+        })
+
 
         hubConnection.on("ReceiveNotificationWhenDisconnected", (username) => {
             console.log(`${username} đã ngắt kết nối!`);
         })
+
+
         hubConnection.on("ShowAlertWhenOnline", (username) => {
             console.log(`${username} đã kết nối!`);
         })
+
 
         hubConnection.on("ShowPecentUpload", (currentFileUpload, totalFileUpload, isFinish, totalTimes, progressInfo) => {
             // Ẩn loading nếu có:
@@ -100,7 +101,22 @@ const commonJs = {
                 }, 500)
             }
         });
-
+        if (store.getters.isAuthenticated) {
+            commonJs.showConnectingHub();
+            hubConnection
+                .start()
+                .then(() => {
+                    console.log("Đã kết nối tới Hub...");
+                    // Cập nhật store:
+                    store.dispatch(SET_NEW_HUB_CONNECTION, hubConnection);
+                    // hubConnection.invoke("GetClassInfo");
+                    commonJs.hideConnectingHub();
+                })
+                .catch((err) => {
+                    console.error(err);
+                    commonJs.hideConnectingHub();
+                });
+        }
         return hubConnection;
     },
     change_alias: function(alias) {

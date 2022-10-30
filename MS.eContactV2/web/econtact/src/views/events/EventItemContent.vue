@@ -4,12 +4,13 @@
       <button class="dialog-content__button" @click="onClose">
         <i class="icofont-close"></i>
       </button>
-      <div class="event__title">{{eventSelected.EventName}}</div>
-      <div class="event__text"
+      <div class="event__title">{{ eventSelected.EventName }}</div>
+      <div
+        class="event__text"
         v-if="eventSelected.EventContent && eventSelected.EventContent.trim() != ''"
         v-html="eventSelected.EventContent"
       ></div>
-      
+
       <div v-else>(Trống)</div>
       <div class="event__footer">
         <button class="btn btn--default" @click="onClose">Đóng</button>
@@ -22,9 +23,7 @@ export default {
   name: "EventItemContent",
   props: ["eventSelected"],
   emits: ["onCloseEventDetailContent"],
-  created() {
-    console.log(this.eventSelected);
-  },
+  created() {},
   methods: {
     onClose() {
       this.$emit("onCloseEventDetailContent");
@@ -36,23 +35,23 @@ export default {
 };
 </script>
 <style scoped>
-.event__title{
-    font-weight: 700;
-    font-size: 16px;
-    border-bottom: 1px solid #dedede;
-    margin-bottom: 10px;
+.event__title {
+  font-weight: 700;
+  font-size: 16px;
+  border-bottom: 1px solid #dedede;
+  margin-bottom: 10px;
 }
 
-.event__text{
-    max-height:calc(100vh - 150px);
-    overflow-y: auto;
+.event__text {
+  max-height: calc(100vh - 150px);
+  overflow-y: auto;
 }
 
-.event__footer{
-    display: flex;
-    align-items: center;
-    justify-content: flex-end;
-    margin-top: 10px;
+.event__footer {
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  margin-top: 10px;
 }
 .content-dialog {
   position: fixed;
@@ -64,7 +63,7 @@ export default {
   display: flex;
   align-items: center;
   justify-content: center;
-  z-index:999;
+  z-index: 999;
 }
 .content-dialog .event-content {
   position: relative;

@@ -201,7 +201,6 @@ export default {
     },
     onCancel() {
       this.$emit("update:formMode", this.Enum.FormMode.VIEW);
-      console.log(this.contactInput);
       this.contact = JSON.parse(this.originalContact);
     },
     onClose() {

@@ -90,7 +90,6 @@ export default {
     ...mapGetters(["processList"]),
   },
   created() {
-    console.log(this.processList);
     this.loadAlbum();
     var roleValue = localStorage.getItem("userRoleValue");
     if (roleValue == 1) {
@@ -129,6 +128,7 @@ export default {
       }
     );
   },
+  mounted() {},
   methods: {
     onAddNewAlbum() {
       this.showAddNew = true;

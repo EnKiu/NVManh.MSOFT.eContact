@@ -5,12 +5,13 @@ using System;
 using MS.ApplicationCore.DTOs;
 using MS.ApplicationCore.Interfaces;
 using Microsoft.AspNetCore.SignalR;
-using Microsoft.AspNetCore.Authorization;
+using MS.ApplicationCore.Entities.Auth;
+using MS.ApplicationCore.Authorization;
 
 namespace MS.eContact.Core
 {
     [Authorize]
-    public class NotificationHub: Hub, INotificationHub
+    public class NotificationHub : Hub, INotificationHub
     {
         readonly IUnitOfWork _unitOfWork;
         public NotificationHub(IUnitOfWork unitOfWork)
@@ -31,11 +32,25 @@ namespace MS.eContact.Core
             if (userId != null)
             {
                 _connections.Add(userId, Context.ConnectionId);
-                var classInfo = await _unitOfWork.Users.GetClassInfoById(userId);
-                await Clients.All.SendAsync("UpdateClassInfo", classInfo);
+
             }
             //await Clients.Caller.SendAsync("ReceiveNotification", notifications, Context.ConnectionId);
             await Clients.All.SendAsync("ShowAlertWhenOnline", userName);
+        }
+
+        /// <summary>
+        /// Lấy thông tin lớp
+        /// </summary>
+        /// <returns></returns>
+        public async Task GetClassInfo()
+        {
+            var userId = Context.User?.Claims?.First(x => x.Type == "id").Value;
+            if (userId != null)
+            {
+                _connections.Add(userId, Context.ConnectionId);
+                var classInfo = await _unitOfWork.Users.GetClassInfoById(userId);
+                await Clients.All.SendAsync("UpdateClassInfo", classInfo);
+            }
         }
 
         /// <summary>
@@ -46,18 +61,19 @@ namespace MS.eContact.Core
         public override async Task OnDisconnectedAsync(Exception? exception)
         {
             var userName = Context.User?.Identity?.Name;
-            if (userName != null)
+            var userId = Context.User?.Claims?.First(x => x.Type == "id").Value;
+            if (userId != null)
             {
-                _connections.Remove(userName, Context.ConnectionId);
+                _connections.Remove(userId, Context.ConnectionId);
             }
 
-            await Clients.All.SendAsync("ReceiveNotificationWhenDisconnected", Context.User?.Identity?.Name);
+            await Clients.All.SendAsync("ReceiveNotificationWhenDisconnected", userName);
         }
 
         public async Task RemoveConnection()
         {
-            var userName = Context.User?.Identity?.Name;
-            _connections.Remove(userName, Context.ConnectionId);
+            var userId = Context.User?.Claims?.First(x => x.Type == "id").Value;
+            _connections.Remove(userId, Context.ConnectionId);
         }
         /// <summary>
         /// Gửi tin nhắn tới tất cả mọi người

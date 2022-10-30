@@ -104,7 +104,6 @@ export default {
     },
     onCancelRegister(currentEvent) {
       // Hỏi:
-      console.log(currentEvent);
       var eventId = currentEvent.EventId;
       this.commonJs.showConfirm(
         "Bạn có chắc chắn muốn hủy tham gia sự kiện này không?",
@@ -112,8 +111,7 @@ export default {
           this.api({
             url: "/api/v1/events/register?eventId=" + eventId,
             method: "DELETE",
-          }).then((res) => {
-            console.log(res);
+          }).then(() => {
             this.loadData();
           });
         }
@@ -146,7 +144,6 @@ export default {
       });
     },
     onEditEvent(event) {
-      console.log(event);
       this.eventDetailSelected = event;
       this.detailFormMode = Enum.FormMode.UPDATE;
       this.showDetail = true;

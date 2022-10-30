@@ -95,7 +95,6 @@ export default {
       this.commonJs.login(this.user.UserName, this.user.Password);
     },
     onBlurPhoneInput() {
-      console.log("onBlurPhoneInput");
       // Kiểm tra thông tin số điện thoại đã được đăng ký hoặc khớp với thành viên nào trong hệ thống:
       // var userName = this.user.UserName;
       // if (userName) {

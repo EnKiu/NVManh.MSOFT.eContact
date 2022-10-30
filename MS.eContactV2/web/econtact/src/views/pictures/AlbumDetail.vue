@@ -7,29 +7,35 @@
     <div class="album__total-view">Lượt xem: {{ album.TotalViews }}</div>
     <div class="pictures">
       <div class="picture-item" v-for="(pic, index) in pictures" :key="index">
-        <div v-show="!isloading" class="picture__total-views"><i class="icofont-eye-alt"></i> {{pic.TotalViews}}</div>
+        <div v-show="!isloading" class="picture__total-views">
+          <i class="icofont-eye-alt"></i> {{ pic.TotalViews }}
+        </div>
         <div class="picture__img" @click="onShowTranslation(index, pic)">
           <img :src="pic.UrlFullPath" alt="" />
         </div>
         <div class="picture__description">{{ pic.Description }}</div>
       </div>
     </div>
-    <button
-      id="btn-close"
-      class="btn dialog__button--cancel"
-      @click="onCloseAlbumDetail"
-    >
+    <button id="btn-close" class="btn dialog__button--cancel" @click="onCloseAlbumDetail">
       <i class="icofont-close" @click="onCloseAlbumDetail"></i> Đóng lại
     </button>
     <div v-if="showTransition" class="picture-transition">
       <div class="transition-container">
-        <div v-show="!isloading" class="picture__total-views"><i class="icofont-eye-alt"></i> {{picturesTotalViews}}</div>
+        <div v-show="!isloading" class="picture__total-views">
+          <i class="icofont-eye-alt"></i> {{ picturesTotalViews }}
+        </div>
         <button class="close-album" @click="onCloseTransition">
           <i class="icofont-ui-close"></i>
         </button>
         <transition name="slide-fade">
           <!-- 			SRC comes from the array of images the :key is important for vue to believe its a 'new' DOM element and do the transition -->
-          <img v-bind:src="urlPath" v-bind:key="currentIndex"  @touchstart="pictureTouchStart" @touchend="pictureTouchEnd" @touchmove="touchMoveImg"/>
+          <img
+            v-bind:src="urlPath"
+            v-bind:key="currentIndex"
+            @touchstart="pictureTouchStart"
+            @touchend="pictureTouchEnd"
+            @touchmove="touchMoveImg"
+          />
         </transition>
         <div
           v-if="currentIndex > 0"
@@ -72,13 +78,13 @@ export default {
         return this.pictures[this.currentIndex].UrlFullPath;
       }
     },
-    picturesTotalViews:function(){
+    picturesTotalViews: function () {
       if (!this.pictures || this.pictures.length == 0) {
         return 0;
       } else {
         return this.pictures[this.currentIndex].TotalViews;
       }
-    }
+    },
   },
   methods: {
     async loadPictures() {
@@ -86,7 +92,6 @@ export default {
       await this.api({
         url: "/api/v1/Albums/" + this.album.AlbumId,
       }).then((res) => {
-        console.log(res);
         this.pictures = res;
         this.isloading = false;
       });
@@ -96,19 +101,18 @@ export default {
       await this.api({
         url: "/api/v1/Albums/" + this.album.AlbumId + "/total-views",
         method: "PUT",
-        showToast: false
-      }).then((res) => {
-        console.log(res);
+        showToast: false,
+      }).then(() => {
         this.$emit("update:totalViews", this.album.TotalViews + 1);
         this.isloading = false;
       });
     },
-    updatePictureTotalViews(pic){
+    updatePictureTotalViews(pic) {
       this.isloading = true;
       this.api({
         url: "/api/v1/Pictures/" + pic.PictureId + "/total-views",
         method: "PUT",
-        showToast: false
+        showToast: false,
       }).then(() => {
         pic.TotalViews++;
         this.pictureTransition = pic;
@@ -123,7 +127,6 @@ export default {
       event.preventDefault();
     },
     onShowTranslation(index, pic) {
-      console.log(index);
       this.showTransition = true;
       this.currentIndex = index;
       // Cập nhật lượt xem:
@@ -143,19 +146,18 @@ export default {
     // pictureTouchEnd(){
     //   console.log("pictureTouchEnd",event);
     // },
-    touchMoveImg(){
-      var touch = event.targetTouches[0];
-      console.log("pageX",touch.pageX<touch.screenX);
-    }
+    touchMoveImg() {
+      // var touch = event.targetTouches[0];
+    },
   },
   data() {
     return {
-      touchPosition:null,
+      touchPosition: null,
       pictures: [],
       pictureTransition: null,
       showTransition: false,
       currentIndex: null,
-      isloading:false
+      isloading: false,
     };
   },
 };
@@ -193,8 +195,8 @@ button.close-album {
   padding: 24px 24px 0 24px;
 }
 
-.album__total-view{
-  color:#fff;
+.album__total-view {
+  color: #fff;
   padding: 0 24px;
 }
 .pictures {
@@ -213,15 +215,15 @@ button.close-album {
   margin: 5px;
 }
 
-.picture__total-views{
+.picture__total-views {
   position: absolute;
-  top:16px;
+  top: 16px;
   left: 16px;
   color: #fff;
   text-shadow: 1px 1px #030303;
 }
 
-.picture__total-views i{
+.picture__total-views i {
   margin-right: 5px;
 }
 .picture__img {

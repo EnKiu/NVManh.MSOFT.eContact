@@ -27,9 +27,7 @@
         <div
           class="navbar-item__avatar"
           :style="{
-            'background-image': `url(${
-              account.AvatarFullPath || 'avatar.png'
-            })`,
+            'background-image': `url(${account.AvatarFullPath || 'avatar.png'})`,
           }"
         ></div>
         <span>{{ account.LastName }}</span>
@@ -37,26 +35,25 @@
           <router-link to="/account" class="option-item"
             ><i class="icofont-info-circle"></i> Thông tin</router-link
           >
-          <div class="option-item">
-            <i class="icofont-key"></i> Đổi mật khẩu
-          </div>
+          <div class="option-item"><i class="icofont-key"></i> Đổi mật khẩu</div>
           <div class="option-item" @click="logOut">
             <i class="icofont-sign-out"></i> Đăng xuất
           </div>
         </div>
       </a>
       <router-link v-else to="/login" class="navbar-item">
-        <span class="navbar-item__text"
-          ><i class="icofont-login"></i> Đăng nhập</span
-        >
+        <span class="navbar-item__text"><i class="icofont-login"></i> Đăng nhập</span>
       </router-link>
     </div>
   </nav>
   <div class="class-info">
-    <div class="info-item">Sĩ số: {{ classInfo.totalMembers }}</div>
+    <div class="info-item">Sĩ số: {{ classInfo.TotalMembers }}</div>
     <div class="info-item">
       <span class="flipX"
-        >Quỹ lớp: {{ commonJs.formatMoney(classInfo.totalMoneys) }}</span
+        >Quỹ lớp:
+        <span class="total-money"
+          >+{{ commonJs.formatMoney(classInfo.TotalMoneys) }}</span
+        ></span
       >
     </div>
   </div>
@@ -98,7 +95,7 @@ export default {
   directives: {
     clickoutside,
   },
-  props: ["isAuthenticated", "isProfileLoaded", "hubConnection"],
+  props: ["isAuthenticated", "isProfileLoaded", "classInfo"],
   created() {
     if (this.isAuthenticated) {
       this.account.AvatarFullPath = localStorage.getItem("avatar");
@@ -112,23 +109,10 @@ export default {
         this.account.LastName = localStorage.getItem("lastName");
       }
     },
-    hubConnection: {
-      handler: function (newValue) {
-        console.log(newValue);
-        if (newValue) {
-          this.hubConnection.on("UpdateClassInfo", (classInfo) => {
-            console.log(classInfo);
-            this.classInfo = classInfo;
-          });
-        } else {
-          this.hubConnection.off("UpdateClassInfo");
-        }
-      },
-      deep:true
-    },
   },
   methods: {
     logOut() {
+      this.hubConnection.invoke("RemoveConnection");
       this.$store.dispatch(AUTH_LOGOUT);
     },
     hideListAccountOption() {
@@ -139,7 +123,6 @@ export default {
     return {
       account: { AvatarFullPath: null },
       showAccountOption: false,
-      classInfo: {},
     };
   },
 };
@@ -251,6 +234,10 @@ export default {
 
 .info-item + .info-item {
   margin-left: 10px;
+}
+
+.total-money {
+  color: #0c701e;
 }
 @media screen and (max-width: 411px) {
   /* .item__text-label{

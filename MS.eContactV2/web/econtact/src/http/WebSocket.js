@@ -11,7 +11,7 @@ export default {
                 transport: HttpTransportType.WebSockets
             })
             .withAutomaticReconnect()
-            // .configureLogging(LogLevel.Information)
+            .configureLogging(LogLevel.Information)
             .configureLogging(LogLevel.None)
             .build();
     }

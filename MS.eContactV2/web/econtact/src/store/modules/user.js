@@ -1,10 +1,12 @@
 import { USER_REQUEST, USER_ERROR, USER_SUCCESS } from "../actions/user";
-import { CREATE_CONNECTION } from "../actions/signalR";
 import apiCall from "../../utils/api";
 // import { createApp } from 'vue'
 import { AUTH_LOGOUT } from "../actions/auth";
 // const app = createApp({});
 import router from "@/router";
+// import { SET_NEW_HUB_CONNECTION } from "../actions/signalR";
+import store from "..";
+import { UPDATE_CLASS_INFO } from "../actions/signalR";
 
 const state = {
     status: "",
@@ -46,13 +48,12 @@ const actions = {
                     localStorage.setItem("lastName", resp.LastName);
                     localStorage.setItem("fullName", resp.FullName);
                     localStorage.setItem("contactId", resp.ContactId);
-
-                    // Tạo kết nối signalR:
-                    dispatch(CREATE_CONNECTION);
+                    store.dispatch(UPDATE_CLASS_INFO);
                     commit(USER_SUCCESS, resp);
                     resolve(resp);
                 })
                 .catch((res) => {
+                    console.log(`Lỗi USER REQUEST`, res);
                     commit(USER_ERROR);
                     // if resp is unauthorized, logout, to
                     dispatch(AUTH_LOGOUT);

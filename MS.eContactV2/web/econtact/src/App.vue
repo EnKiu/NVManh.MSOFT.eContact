@@ -3,7 +3,7 @@
     v-if="isAuthenticated"
     :isAuthenticated="isAuthenticated"
     :isProfileLoaded="isProfileLoaded"
-    :hubConnection="hubConnection"
+    :classInfo="classInfo"
   ></the-header>
   <the-main></the-main>
   <router-view name="LoginPage"></router-view>
@@ -25,10 +25,7 @@
   <m-toast v-if="isShowToast" :msg="msgToast" :type="msgToastType"></m-toast>
 
   <news-list v-if="isAuthenticated && showNew" @onClose="showNew = false"></news-list>
-  <progress-bar
-    v-if="isShowProgressBar"
-    :processList="processList"
-  ></progress-bar>
+  <progress-bar v-if="isShowProgressBar" :processList="processList"></progress-bar>
 </template>
 
 <script>
@@ -71,7 +68,7 @@ export default {
       "msgToastType",
       "isShowProgressBar",
       "processList",
-      "hubConnection"
+      "classInfo",
     ]),
     ...mapState({
       authLoading: (state) => state.auth.status === "loading",

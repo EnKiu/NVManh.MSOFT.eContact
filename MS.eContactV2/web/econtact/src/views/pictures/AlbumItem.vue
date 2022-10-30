@@ -44,7 +44,7 @@
 <script>
 export default {
   name: "PictureDetail",
-  emits: ["onCloseAddNewDialog", "afterAddAlbum","onAddAlbum"],
+  emits: ["onCloseAddNewDialog", "afterAddAlbum", "onAddAlbum"],
   props: [],
   methods: {
     async onAddAlbum() {
@@ -66,11 +66,10 @@ export default {
           url: "/api/v1/Albums",
           data: formData,
           method: "POST",
-          showToast:false,
+          showToast: false,
           showMsg: false,
         })
-          .then((res) => {
-            console.log(res);
+          .then(() => {
             this.$emit("afterAddAlbum");
           })
           .catch((res) => {

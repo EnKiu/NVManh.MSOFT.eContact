@@ -38,17 +38,14 @@
               <template #default="scope">
                 <div class="cell__row">{{ scope.row.FullName }}</div>
                 <div
-                  v-if="
-                    !expireTime ||
-                    scope.row.NumberAccompanying > 0 ||
-                    scope.row.Note
-                  "
+                  v-if="!expireTime || scope.row.NumberAccompanying > 0 || scope.row.Note"
                   class="cell__row --mini"
                 >
                   <div v-if="scope.row.SpendsTotal > 0" style="color: #00b87a">
                     + Nộp quỹ:
                     {{ commonJs.formatMoney(scope.row.SpendsTotal) }}
                     <button
+                      v-if="!expireTime && isAdmin"
                       id="btnRemoveSpend"
                       title="Hủy nộp tiền"
                       @click="onRemoveSpends(scope.row)"
@@ -59,6 +56,7 @@
                   <div v-else style="color: #ff0000">
                     - Chưa đóng quỹ.
                     <button
+                      v-if="!expireTime && isAdmin"
                       id="btnAddMoney"
                       title="Nộp tiền"
                       @click="onAddMoney(scope.row)"
@@ -85,14 +83,10 @@
                 </div>
               </template>
             </m-column>
-            <m-column
-              v-if="!expireTime && isAdmin"
-              label="Hủy đăng ký"
-              width="120"
-            >
+            <m-column v-if="!expireTime && isAdmin" label="Hủy đăng ký" width="70">
               <template #header>
                 <button class="btn btn--default" @click="onRegister">
-                  Đăng ký thêm
+                  <i class="icofont-ui-add"></i>
                 </button>
               </template>
               <template #default="scope">
@@ -101,7 +95,7 @@
                   :title="scope.row.FullName"
                   @click="onCancelRegister(scope.row)"
                 >
-                  Hủy đăng ký
+                  <i class="icofont-ui-close"></i>
                 </button>
               </template>
             </m-column>
@@ -120,11 +114,7 @@
     v-model:comment="commentSelected"
     :fullName="fullNameComment"
   ></event-comment>
-  <m-dialog
-    title="Nộp tiền"
-    v-if="showAddMoneyForm"
-    @onClose="showAddMoneyForm = false"
-  >
+  <m-dialog title="Nộp tiền" v-if="showAddMoneyForm" @onClose="showAddMoneyForm = false">
     <template v-slot:content>
       <div class="add-money">
         <m-input
@@ -157,11 +147,7 @@ import EventComment from "./EventComment.vue";
 export default {
   name: "EventDetail",
   components: { EventComment },
-  emits: [
-    "onCloseDetail",
-    "onRegisterFromDetail",
-    "afterCancelRegisterSuccess",
-  ],
+  emits: ["onCloseDetail", "onRegisterFromDetail", "afterCancelRegisterSuccess"],
   props: ["eventItem", "isAdmin"],
   created() {
     var registerDate = new Date(this.eventItem.ExpireRegisterDate);

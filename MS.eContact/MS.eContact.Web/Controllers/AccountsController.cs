@@ -38,6 +38,15 @@ namespace MS.eContact.Web.Controllers
             return Ok(data);
         }
 
+        [Authorize]
+        [HttpGet("class-info")]
+        public async Task<IActionResult> GetClassInfo()
+        {
+            var userId = HttpContext?.User?.Claims?.First(x => x.Type == "id").Value;
+            var classInfo = await _unitOfWork.Users.GetClassInfoById(userId);
+            return Ok(classInfo);
+        }
+
         [AllowAnonymous]
         [HttpGet]
         [Route("register")]

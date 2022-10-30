@@ -20,6 +20,10 @@ namespace MS.ApplicationCore.Authorization
         private readonly MSEnums.MSRole _role;
         private readonly IList<Role> _roles;
 
+        public AuthorizeAttribute()
+        {
+
+        }
         public AuthorizeAttribute(params Role[] roles)
         {
             _roles = roles ?? new Role[] { };
@@ -45,7 +49,7 @@ namespace MS.ApplicationCore.Authorization
             }
             else
             {
-                var hasNotPermission = (user.HighestRole == null || user.HighestRole > _role);
+                var hasNotPermission = (user.HighestRole == null || (_role!=0 && user.HighestRole > _role));
                 // Chỉ quản lý hoặc người dùng thông thường được phép sửa thông tin liên hệ:
                 var path = context.HttpContext.Request.Path.Value;
                 var method = context.HttpContext.Request.Method;

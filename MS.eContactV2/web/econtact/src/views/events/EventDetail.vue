@@ -90,7 +90,6 @@ export default {
   props: ["eventItem", "formMode"],
   emits: ["onClose", "onSaveSuccess"],
   created() {
-    console.log(this.eventItem);
     if (this.formMode == Enum.FormMode.UPDATE) {
       this.event = this.eventItem;
     }

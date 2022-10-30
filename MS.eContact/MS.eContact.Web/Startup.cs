@@ -30,6 +30,8 @@ using System.Data;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using Newtonsoft.Json;
+using AutoMapper;
 
 namespace MS.eContact.Web
 {
@@ -113,7 +115,12 @@ namespace MS.eContact.Web
                                                               .AllowCredentials();
                                       });
             });
-            services.AddSignalR();
+            services
+                .AddSignalR()
+                .AddJsonProtocol(options =>
+                {
+                    options.PayloadSerializerOptions.PropertyNamingPolicy = null;
+                });
             services.AddApplication();
             services.AddControllers()
                .AddNewtonsoftJson(options =>

@@ -15,7 +15,7 @@
           placeholder="Mật khẩu"
           type="password"
           v-model="user.Password"
-          autocomplete ="password"
+          autocomplete="password"
           :required="true"
           :validated="validated"
         ></m-input>
@@ -26,8 +26,10 @@
         </div>
       </form>
       <div class="login-ext">
-        <span>Bạn chưa có tài khoản? <i class="icofont-swoosh-right"></i>
-          <router-link to="/register">Đăng ký</router-link></span>
+        <span
+          >Bạn chưa có tài khoản? <i class="icofont-swoosh-right"></i>
+          <router-link to="/register">Tạo tài khoản</router-link></span
+        >
       </div>
     </div>
   </div>
@@ -40,14 +42,14 @@ export default {
   props: [],
   created() {},
   methods: {
-    onLogin(){
-        this.commonJs.login(this.user.UserName,this.user.Password);
-    }
+    onLogin() {
+      this.commonJs.login(this.user.UserName, this.user.Password);
+    },
   },
   data() {
     return {
       validated: false,
-      user:{}
+      user: {},
     };
   },
 };

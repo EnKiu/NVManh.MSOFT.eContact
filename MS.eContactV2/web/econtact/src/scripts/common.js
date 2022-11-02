@@ -41,7 +41,6 @@ const commonJs = {
     createHubConnection() {
         var hubConnection = webSocket.createHub();
         hubConnection.on("UpdateClassInfo", (classInfo) => {
-            // state.classInfo = classInfo;
             store.dispatch("UPDATE_CLASS_INFO", classInfo);
         })
 

@@ -5,7 +5,9 @@
     </button>
     <div class="news__icon"><i class="icofont-hand-right"></i></div>
     <div class="news-content">
-      <div class="news__info">Tham gia kỷ niệm 15 năm ra trường</div>
+      <div class="news__info">
+        THÔNG BÁO HOT: BẤM ĐỂ ĐĂNG KÝ tham gia họp lớp kỷ niệm 15 năm ra trường
+      </div>
 
       <span
         >Chỉ còn: <span class="time--left">{{ timeLeftInfo }}</span></span
@@ -101,7 +103,7 @@ export default {
   },
   data() {
     return {
-      item: { StartTime: new Date("2022-11-05 12:00:00") },
+      item: { StartTime: new Date("2022-11-06 23:59:00") },
       timeLeftInfo: null,
     };
   },
@@ -120,6 +122,9 @@ export default {
   align-items: center;
   justify-content: center;
   cursor: pointer;
+  color: #ff0000;
+  border-color: #ff0000;
+  border-style: solid;
 }
 .news {
   display: flex;
@@ -127,11 +132,13 @@ export default {
   border-radius: 4px;
   padding: 10px;
   position: fixed;
-  bottom: 16px;
-  right: 16px;
+  bottom: 10px;
+  right: 10px;
+  left: 10px;
   background-color: #fff;
   box-shadow: 0px 0px 10px #404040;
   z-index: 1995;
+  background-color: yellow;
 }
 .news__icon {
   font-size: 24px;

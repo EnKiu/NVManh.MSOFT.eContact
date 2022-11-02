@@ -1,5 +1,6 @@
 ﻿using AutoMapper;
 using Dapper;
+using Microsoft.AspNetCore.Http;
 using MS.ApplicationCore.DTOs;
 using MS.ApplicationCore.Entities;
 using MS.ApplicationCore.Entities.Auth;
@@ -256,12 +257,12 @@ namespace MS.Infrastructure.Data
             return userName;
         }
 
-        public async Task<ClassInfo> GetClassInfoById(string id)
+        public async Task<ClassInfo> GetClassInfoById(string? id = null)
         {
             var sql = "Proc_GetClass_Info";
             DynamicParameters parameters = new DynamicParameters();
             parameters.Add("@UserId", id);
-            var result = await DbContext.Connection.QueryFirstOrDefaultAsync<ClassInfo>(sql, param: parameters, transaction: DbContext.Transaction,commandType:System.Data.CommandType.StoredProcedure);
+            var result = await DbContext.Connection.QueryFirstOrDefaultAsync<ClassInfo>(sql, param: parameters, transaction: DbContext.Transaction, commandType: System.Data.CommandType.StoredProcedure);
             return result;
         }
     }

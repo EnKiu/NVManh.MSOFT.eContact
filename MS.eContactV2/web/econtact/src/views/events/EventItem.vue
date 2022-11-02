@@ -71,7 +71,9 @@
     </div>
     <div class="event-info event__spendtotals">
       <div class="event__label"><i class="icofont-money"></i> Kinh phí đã thu:</div>
-      <div class="event__text"><b>{{ moneyTotalFormat }}</b></div>
+      <div class="event__text">
+        <b>{{ moneyTotalFormat }}</b>
+      </div>
     </div>
     <div class="event-info event__content">
       <button class="link--show-content" @click="onShowContentDetail">

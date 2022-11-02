@@ -33,7 +33,7 @@ const routes = [{
         components: {
             HomePage: HomePage
         },
-        beforeEnter: ifNotAuthenticated
+        beforeEnter: ifAuthenticated
     },
     {
         path: '/login',

@@ -27,7 +27,11 @@ namespace MS.ApplicationCore.Services
             ValidateObject(entity);
             BeforeSave(entity);
             if (Errors.Count == 0)
-                return _repository.Add(entity);
+            {
+                var res = _repository.Add(entity);
+                AfterSave(entity);
+                return res;
+            }
             else
                 throw new MISAException(System.Net.HttpStatusCode.BadRequest,Errors);
         }
@@ -45,7 +49,11 @@ namespace MS.ApplicationCore.Services
             ValidateObject(entity);
             BeforeSave(entity);
             if (Errors.Count == 0)
-                return await _repository.AddAsync(entity);
+            {
+                var res = await _repository.AddAsync(entity);
+                AfterSave(entity);
+                return res;
+            }
             else
                 throw new MISAException(System.Net.HttpStatusCode.BadRequest, Errors);
         }
@@ -107,21 +115,34 @@ namespace MS.ApplicationCore.Services
         {
             BeforeSave(entity);
             if (Errors.Count == 0)
-                return _repository.Update(entity, pks);
+            {
+                var res = _repository.Update(entity,pks);
+                AfterSave(entity);
+                return res;
+            }
             else
                 throw new MISAException(System.Net.HttpStatusCode.BadRequest, Errors);
         }
 
-        public async Task<int> UpdateAsync(TEntity entity, object pks)
+        public virtual async Task<int> UpdateAsync(TEntity entity, object pks)
         {
             BeforeSave(entity);
             if (Errors.Count == 0)
-                return await _repository.UpdateAsync(entity, pks);
+            {
+                var res = await _repository.UpdateAsync(entity, pks);
+                AfterSave(entity);
+                return res;
+            }
             else
                 throw new MISAException(System.Net.HttpStatusCode.BadRequest, Errors);
         }
 
         protected virtual void BeforeSave(TEntity entity)
+        {
+
+        }
+
+        protected virtual void AfterSave(TEntity entity)
         {
 
         }

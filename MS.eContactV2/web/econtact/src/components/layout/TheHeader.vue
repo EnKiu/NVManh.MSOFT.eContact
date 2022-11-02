@@ -5,17 +5,21 @@
   <nav class="navbar">
     <div class="logo"></div>
     <div class="navbar-list">
+      <router-link to="/" class="navbar-item">
+        <span class="navbar-item__text"><i class="icofont-navigation-menu"></i></span>
+        <!-- <span class="item__text-label">Tin tức</span> -->
+      </router-link>
       <router-link to="/contacts" class="navbar-item">
         <span class="navbar-item__text"><i class="icofont-contacts"></i></span>
-        <span class="item__text-label"> Danh bạ</span>
+        <span class="item__text-label">Danh bạ</span>
       </router-link>
       <router-link to="/events" class="navbar-item">
         <span class="navbar-item__text"><i class="icofont-history"></i></span>
-        <span class="item__text-label"> Sự kiện</span>
+        <span class="item__text-label">Sự kiện</span>
       </router-link>
       <router-link to="/pictures" class="navbar-item">
         <span class="navbar-item__text"><i class="icofont-image"></i></span>
-        <span class="item__text-label"> Kho ảnh</span>
+        <span class="item__text-label">Ảnh</span>
       </router-link>
       <a
         v-if="isAuthenticated"
@@ -30,7 +34,7 @@
             'background-image': `url(${account.AvatarFullPath || 'avatar.png'})`,
           }"
         ></div>
-        <span>{{ account.LastName }}</span>
+        <!-- <span>{{ account.LastName }}</span> -->
         <div v-if="showAccountOption" class="account-option">
           <router-link to="/account" class="option-item"
             ><i class="icofont-info-circle"></i> Thông tin</router-link
@@ -193,7 +197,7 @@ export default {
   background-size: cover;
   background-position: center;
   border-radius: 50%;
-  margin-right: 10px;
+  /* margin-right: 10px; */
   background-repeat: no-repeat;
 }
 
@@ -228,6 +232,7 @@ export default {
   background-color: #fffb02;
   display: flex;
   align-items: center;
+  justify-content: center;
   font-weight: 700;
   padding: 0 24px;
 }

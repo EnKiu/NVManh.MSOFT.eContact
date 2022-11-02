@@ -103,6 +103,6 @@ namespace MS.ApplicationCore.Interfaces
         /// </summary>
         /// <param name="id"></param>
         /// <returns></returns>
-        Task<ClassInfo> GetClassInfoById(string id);
+        Task<ClassInfo> GetClassInfoById(string? id = null);
     }
 }

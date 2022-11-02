@@ -2,10 +2,12 @@
 using Microsoft.AspNetCore.Mvc;
 using MS.ApplicationCore.Authorization;
 using MS.ApplicationCore.Entities;
+using MS.ApplicationCore.Exceptions;
 using MS.ApplicationCore.Interfaces;
 using Newtonsoft.Json;
 using System;
 using System.Linq;
+using System.Net;
 using System.Threading.Tasks;
 
 namespace MS.eContact.Web.Controllers
@@ -34,6 +36,21 @@ namespace MS.eContact.Web.Controllers
         public override Task<IActionResult> Post([FromBody] EventDetail entity)
         {
             return base.Post(entity);
+        }
+
+        /// <summary>
+        /// Cập nhật thông tin người đăng ký sự kiện
+        /// </summary>
+        /// <param name="id"></param>
+        /// <param name="entity"></param>
+        /// <returns></returns>
+        public async override Task<IActionResult> Put(string id, [FromBody] EventDetail entity)
+        {
+            var res = await _service.UpdateAsync(entity, id);
+            if (res > 0)
+                return Ok(res);
+            else
+                throw new MISAException(HttpStatusCode.InternalServerError, "Không thể cập nhập dữ liệu, vui lòng liên hệ Quản trị viên để được trợ giúp.");
         }
         //public override async Task<IActionResult> Delete(object id)
         //{

@@ -22,17 +22,6 @@
       ></event-item>
     </div>
 
-    <!-- ĐĂNG KÝ SỰ KIỆN -->
-    <event-register
-      v-if="showRegister"
-      :isAdmin="isAdmin"
-      @onClose="showRegister = false"
-      @onRegisterSuccess="onCloseRegister"
-      v-model:TotalAccompanying="eventRegister.TotalAccompanying"
-      v-model:TotalMember="eventRegister.TotalMember"
-      :eventRegister="eventRegister"
-    ></event-register>
-
     <!-- DANH SÁCH CHI TIẾT THAM GIA SỰ KIỆN -->
     <event-detail-list
       v-if="showDetailList"
@@ -40,8 +29,22 @@
       @onCloseDetail="onCloseDetail"
       @onRegisterFromDetail="onRegister"
       @afterCancelRegisterSuccess="onCancelRegisterSuccess(eventDetail)"
+      @onUpdateRegister="onUpdateRegister"
       :eventItem="eventDetailSelected"
     ></event-detail-list>
+
+    <!-- ĐĂNG KÝ SỰ KIỆN -->
+    <event-register
+      v-if="showRegister"
+      :isAdmin="isAdmin"
+      :register="registerForUpdate"
+      :formMode="registerFormMode"
+      @onClose="showRegister = false"
+      @onRegisterSuccess="onCloseRegister"
+      v-model:TotalAccompanying="eventRegister.TotalAccompanying"
+      v-model:TotalMember="eventRegister.TotalMember"
+      :eventRegister="eventRegister"
+    ></event-register>
 
     <!-- CHI TIẾT SỰ KIỆN -->
     <event-detail
@@ -100,7 +103,14 @@ export default {
     },
     onRegister(currentEvent) {
       this.showRegister = true;
+      this.registerFormMode = Enum.FormMode.ADD;
       this.eventRegister = currentEvent;
+    },
+    onUpdateRegister(register, currentEvent) {
+      this.showRegister = true;
+      this.eventRegister = currentEvent;
+      this.registerFormMode = Enum.FormMode.UPDATE;
+      this.registerForUpdate = register;
     },
     onCancelRegister(currentEvent) {
       // Hỏi:
@@ -175,6 +185,8 @@ export default {
       detailFormMode: null,
       events: [],
       eventRegister: {},
+      registerFormMode: Enum.FormMode.ADD,
+      registerForUpdate: null,
       eventDetailSelected: null,
       showDetail: false,
       showRegister: false,

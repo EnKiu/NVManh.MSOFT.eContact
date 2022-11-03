@@ -19,7 +19,7 @@ namespace MS.Infrastructure.Data
 
         public async Task<ExpenditurePlan> GetIncrementExpenditurePlanByEventId(object eventId)
         {
-            var sql = "SELECT * FROM ExpenditurePlan e WHERE EventId = @EventId AND ExpenditureType = @ExpenditureType";
+            var sql = "SELECT * FROM ExpenditurePlan e WHERE EventId = @EventId AND ExpenditurePlanType = @ExpenditureType";
             var parameters = new DynamicParameters();
             parameters.Add("@EventId", eventId);
             parameters.Add("@ExpenditureType", ExpenditurePlanType.INCREMENT_EVENT);

@@ -37,6 +37,10 @@ body {
     color: #ff0000;
 }
 
+.--color-edit {
+    color: #0084ff;
+}
+
 .--bold {
     font-weight: 700;
 }

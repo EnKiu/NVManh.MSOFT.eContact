@@ -67,7 +67,7 @@ export default {
   left: 0;
   right: 0;
   bottom: 0;
-  padding: 24px;
+  padding: 10px;
   z-index: 1005;
 }
 .dialog-wrapper {
@@ -79,10 +79,10 @@ export default {
 }
 
 .dialog__content {
-  padding: 24px;
+  padding: 16px;
 }
 .dialog__header {
-  padding: 24px 24px 0 24px;
+  padding: 16px 24px 0 24px;
   min-width: 300px;
   font-size: 20px;
   font-weight: 700;
@@ -129,7 +129,7 @@ export default {
   display: flex;
   align-items: center;
   justify-content: flex-end;
-  padding: 0 24px 24px 24px;
+  padding: 0 16px 16px 16px;
 }
 
 .dialog__footer button {

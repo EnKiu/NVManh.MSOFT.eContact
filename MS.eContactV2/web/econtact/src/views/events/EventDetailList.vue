@@ -85,18 +85,31 @@
             </m-column>
             <m-column v-if="!expireTime && isAdmin" label="Hủy đăng ký" width="70">
               <template #header>
-                <button class="btn btn--default" @click="onRegister">
-                  <i class="icofont-ui-add"></i>
+                <button
+                  id="btn-add-register"
+                  class="btn btn--default"
+                  @click="onRegister"
+                >
+                  <i class="icofont-ui-add"></i> Thêm đăng ký
                 </button>
               </template>
               <template #default="scope">
-                <button
-                  class="btn btn--table --color-red"
-                  :title="scope.row.FullName"
-                  @click="onCancelRegister(scope.row)"
-                >
-                  <i class="icofont-ui-close"></i>
-                </button>
+                <div class="button-column">
+                  <button
+                    class="btn--table-mini --color-red"
+                    :title="scope.row.FullName"
+                    @click="onCancelRegister(scope.row)"
+                  >
+                    <i class="icofont-ui-delete"></i> <span>Xóa</span>
+                  </button>
+                  <button
+                    class="btn--table-mini --color-edit"
+                    :title="scope.row.FullName"
+                    @click="onUpdateRegister(scope.row)"
+                  >
+                    <i class="icofont-ui-edit"></i> <span>Sửa</span>
+                  </button>
+                </div>
               </template>
             </m-column>
           </m-table>
@@ -147,7 +160,12 @@ import EventComment from "./EventComment.vue";
 export default {
   name: "EventDetail",
   components: { EventComment },
-  emits: ["onCloseDetail", "onRegisterFromDetail", "afterCancelRegisterSuccess"],
+  emits: [
+    "onCloseDetail",
+    "onRegisterFromDetail",
+    "afterCancelRegisterSuccess",
+    "onUpdateRegister",
+  ],
   props: ["eventItem", "isAdmin"],
   created() {
     var registerDate = new Date(this.eventItem.ExpireRegisterDate);
@@ -186,6 +204,9 @@ export default {
           this.onSaveEventDetail();
         }
       );
+    },
+    onUpdateRegister(register) {
+      this.$emit("onUpdateRegister", register, this.eventItem);
     },
     onSaveEventDetail() {
       this.api({
@@ -254,7 +275,7 @@ div.add-money .input-wrapper:last-child {
 }
 .register__list {
   max-width: 400px;
-  height: 250px;
+  height: calc(100vh - 240px);
   overflow-y: auto;
   box-sizing: border-box;
 }
@@ -296,7 +317,25 @@ div.add-money .input-wrapper:last-child {
 .el-table__row .cell {
   padding: 10px 0 !important;
 }
+.button-column {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  padding: 0 4px;
+}
+.btn--table-mini {
+  background: none;
+  font-size: 16px;
+  width: 20px;
+  text-align: center;
+  border: unset;
+  padding: 0;
+  cursor: pointer;
+}
 
+.btn--table-mini + .btn--table-mini {
+  margin-top: 10px;
+}
 #btnAddMoney,
 #btnRemoveSpend {
   color: #00b87a;
@@ -308,5 +347,11 @@ div.add-money .input-wrapper:last-child {
 
 #btnRemoveSpend {
   color: #ff0000;
+}
+
+#btn-add-register {
+  position: absolute;
+  right: 0;
+  top: 4px;
 }
 </style>

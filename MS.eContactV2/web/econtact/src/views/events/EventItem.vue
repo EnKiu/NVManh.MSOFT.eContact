@@ -95,9 +95,13 @@
 
     <div v-if="item.IsCancel == false" class="event__joinned-number">
       <div v-if="item.TotalMember > 0">
-        Có <b>{{ item.TotalMember }}</b> thành viên đăng ký.
-        <i class="icofont-swoosh-right"></i>
-        <a class="show-list-registers" @click="onShowList">Xem danh sách chi tiết</a>
+        <a class="show-list-registers" @click="onShowList"
+          ><i class="icofont-swoosh-right"></i> Xem danh sách
+          <span style="font-size: 16px; color: #ff0000"
+            ><b>{{ item.TotalMember }}</b></span
+          >
+          thành viên tham dự</a
+        >
       </div>
       <span v-else>Không có ai tham gia.</span>
     </div>
@@ -321,7 +325,7 @@ export default {
 
 .event__joinned-number {
   margin-top: 10px;
-  font-style: italic;
+  /* font-style: italic; */
 }
 
 .show-list-registers {

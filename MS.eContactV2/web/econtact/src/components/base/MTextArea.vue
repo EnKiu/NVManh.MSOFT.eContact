@@ -1,13 +1,13 @@
 <template>
   <div class="input-wrapper">
     <label v-if="label"
-      >{{ label }}
-      <span v-if="required">(<span class="required">*</span>)</span>:</label
+      >{{ label }} <span v-if="required">(<span class="required">*</span>)</span>:</label
     >
     <textarea
       cols="15"
       rows="3"
       ref="minput"
+      :placeholder="textPlaceholder"
       :focus="focus"
       :required="required"
       v-model="value"
@@ -17,7 +17,7 @@
     />
   </div>
 </template>
-  <script>
+<script>
 export default {
   name: "MInput",
   props: {
@@ -26,6 +26,7 @@ export default {
     focus: { type: Boolean, default: false, required: false },
     required: { type: Boolean, default: false, required: false },
     disabled: { type: Boolean, default: false, required: false },
+    textPlaceholder: { type: String, default: "", required: false },
   },
   emits: ["update:modelValue"],
   created() {
@@ -48,7 +49,7 @@ export default {
   },
 };
 </script>
-  <style scoped>
+<style scoped>
 textarea {
   border: 1px solid #ccc;
   border-radius: 4px;
@@ -60,8 +61,8 @@ textarea {
 }
 
 .input-wrapper {
-    display: flex;
-    flex-direction: column;
+  display: flex;
+  flex-direction: column;
 }
 
 .input-wrapper textarea {
@@ -80,4 +81,3 @@ textarea {
   margin-top: 16px;
 }
 </style>
-  

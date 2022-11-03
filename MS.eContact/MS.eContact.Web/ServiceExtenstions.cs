@@ -43,6 +43,9 @@ namespace MS.eContact.Web
             service.AddTransient<ICommonFunction, CommonFunction>();
             service.AddTransient<IExpenditureRepository, ExpenditureRepository>();
             service.AddTransient<IExpenditureService, ExpenditureService>();
+            service.AddTransient<IExpenditurePlanRepository, ExpenditurePlanRepository>();
+            service.AddTransient<IExpenditurePlanService, ExpenditurePlanService>();
+            service.AddTransient<IContactRepository, ContactRepository>();
 
             service.AddTransient<IJwtUtils, JwtUtils>();
             service.AddHttpContextAccessor();

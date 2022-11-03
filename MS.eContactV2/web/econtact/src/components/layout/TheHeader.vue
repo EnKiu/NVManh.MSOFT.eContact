@@ -60,6 +60,11 @@
         ></span
       >
     </div>
+    <div class="expenditure" id="expenditure">
+      <router-link to="/expenditures" class="navbar-item">
+        <span><i class="icofont-chart-arrows-axis"></i>Báo cáo Thu/Chi</span>
+      </router-link>
+    </div>
   </div>
 </template>
 <script>
@@ -243,6 +248,16 @@ export default {
 
 .total-money {
   color: #0c701e;
+}
+
+.expenditure a{
+  text-decoration: none;
+  margin: 0 10px;
+}
+
+.expenditure .router-link-active{
+  color: #fff;
+  background-color: #ff0000;
 }
 @media screen and (max-width: 411px) {
   /* .item__text-label{

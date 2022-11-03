@@ -54,6 +54,11 @@ const commonJs = {
             console.log(`${username} đã kết nối!`);
         })
 
+        hubConnection.on("RecieveNotifiedWhenContactRegistedEventSuccess", (eventInfo, contactInfo) => {
+            console.log('eventInfo:', eventInfo);
+            console.log('contactInfo:', contactInfo);
+        })
+
 
         hubConnection.on("ShowPecentUpload", (currentFileUpload, totalFileUpload, isFinish, totalTimes, progressInfo) => {
             // Ẩn loading nếu có:

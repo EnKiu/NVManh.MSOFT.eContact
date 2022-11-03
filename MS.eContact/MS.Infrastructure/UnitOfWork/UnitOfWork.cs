@@ -18,6 +18,10 @@ namespace MS.Infrastructure.UnitOfWork
         public IUserRepository Users { get; }
 
         public IUserRolesRepository UserRoles { get; }
+        public IExpenditurePlanRepository ExpenditurePlans { get; }
+        public IExpenditureRepository Expenditures { get; }
+
+        public IContactRepository Contacts { get; }
         #endregion
 
         private readonly MySqlDbContext _dbContext;
@@ -29,7 +33,10 @@ namespace MS.Infrastructure.UnitOfWork
             IPictureRepository pictures,
             IUserRepository users,
             MySqlDbContext dbContext,
-            IUserRolesRepository userRoles)
+            IUserRolesRepository userRoles,
+            IExpenditurePlanRepository expenditurePlans,
+            IExpenditureRepository expenditures, 
+            IContactRepository contacts)
         {
             _id = Guid.NewGuid();
             Albums = albums;
@@ -39,6 +46,9 @@ namespace MS.Infrastructure.UnitOfWork
             Users = users;
             _dbContext = dbContext;
             UserRoles = userRoles;
+            ExpenditurePlans = expenditurePlans;
+            Expenditures = expenditures;
+            Contacts = contacts;
         }
 
         public Guid Id

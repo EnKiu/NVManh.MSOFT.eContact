@@ -20,11 +20,88 @@ namespace MS.ApplicationCore.Services
         {
             _notificationHub = notificationHub;
         }
+
+        /// <summary>
+        /// Nghiệp vụ: Khi thực hiện đăng ký hoặc thêm mới một thành viên đăng ký tham gia sự kiện
+        /// - Nếu có thông tin số tiền nộp thì cập nhật luôn ở bảng thu/chi - thêm mới khoản thu vào
+        /// </summary>
+        /// <param name="entity"></param>
+        /// <returns></returns>
+        /// <exception cref="MISAException"></exception>
         public override async Task<int> AddAsync(EventDetail entity)
         {
             await Validate(entity);
             if (Errors.Count == 0)
-                return await UnitOfWork.EventDetails.AddAsync(entity);
+            {
+                // Kiểm tra xem có thông tin số tiền nộp không, nếu có thì tự động thêm mới khoản thu/ không thì thôi -> chỉ coi như mới đăng ký:
+                UnitOfWork.BeginTransaction();
+
+                // Đầu tiên là thêm mới đăng ký đã:
+                var res = await UnitOfWork.EventDetails.AddAsync(entity);
+
+                // Thêm mới thành công thì xử lý các nghiệp vụ tiếp theo:
+                if (res>0)
+                {
+                    var amount = entity.SpendsTotal;
+                    if (amount != null && amount > 0)
+                    {
+                        var eventInfo = await UnitOfWork.Events.FindAsync(entity.EventId);
+                        var contactInfo = await UnitOfWork.Contacts.FindAsync(entity.ContactId);
+
+                        // Kiểm tra xem có kế hoạch thu tiền hiện tại hay chưa? - chưa có tạo mới, có thì thêm khoản thu mới:
+                        var expenditurePlan = await UnitOfWork.ExpenditurePlans.GetIncrementExpenditurePlanByEventId(entity.EventId);
+
+                        // Khai báo khoản thu mới:
+                        var expenditure = new Expenditure()
+                        {
+                            ExpenditureId = Guid.NewGuid(),
+                            ExpenditureDate = DateTime.Now,
+                            ContactId = entity.ContactId,
+                            EntityState = MSEnums.EntityState.ADD,
+                            ExpenditureType = MSEnums.ExpenditureType.INCREMENT_PLAN,
+                            Amount = (decimal)entity.SpendsTotal,
+                            ExpenditureName = expenditurePlan.ExpenditurePlanName,
+                            Description = $"{contactInfo.LastName} nộp tiền cho sự kiện [{eventInfo.EventName}]"
+                        };
+
+                        // Không có kế hoạch thu cho sự kiện hiện tại thì thêm mới:
+                        if (expenditurePlan == null)
+                        {
+                            var newExpenditurePlan = new ExpenditurePlan()
+                            {
+                                ExpenditurePlanId = Guid.NewGuid(),
+                                ExpenditurePlanName = $"Thu kinh phí cho sự kiện [{eventInfo.EventName}]",
+                                StartDate = eventInfo.StartTime,
+                                EndDate = eventInfo.EndTime,
+                                Description = $"Kế hoạch thu kinh phí cho sự kiện [{eventInfo.EventName}]",
+                                EntityState = MSEnums.EntityState.ADD,
+                                EventId = eventInfo.EventId,
+                                ExpenditurePlanType = MSEnums.ExpenditurePlanType.INCREMENT_EVENT,
+                                IsFinish = false
+                            };
+
+                            // Thêm kế hoạch mới:
+                            await UnitOfWork.ExpenditurePlans.AddAsync(newExpenditurePlan);
+
+                            // Cập nhật kế hoạch thu chi cho khoản thu:
+                            expenditure.ExpenditurePlanId = newExpenditurePlan.ExpenditurePlanId;
+
+                        }
+
+                        // Thêm khoản thu vào Database:
+                        await UnitOfWork.Expenditures.AddAsync(expenditure);
+
+                        // Thông báo cho các client biết liên hệ đã đăng ký sự kiện thành công:
+                        await _notificationHub.Clients.All.SendAsync("RecieveNotifiedWhenContactRegistedEventSuccess", eventInfo, contactInfo);
+                    }
+                }
+                else
+                {
+                    throw new MISAException(System.Net.HttpStatusCode.InternalServerError, "Không thể đăng ký sự kiện cho thành viên, vui lòng kiểm tra lại.");
+                }
+                UnitOfWork.Commit();
+                return res;
+            }
             else
                 throw new MISAException(System.Net.HttpStatusCode.BadRequest, Errors);
         }

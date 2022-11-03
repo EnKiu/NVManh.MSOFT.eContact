@@ -5,9 +5,9 @@ using MS.ApplicationCore.Interfaces;
 
 namespace MS.eContact.Web.Controllers
 {
-    public class ExpenditureController : BaseController<Expenditure>
+    public class ExpendituresController : BaseController<Expenditure>
     {
-        public ExpenditureController(IExpenditureRepository repository, IExpenditureService baseService) : base(repository, baseService)
+        public ExpendituresController(IExpenditureRepository repository, IExpenditureService baseService) : base(repository, baseService)
         {
         }
     }

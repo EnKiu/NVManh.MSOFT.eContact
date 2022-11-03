@@ -7,7 +7,7 @@ using System.Text;
 
 namespace MS.Infrastructure.Data
 {
-    public class ContactRepository:DapperRepository<Contact>
+    public class ContactRepository:DapperRepository<Contact>,IContactRepository
     {
         string _tableName = string.Empty;
         public ContactRepository(MySqlDbContext dbContext):base(dbContext)

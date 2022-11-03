@@ -19,6 +19,9 @@ namespace MS.ApplicationCore.Interfaces
         IPictureRepository Pictures { get; }
         IUserRepository Users { get; }
         IUserRolesRepository UserRoles { get; }
+        IExpenditurePlanRepository ExpenditurePlans { get; }
+        IExpenditureRepository Expenditures { get; }
+        IContactRepository Contacts { get; }
 
     }
 }

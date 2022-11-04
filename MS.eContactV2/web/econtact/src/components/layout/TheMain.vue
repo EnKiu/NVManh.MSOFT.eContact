@@ -11,9 +11,9 @@ export default {};
 
 <style scoped>
 .main {
-  margin-top: 80px;
+  margin-top: 85px;
   width: 100%;
-  height: calc(100vh - 80px);
+  height: calc(100vh - 85px);
   display: flex;
   justify-content: center;
   padding: 16px;

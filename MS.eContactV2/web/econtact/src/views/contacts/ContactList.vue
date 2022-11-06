@@ -97,10 +97,10 @@ export default {
       );
       this.contactsFilter = this.contacts.filter((item) => {
         var fullName = me.commonJs.change_alias(
-            (item.FirstName + item.LastName).replace(" ", "").toLowerCase()
+            (item.FullName || "").replace(" ", "").toLowerCase()
           ),
-          mobile = item.MobileNumber,
-          phone = item.PhoneNumber;
+          mobile = item.MobileNumber || "",
+          phone = item.PhoneNumber || "";
         return fullName.match(key) || mobile.match(key) || phone.match(key);
       });
     },

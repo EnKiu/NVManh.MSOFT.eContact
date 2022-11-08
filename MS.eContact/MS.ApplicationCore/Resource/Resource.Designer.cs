@@ -61,6 +61,60 @@ namespace MS.ApplicationCore.Resource {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Enum_DegreeClassification_AverageGood.
+        /// </summary>
+        public static string Enum_DegreeClassification_AverageGood {
+            get {
+                return ResourceManager.GetString("Enum_DegreeClassification_AverageGood", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Thu quỹ hàng năm.
+        /// </summary>
+        public static string Enum_ExpenditurePlanType_INCREMENT_ANNUAL {
+            get {
+                return ResourceManager.GetString("Enum_ExpenditurePlanType_INCREMENT_ANNUAL", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Thu cho sự kiện.
+        /// </summary>
+        public static string Enum_ExpenditurePlanType_INCREMENT_EVENT {
+            get {
+                return ResourceManager.GetString("Enum_ExpenditurePlanType_INCREMENT_EVENT", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Thu khác.
+        /// </summary>
+        public static string Enum_ExpenditurePlanType_INCREMENT_OTHER {
+            get {
+                return ResourceManager.GetString("Enum_ExpenditurePlanType_INCREMENT_OTHER", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Chi khác (Ma chay, hiếu hỉ...).
+        /// </summary>
+        public static string Enum_ExpenditurePlanType_REDUCE_OTHER {
+            get {
+                return ResourceManager.GetString("Enum_ExpenditurePlanType_REDUCE_OTHER", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Chi cho sự kiện.
+        /// </summary>
+        public static string Enum_ExpenditurePlanType_REDURE_EVENT {
+            get {
+                return ResourceManager.GetString("Enum_ExpenditurePlanType_REDURE_EVENT", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Có lỗi xảy ra vui lòng liên hệ Quản trị viên để được trợ giúp.
         /// </summary>
         public static string Exception_Message_General {

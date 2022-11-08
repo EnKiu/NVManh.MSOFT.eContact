@@ -1,7 +1,7 @@
 <template>
   <div class="main">
     <div class="main-container">
-      <router-view></router-view>
+      <router-view :key="$route.fullPath"></router-view>
     </div>
   </div>
 </template>
@@ -26,5 +26,6 @@ export default {};
 .main-container {
   max-width: 700px;
   height: 100%;
+  position: relative;
 }
 </style>

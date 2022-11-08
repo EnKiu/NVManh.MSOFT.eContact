@@ -27,10 +27,10 @@ namespace MS.Infrastructure.Data
         }
         public async override Task<IEnumerable<Event>> AllAsync()
         {
-            var userId = _httpContextAccessor.HttpContext.User?.Claims?.First(x => x.Type == "id").Value;
+            //var userId = _httpContextAccessor.HttpContext.User?.Claims?.First(x => x.Type == "id").Value;
             var storeName = "Proc_Event_GetEventInfo_ByUserId";
             DynamicParameters parameters = new DynamicParameters();
-            parameters.Add("p_UserId", userId);
+            parameters.Add("p_UserId", null);
             return await DbContext.Connection.QueryAsync<Event>(storeName,param:parameters, DbContext.Transaction, commandType: System.Data.CommandType.StoredProcedure);
             //return await DbContext.Connection.QueryAsync<Event>($"SELECT * FROM Event Order By EventDate DESC", DbContext.Transaction, commandType: System.Data.CommandType.Text);
         }

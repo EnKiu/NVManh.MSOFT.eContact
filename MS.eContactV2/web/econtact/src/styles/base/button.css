@@ -13,6 +13,11 @@
     color: #fff;
 }
 
+.btn--add {
+    background-color: #006207;
+    color: #fff;
+}
+
 .btn--close:hover {
     background-color: #ccc !important;
 }
@@ -22,7 +27,9 @@
     color: #fff;
 }
 
-.dialog__button--cancel {
+.dialog__button--cancel,
+.btn--close,
+.btn--remove {
     background-color: #ff0000 !important;
     color: #fff !important;
 }
@@ -56,4 +63,14 @@ button.btn--close-item {
     color: #ff0000;
     border-color: #ff0000;
     border-style: solid;
+}
+
+.btn-mini {
+    background: none;
+    font-size: 16px;
+    width: 20px;
+    text-align: center;
+    border: unset;
+    padding: 0;
+    cursor: pointer;
 }

@@ -46,6 +46,7 @@ namespace MS.eContact.Web
             service.AddTransient<IExpenditurePlanRepository, ExpenditurePlanRepository>();
             service.AddTransient<IExpenditurePlanService, ExpenditurePlanService>();
             service.AddTransient<IContactRepository, ContactRepository>();
+            service.AddTransient<IDictionaryEnumService, DictionaryEnumService>();
 
             service.AddTransient<IJwtUtils, JwtUtils>();
             service.AddHttpContextAccessor();

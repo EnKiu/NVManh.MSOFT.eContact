@@ -19,6 +19,7 @@ namespace MS.ApplicationCore.Entities
         public Guid? ContactId { get; set; }
         public bool? IsFinish { get; set; }
         public Guid? OrganizationId { get; set; }
+        public decimal AmountUnit { get; set; }
 
     }
 }

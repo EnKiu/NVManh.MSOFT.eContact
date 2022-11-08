@@ -1,16 +1,16 @@
 ﻿using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using MS.ApplicationCore.Authorization;
-using MS.ApplicationCore.Entities;
 using MS.ApplicationCore.Interfaces;
-using System.Threading.Tasks;
 
 namespace MS.eContact.Web.Controllers
 {
-    public class ExpenditurePlansController : BaseController<ExpenditurePlan>
+    [Route("api/[controller]")]
+    [ApiController]
+    public class DictionarysController : ControllerBase
     {
         IDictionaryEnumService _dictionaryEnumService;
-        public ExpenditurePlansController(IRepository<ExpenditurePlan> repository, IBaseService<ExpenditurePlan> baseService, IDictionaryEnumService dictionaryEnumService) : base(repository, baseService)
+        public DictionarysController(IDictionaryEnumService dictionaryEnumService)
         {
             _dictionaryEnumService = dictionaryEnumService;
         }
@@ -19,7 +19,15 @@ namespace MS.eContact.Web.Controllers
         [HttpGet("plan-type")]
         public IActionResult GetExpenditurePlanTypeList()
         {
-            return Ok(_dictionaryEnumService.GetExpenditurePlanType());
+            var res = _dictionaryEnumService.GetExpenditurePlanType();
+            return Ok(res);
+        }
+
+        [AllowAnonymous]
+        [HttpGet("gender")]
+        public IActionResult GetGenders()
+        {
+            return Ok(_dictionaryEnumService.GetGenders());
         }
     }
 }

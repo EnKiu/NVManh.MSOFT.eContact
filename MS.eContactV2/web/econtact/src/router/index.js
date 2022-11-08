@@ -5,6 +5,7 @@ import EventList from '../views/events/EventList.vue'
 // import NewList from '../views/news/NewList.vue'
 import AlbumList from '../views/pictures/AlbumList.vue'
 import ExpenditureIndex from '../views/expenditure/Index.vue'
+import ExpenditureDetail from '../views/expenditure/ExpenditureDetail.vue'
 import LoginPage from '../views/account/Login.vue'
 import Register from '../views/account/Register.vue'
 import AccountInfo from '../views/account/AccountInfo.vue'
@@ -62,6 +63,13 @@ const routes = [{
         path: '/expenditures',
         name: 'ExpenditureIndex',
         component: ExpenditureIndex,
+        beforeEnter: ifAuthenticated
+    },
+    {
+        path: '/expenditures/:id',
+        name: 'ExpenditureDetail',
+        component: ExpenditureDetail,
+        props: true,
         beforeEnter: ifAuthenticated
     },
     {

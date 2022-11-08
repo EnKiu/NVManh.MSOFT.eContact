@@ -30,6 +30,22 @@ var Enum = {
     },
     KeyCode: {
         ENTER: 13
+    },
+
+    /**
+     * Kế hoạch thu chi
+     */
+    ExpenditurePlanType: {
+        // Thu cho sự kiện
+        INCREMENT_EVENT: 100,
+        // Thu quỹ hàng năm
+        INCREMENT_ANNUAL: 101,
+        // Thu khác
+        INCREMENT_OTHER: 102,
+        // Chi cho sự kiện
+        REDURE_EVENT: 200,
+        // Chi khác
+        REDUCE_OTHER: 201
     }
 }
 export default Enum;

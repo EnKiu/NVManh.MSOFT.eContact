@@ -10,9 +10,11 @@ namespace MS.eContact.Web.Controllers
     public class ExpenditurePlansController : BaseController<ExpenditurePlan>
     {
         IDictionaryEnumService _dictionaryEnumService;
-        public ExpenditurePlansController(IRepository<ExpenditurePlan> repository, IBaseService<ExpenditurePlan> baseService, IDictionaryEnumService dictionaryEnumService) : base(repository, baseService)
+        IUnitOfWork _unitOfWork;
+        public ExpenditurePlansController(IRepository<ExpenditurePlan> repository, IBaseService<ExpenditurePlan> baseService, IDictionaryEnumService dictionaryEnumService, IUnitOfWork unitOfWork) : base(repository, baseService)
         {
             _dictionaryEnumService = dictionaryEnumService;
+            _unitOfWork = unitOfWork;
         }
 
         [AllowAnonymous]
@@ -20,6 +22,17 @@ namespace MS.eContact.Web.Controllers
         public IActionResult GetExpenditurePlanTypeList()
         {
             return Ok(_dictionaryEnumService.GetExpenditurePlanType());
+        }
+
+        public async override Task<IActionResult> Get()
+        {
+            return Ok(await _unitOfWork.ExpenditurePlans.GetExpenditurePlans());
+        }
+
+        [HttpGet("filter")]
+        public async Task<IActionResult> Filter([FromQuery] int? type)
+        {
+            return Ok(await _unitOfWork.ExpenditurePlans.GetExpenditurePlans(type));
         }
     }
 }

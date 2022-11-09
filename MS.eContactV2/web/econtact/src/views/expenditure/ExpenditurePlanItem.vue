@@ -7,10 +7,10 @@
       </div>
       <!-- <div class="plan__state">(Đang thu)</div> -->
     </div>
-    <div>
+    <div class="flex">
       <div class="plan__amount">
         <div class="expenditure__fee">
-          {{ this.commonJs.formatMoney(plan.Amount) }}
+          {{ this.commonJs.formatMoney(plan.TotalMoney) }}
         </div>
       </div>
       <div class="plan__option">
@@ -92,12 +92,11 @@ export default {
   justify-content: space-between;
 }
 
-.expenditure-plan-list {
-  max-height: calc(100vh - 270px);
-  overflow-y: auto;
-}
-
 .btn-mini+.btn-mini{
   margin-left: 4px;
+}
+
+.plan__option{
+  width: 45px;
 }
 </style>

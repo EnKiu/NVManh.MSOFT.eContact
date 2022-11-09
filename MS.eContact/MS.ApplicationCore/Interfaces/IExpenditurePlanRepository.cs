@@ -1,4 +1,5 @@
-﻿using MS.ApplicationCore.Entities;
+﻿using MS.ApplicationCore.DTOs;
+using MS.ApplicationCore.Entities;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -15,5 +16,6 @@ namespace MS.ApplicationCore.Interfaces
         /// <param name="eventId"></param>
         /// <returns></returns>
         Task<ExpenditurePlan> GetIncrementExpenditurePlanByEventId(object eventId);
+        Task<IEnumerable<ExpenditurePlanResponse>> GetExpenditurePlans(int? type=null);
     }
 }

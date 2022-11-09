@@ -1,85 +1,88 @@
 <template>
-  <m-dialog title="Thông tin kế hoạch thu/chi" @onClose="onClose">
+  <m-dialog :title="formTitle">
     <template v-slot:content>
-      <form id="form-info" @submit.prevent="onSubmitForm"></form>
-      <div class="m-row">
-        <m-input
-          label="Tên kế hoạch"
-          v-model="plan.ExpenditurePlanName"
-          :isFocus="true"
-          required
-        ></m-input>
-      </div>
-      <div class="m-row">
-        <m-combobox
-          label="Thu/chi cho"
-          url="/api/v1/expenditureplans/plan-type"
-          v-model="plan.ExpenditurePlanType"
-          :required="true"
-          :isDisabled="false"
-          propValue="Value"
-          propText="Text"
-        >
-        </m-combobox>
-      </div>
-      <div v-if="isEventType" class="m-row">
-        <m-combobox
-          label="Sự kiện"
-          url="/api/v1/Events"
-          v-model="plan.EventId"
-          :required="true"
-          :isDisabled="false"
-          propValue="EventId"
-          propText="EventName"
-        >
-        </m-combobox>
-      </div>
-      <div v-if="isIncrement" class="m-row">
-        <m-input
-          label="Số tiền/người"
-          :onlyNumberChar="true"
-          v-model="plan.AmountUnit"
-          required
-        ></m-input>
-      </div>
-      <div class="m-row flex">
-        <div class="m-col">
-          <label for="">Bắt đầu thu từ: </label>
-          <el-date-picker
-            v-model="plan.StartDate"
-            type="date"
-            format="DD-MM-YYYY"
-            placeholder="Ngày bắt đầu thu/chi"
-          />
-        </div>
-        <div class="m-col" style="margin-left: 10px">
-          <label for="">Ngày kết thúc đợt thu:</label>
-          <el-date-picker
-            v-model="plan.EndDate"
-            type="date"
-            format="DD-MM-YYYY"
-            placeholder="Ngày kết thúc"
-          />
-        </div>
-      </div>
-
-      <div class="m-row">
-        <m-combobox
-          label="Người thực hiện"
-          url="/api/v1/contacts"
-          v-model="plan.ContactId"
-          :required="false"
-          :isDisabled="false"
-          propValue="ContactId"
-          propText="FullName"
-        >
-        </m-combobox>
-      </div>
-      <div class="m-row">
-        <m-text-area
-          label="Mô tả/ Ghi chú"
-          v-model="plan.Description"
-        ></m-text-area>
+      <div>
+        <form action="">
+          <div class="m-row">
+            <el-radio-group v-model="optionType">
+              <el-radio :label="1" size="large"
+                >Thu theo đợt/ kế hoạch</el-radio
+              >
+              <el-radio :label="2" size="large">Khác</el-radio>
+            </el-radio-group>
+          </div>
+          <div v-if="optionType == 1" class="m-row">
+            <m-combobox
+              label="Kế hoạch - Đợt thu/chi"
+              :url="apiPlanUrl"
+              v-model="expenditure.ExpenditurePlanId"
+              :required="true"
+              :isDisabled="false"
+              propValue="ExpenditurePlanId"
+              propText="ExpenditurePlanName"
+            >
+            </m-combobox>
+          </div>
+          <div class="m-row">
+            <m-combobox
+              label="Loại khoản"
+              url="/api/v1/expenditureplans/plan-type"
+              v-model="expenditure.ExpenditureType"
+              :required="true"
+              :isDisabled="false"
+              propValue="Value"
+              propText="Text"
+            >
+            </m-combobox>
+          </div>
+          <div v-if="isEventType" class="m-row">
+            <m-combobox
+              label="Sự kiện"
+              url="/api/v1/Events"
+              v-model="expenditure.EventId"
+              :required="true"
+              :isDisabled="false"
+              propValue="EventId"
+              propText="EventName"
+            >
+            </m-combobox>
+          </div>
+          <div v-if="isIncrement" class="m-row">
+            <m-combobox
+              label="Người nộp tiền"
+              url="/api/v1/contacts"
+              v-model="expenditure.ContactId"
+              :required="true"
+              :isDisabled="false"
+              propValue="ContactId"
+              propText="FullName"
+            >
+            </m-combobox>
+          </div>
+          <div class="m-row">
+            <m-input
+              label="Số tiền"
+              :onlyNumberChar="true"
+              v-model="expenditure.Amount"
+              required
+            ></m-input>
+          </div>
+          <div class="m-row">
+            <label for="">Ngày thu </label>
+            <el-date-picker
+              v-model="expenditure.ExpenditureDate"
+              type="date"
+              format="DD-MM-YYYY"
+              placeholder="Ngày thu"
+            />
+          </div>
+          <div class="m-row">
+            <m-text-area
+              label="Mô tả/ Ghi chú"
+              v-model="expenditure.Description"
+            ></m-text-area>
+          </div>
+        </form>
       </div>
     </template>
     <template v-slot:footer>
@@ -92,29 +95,53 @@
         class="btn btn--default"
         style="margin-left: 10px"
       >
-        <i class="icofont-save"></i> Lưu
+        <i class="icofont-save"></i> Hoàn tất
       </button>
     </template>
   </m-dialog>
 </template>
 <script>
 import Enum from "@/scripts/enum";
-import router from "@/router";
 export default {
   name: "ExpenditureDetail",
-  emits: ["onSaveSuccess", "update:formMode"],
-  props: ["planEdit", "formMode", "id"],
+  emits: [],
+  props: ["id", "type"],
+  created() {
+    console.log(this.type);
+    if (this.isIncrement) {
+      this.formTitle = "Chi tiết phiếu thu";
+    } else {
+      this.formTitle = "Chi tiết phiếu chi";
+    }
+  },
   computed: {
     isEventType: function () {
       if (
-        this.plan.ExpenditurePlanType ==
-        Enum.ExpenditurePlanType.INCREMENT_EVENT
+        this.expenditure.ExpenditureType ==
+          Enum.ExpenditurePlanType.INCREMENT_EVENT ||
+        this.expenditure.ExpenditureType ==
+          Enum.ExpenditurePlanType.REDURE_EVENT
       )
         return true;
       else return false;
     },
+    apiPlanUrl(){
+        if (
+        this.type == Enum.ExpenditureType.INCREMENT_OTHER ||
+        this.type == Enum.ExpenditureType.INCREMENT_PLAN ||
+        this.type == Enum.ExpenditureType.INCREMENT_SUPER_RICH
+      ) {
+        return "/api/v1/expenditureplans/filter?type=1";
+      } else {
+        return "/api/v1/expenditureplans/filter?type=2";
+      }
+    },
     isIncrement() {
-      if (this.plan.ExpenditurePlanType < 200) {
+      if (
+        this.type == Enum.ExpenditureType.INCREMENT_OTHER ||
+        this.type == Enum.ExpenditureType.INCREMENT_PLAN ||
+        this.type == Enum.ExpenditureType.INCREMENT_SUPER_RICH
+      ) {
         return true;
       } else {
         return false;
@@ -127,78 +154,13 @@ export default {
       return true;
     },
   },
-  created() {
-    console.log(this.id);
-    if (this.id && this.id != "create") {
-      this.api({ url: "/api/v1/expenditureplans/" + this.id }).then((res) => {
-        this.plan = res;
-      });
-    }
-    // if (this.formMode == Enum.FormMode.UPDATE && this.planEdit) {
-    //   this.plan = this.planEdit;
-    // }
-  },
-  methods: {
-    onSubmitForm() {
-      if (this.onValidate()) {
-        var method = this.isAdd ? "POST" : "PUT";
-        var url = this.isAdd
-          ? "/api/v1/expenditureplans"
-          : `/api/v1/expenditureplans/${this.id}`;
-        this.api({
-          url: url,
-          data: this.plan,
-          method: method,
-        }).then((res) => {
-          console.log(res);
-          //   this.$emit("onSaveSuccess");
-          //   this.$emit("update:formMode", Enum.FormMode.ADD);
-          router.push("/expenditures");
-        });
-      }
-    },
-    onValidate() {
-      try {
-        var errors = [];
-        if (!this.plan.ExpenditurePlanName) {
-          errors.push("Tên kế hoạch không được phép để trống.");
-        }
-        if (!this.plan.ExpenditurePlanType) {
-          errors.push("Loại kế hoạch không được để trống.");
-        }
-
-        if (
-          this.plan.ExpenditurePlanType ==
-            Enum.ExpenditurePlanType.INCREMENT_EVENT &&
-          !this.plan.EventId
-        ) {
-          errors.push("Sự kiện cho khoản thu/chi không được phép để trống.");
-        }
-
-        if (this.isIncrement && !this.plan.AmountUnit) {
-          errors.push("Số tiền thu/người không được phép để trống.");
-        }
-        if (errors.length > 0) {
-          this.commonJs.showMessenger({
-            title: "Dữ liệu không hợp lệ",
-            msg: errors,
-            type: Enum.MsgType.Error,
-            confirm: () => {},
-          });
-          return false;
-        }
-        return true;
-      } catch (error) {
-        console.log(error);
-      }
-    },
-    onClose(){
-        router.push("/expenditures?isReload");
-    }
-  },
   data() {
     return {
-      plan: { ExpenditurePlanType: Enum.ExpenditurePlanType.INCREMENT_EVENT },
+      expenditure: {},
+      formTitle: null,
+      optionType: 1,
+      plansFilter:[],
+      expenditureTypesFilter:[]
     };
   },
 };

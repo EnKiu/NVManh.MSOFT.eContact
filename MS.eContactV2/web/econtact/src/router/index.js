@@ -4,8 +4,12 @@ import store from '@/store'
 import EventList from '../views/events/EventList.vue'
 // import NewList from '../views/news/NewList.vue'
 import AlbumList from '../views/pictures/AlbumList.vue'
+
+// THU CHI
 import ExpenditureIndex from '../views/expenditure/Index.vue'
+import ExpenditurePlanDetail from '../views/expenditure/ExpenditurePlanDetail.vue'
 import ExpenditureDetail from '../views/expenditure/ExpenditureDetail.vue'
+
 import LoginPage from '../views/account/Login.vue'
 import Register from '../views/account/Register.vue'
 import AccountInfo from '../views/account/AccountInfo.vue'
@@ -66,9 +70,22 @@ const routes = [{
         beforeEnter: ifAuthenticated
     },
     {
-        path: '/expenditures/:id',
+        path: '/expenditures/create',
         name: 'ExpenditureDetail',
+        props: route => ({ type: route.query.type }),
         component: ExpenditureDetail,
+        beforeEnter: ifAuthenticated
+    },
+    // {
+    //     path: '/expenditures/:id',
+    //     name: 'ExpenditureDetail',
+    //     component: ExpenditureDetail,
+    //     beforeEnter: ifAuthenticated
+    // },
+    {
+        path: '/expenditures/plans/:id',
+        name: 'ExpenditurePlanDetail',
+        component: ExpenditurePlanDetail,
         props: true,
         beforeEnter: ifAuthenticated
     },

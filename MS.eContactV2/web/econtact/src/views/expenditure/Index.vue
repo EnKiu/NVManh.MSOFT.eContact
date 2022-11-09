@@ -42,22 +42,22 @@
       <el-tab-pane label="Chi" name="third">Role</el-tab-pane>
     </el-tabs>
   </div>
-  <expenditure-detail
+  <expenditure-plan-detail
     v-if="showDetail"
     :planEdit="planForEdit"
     :formMode="detailFormMode"
     @onClose="showDetail = false"
     @onSaveSuccess="onSavePlanSuccess"
-  ></expenditure-detail>
+  ></expenditure-plan-detail>
 </template>
 <script>
 import ExpenditurePlanItem from "./ExpenditurePlanItem.vue";
-import ExpenditureDetail from "./ExpenditureDetail.vue";
+import ExpenditurePlanDetail from "./ExpenditurePlanDetail.vue";
 import Enum from '@/scripts/enum';
 import router from '@/router';
 export default {
   name: "ExpenditureHome",
-  components: { ExpenditurePlanItem, ExpenditureDetail },
+  components: { ExpenditurePlanItem, ExpenditurePlanDetail },
   props: [],
   emits: [],
   created() {
@@ -72,13 +72,13 @@ export default {
     onAddPlan() {
       // this.showDetail = true;
       // this.detailFormMode = Enum.FormMode.ADD;
-      router.push("/expenditures/create")
+      router.push("/expenditures/plans/create")
     },
     onUpdatePlan(plan){
       // this.showDetail = true;
       // this.planForEdit = plan;
       // this.detailFormMode = Enum.FormMode.UPDATE;
-      router.push("/expenditures/"+plan.ExpenditurePlanId)
+      router.push("/expenditures/plans/"+plan.ExpenditurePlanId)
     },
     onReceive() {},
     onSpend() {},
@@ -102,6 +102,10 @@ export default {
 };
 </script>
 <style scoped>
+.expenditure-plan-list {
+  max-height: calc(100vh - 270px);
+  overflow-y: auto;
+}
 .toolbar {
   position: absolute;
   left: -2px;

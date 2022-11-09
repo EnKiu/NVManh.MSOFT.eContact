@@ -32,6 +32,16 @@ var Enum = {
         ENTER: 13
     },
 
+    ExpenditureType: {
+        INCREMENT_PLAN: 1,
+        INCREMENT_SUPER_RICH: 2,
+        INCREMENT_OTHER: 3,
+        REDURE_PLAN: 20,
+        REDURE_WEDDING: 21,
+        REDURE_FUNERAL: 22,
+        REDUCE_MEDICAL: 23,
+        REDUCE_OTHER: 24
+    },
     /**
      * Kế hoạch thu chi
      */

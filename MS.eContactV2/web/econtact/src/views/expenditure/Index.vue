@@ -5,10 +5,10 @@
         <i class="icofont-coins"></i> Thêm kế hoạch
       </button>
       <button class="btn btn--add" @click="onReceive">
-        <i class="icofont-dong-plus"></i> Thu tiền
+        <i class="icofont-dong-plus"></i> Thu
       </button>
       <button class="btn btn--remove" @click="onSpend">
-        <i class="icofont-dong-minus"></i> Chi tiền
+        <i class="icofont-dong-minus"></i> Chi
       </button>
     </div>
     <div class="expenditure-statistic">
@@ -41,28 +41,35 @@
       <el-tab-pane label="Thu" name="second">Config</el-tab-pane>
       <el-tab-pane label="Chi" name="third">Role</el-tab-pane>
     </el-tabs>
+    <router-view name="ExpenditureDialog" :type="type"></router-view>
   </div>
-  <expenditure-plan-detail
+  <!-- <expenditure-plan-detail
     v-if="showDetail"
     :planEdit="planForEdit"
     :formMode="detailFormMode"
     @onClose="showDetail = false"
     @onSaveSuccess="onSavePlanSuccess"
-  ></expenditure-plan-detail>
+  ></expenditure-plan-detail> -->
 </template>
 <script>
 import ExpenditurePlanItem from "./ExpenditurePlanItem.vue";
-import ExpenditurePlanDetail from "./ExpenditurePlanDetail.vue";
-import Enum from '@/scripts/enum';
-import router from '@/router';
+// import ExpenditurePlanDetail from "./ExpenditurePlanDetail.vue";
+import Enum from "@/scripts/enum";
+import router from "@/router";
 export default {
   name: "ExpenditureHome",
-  components: { ExpenditurePlanItem, ExpenditurePlanDetail },
-  props: [],
+  components: { ExpenditurePlanItem },
+  props: ["type"],
   emits: [],
   created() {
     this.loadData();
   },
+  // beforeRouteEnter(to, from, next) {
+  //   console.log(`to`, to);
+  //   console.log(`from`, from);
+  //   console.log(`next`, next);
+  //   next();
+  // },
   methods: {
     loadData() {
       this.api({ url: "/api/v1/expenditureplans" }).then((res) => {
@@ -72,16 +79,20 @@ export default {
     onAddPlan() {
       // this.showDetail = true;
       // this.detailFormMode = Enum.FormMode.ADD;
-      router.push("/expenditures/plans/create")
+      router.replace("/expenditures/plans/create");
     },
-    onUpdatePlan(plan){
+    onUpdatePlan(plan) {
       // this.showDetail = true;
       // this.planForEdit = plan;
       // this.detailFormMode = Enum.FormMode.UPDATE;
-      router.push("/expenditures/plans/"+plan.ExpenditurePlanId)
+      router.replace("/expenditures/plans/" + plan.ExpenditurePlanId);
     },
-    onReceive() {},
-    onSpend() {},
+    onReceive() {
+      router.replace("/expenditures/create?type=1");
+    },
+    onSpend() {
+      router.replace("/expenditures/create?type=2");
+    },
     onSavePlanSuccess() {
       this.showDetail = false;
       this.loadData();
@@ -95,8 +106,8 @@ export default {
       activeName: "first",
       showDetail: false,
       plans: [],
-      planForEdit:null,
-      detailFormMode: Enum.FormMode.ADD
+      planForEdit: null,
+      detailFormMode: Enum.FormMode.ADD,
     };
   },
 };

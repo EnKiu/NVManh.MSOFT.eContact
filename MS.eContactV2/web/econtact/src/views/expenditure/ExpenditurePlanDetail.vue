@@ -76,16 +76,11 @@
         </m-combobox>
       </div>
       <div class="m-row">
-        <m-text-area
-          label="Mô tả/ Ghi chú"
-          v-model="plan.Description"
-        ></m-text-area>
+        <m-text-area label="Mô tả/ Ghi chú" v-model="plan.Description"></m-text-area>
       </div>
     </template>
     <template v-slot:footer>
-      <button class="btn btn--cancel">
-        <i class="icofont-ui-close"></i> Hủy
-      </button>
+      <button class="btn btn--cancel"><i class="icofont-ui-close"></i> Hủy</button>
       <button
         type="submit"
         form="form-info"
@@ -101,14 +96,13 @@
 import Enum from "@/scripts/enum";
 import router from "@/router";
 export default {
-  name: "ExpenditureDetail",
+  name: "ExpenditurePlanDetail",
   emits: ["onSaveSuccess", "update:formMode"],
   props: ["planEdit", "formMode", "id"],
   computed: {
     isEventType: function () {
       if (
-        this.plan.ExpenditurePlanType ==
-          Enum.ExpenditurePlanType.INCREMENT_EVENT ||
+        this.plan.ExpenditurePlanType == Enum.ExpenditurePlanType.INCREMENT_EVENT ||
         this.plan.ExpenditurePlanType == Enum.ExpenditurePlanType.REDURE_EVENT
       )
         return true;
@@ -169,8 +163,7 @@ export default {
         }
 
         if (
-          this.plan.ExpenditurePlanType ==
-            Enum.ExpenditurePlanType.INCREMENT_EVENT &&
+          this.plan.ExpenditurePlanType == Enum.ExpenditurePlanType.INCREMENT_EVENT &&
           !this.plan.EventId
         ) {
           errors.push("Sự kiện cho khoản thu/chi không được phép để trống.");

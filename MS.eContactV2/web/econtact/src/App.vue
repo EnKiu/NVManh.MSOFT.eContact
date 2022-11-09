@@ -9,6 +9,8 @@
   <router-view name="LoginPage"></router-view>
   <router-view class="register" name="Register"></router-view>
   <router-view name="HomePage"></router-view>
+  <router-view name="Other"></router-view>
+
   <MLoading v-if="isShowLoading" />
   <MLoading v-if="connectingHub" />
   <!-- <home-page v-if="!isAuthenticated && showHomePage" v-model:showHomePage="showHomePage"></home-page> -->
@@ -99,7 +101,7 @@ export default {
   data() {
     return {
       showHomePage: false,
-      showNew: true,
+      showNew: false,
       progressing: false,
     };
   },

@@ -63,17 +63,41 @@ const routes = [{
         component: ContactList,
         beforeEnter: ifAuthenticated
     },
+    // {
+    //     path: '/expenditures',
+    //     name: 'ExpenditureIndex',
+    //     component: ExpenditureIndex,
+    //     beforeEnter: ifAuthenticated
+    // },
     {
         path: '/expenditures',
-        name: 'ExpenditureIndex',
+        name: 'ExpenditureList',
         component: ExpenditureIndex,
-        beforeEnter: ifAuthenticated
-    },
-    {
-        path: '/expenditures/create',
-        name: 'ExpenditureDetail',
         props: route => ({ type: route.query.type }),
-        component: ExpenditureDetail,
+        children: [{
+                path: 'plans',
+                children: [{
+                        path: "create",
+                        components: { ExpenditureDialog: ExpenditurePlanDetail },
+                    },
+                    {
+                        path: ":id",
+                        components: { ExpenditureDialog: ExpenditurePlanDetail },
+                        props: true
+                    }
+                ],
+                // components: { Test: ExpenditurePlanDetail },
+            }, {
+                path: 'create',
+                components: { ExpenditureDialog: ExpenditureDetail },
+            },
+            {
+                path: ':id',
+                components: { ExpenditureDialog: ExpenditureDetail },
+                props: true
+            }
+        ],
+
         beforeEnter: ifAuthenticated
     },
     // {
@@ -82,13 +106,15 @@ const routes = [{
     //     component: ExpenditureDetail,
     //     beforeEnter: ifAuthenticated
     // },
-    {
-        path: '/expenditures/plans/:id',
-        name: 'ExpenditurePlanDetail',
-        component: ExpenditurePlanDetail,
-        props: true,
-        beforeEnter: ifAuthenticated
-    },
+    // {
+    //     path: '/expenditures/plans/:id',
+    //     name: 'ExpenditurePlanDetail',
+    //     components: {
+    //         Other: ExpenditurePlanDetail
+    //     },
+    //     props: true,
+    //     beforeEnter: ifAuthenticated
+    // },
     {
         path: '/events',
         name: 'EventList',

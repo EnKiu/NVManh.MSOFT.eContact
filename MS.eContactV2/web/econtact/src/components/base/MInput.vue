@@ -16,7 +16,7 @@
       class="input"
       @keydown="onKeyDown"
       @blur="onBlur"
-      :class="{ 'input--invalid': inValid }"
+      :class="{ 'input--invalid': inValid, 'text-align-right': onlyNumberChar }"
     />
     <div v-if="inValid" class="validate-error">
       <div class="error__content">

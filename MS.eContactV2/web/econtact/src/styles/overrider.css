@@ -210,3 +210,7 @@
 :root {
     --el-font-size-base: 13px !important;
 }
+
+.el-date-editor.el-input {
+    height: 36px !important;
+}

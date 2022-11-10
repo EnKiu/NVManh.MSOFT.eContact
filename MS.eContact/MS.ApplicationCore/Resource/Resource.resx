@@ -135,6 +135,30 @@
   <data name="Enum_ExpenditurePlanType_REDURE_EVENT" xml:space="preserve">
     <value>Chi cho sự kiện</value>
   </data>
+  <data name="Enum_ExpenditureType_INCREMENT_OTHER" xml:space="preserve">
+    <value>Thu từ nguồn khác</value>
+  </data>
+  <data name="Enum_ExpenditureType_INCREMENT_PLAN" xml:space="preserve">
+    <value>Thu theo kế hoạch</value>
+  </data>
+  <data name="Enum_ExpenditureType_INCREMENT_SUPER_RICH" xml:space="preserve">
+    <value>Thu từ nguồn ủng hộ của các mạnh thường quân</value>
+  </data>
+  <data name="Enum_ExpenditureType_REDUCE_MEDICAL" xml:space="preserve">
+    <value>Chi ốm đau, nghỉ bệnh</value>
+  </data>
+  <data name="Enum_ExpenditureType_REDUCE_OTHER" xml:space="preserve">
+    <value>Chi khác</value>
+  </data>
+  <data name="Enum_ExpenditureType_REDURE_FUNERAL" xml:space="preserve">
+    <value>Chi đám tang/ đám hiểu</value>
+  </data>
+  <data name="Enum_ExpenditureType_REDURE_PLAN" xml:space="preserve">
+    <value>Chi theo kế hoạch</value>
+  </data>
+  <data name="Enum_ExpenditureType_REDURE_WEDDING" xml:space="preserve">
+    <value>Chi đám cưới thành viên</value>
+  </data>
   <data name="Exception_Message_General" xml:space="preserve">
     <value>Có lỗi xảy ra vui lòng liên hệ Quản trị viên để được trợ giúp</value>
   </data>

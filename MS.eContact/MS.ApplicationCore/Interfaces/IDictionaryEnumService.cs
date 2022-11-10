@@ -1,4 +1,5 @@
 ﻿using MS.ApplicationCore.Entities;
+using MS.ApplicationCore.MSEnums;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -10,6 +11,7 @@ namespace MS.ApplicationCore.Interfaces
     public interface IDictionaryEnumService
     {
         IEnumerable<EnumDictionary> GetGenders();
-        IEnumerable<EnumDictionary> GetExpenditurePlanType();
+        IEnumerable<EnumDictionary> GetExpenditurePlanType(ReceiptType? type);
+        IEnumerable<EnumDictionary> GetExpenditureTypes(ReceiptType? type);
     }
 }

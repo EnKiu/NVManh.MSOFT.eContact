@@ -56,6 +56,14 @@ var Enum = {
         REDURE_EVENT: 200,
         // Chi khác
         REDUCE_OTHER: 201
+    },
+    ReceiptType: {
+        Income: 1,
+        Outcome: 2
+    },
+    OptionExpenditurePlanType: {
+        ForPlan: 1,
+        ForOther: 2
     }
 }
 export default Enum;

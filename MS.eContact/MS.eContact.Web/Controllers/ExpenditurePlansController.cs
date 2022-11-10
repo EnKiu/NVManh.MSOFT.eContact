@@ -3,6 +3,7 @@ using Microsoft.AspNetCore.Mvc;
 using MS.ApplicationCore.Authorization;
 using MS.ApplicationCore.Entities;
 using MS.ApplicationCore.Interfaces;
+using MS.ApplicationCore.MSEnums;
 using System.Threading.Tasks;
 
 namespace MS.eContact.Web.Controllers
@@ -19,9 +20,9 @@ namespace MS.eContact.Web.Controllers
 
         [AllowAnonymous]
         [HttpGet("plan-type")]
-        public IActionResult GetExpenditurePlanTypeList()
+        public IActionResult GetExpenditurePlanTypeList([FromQuery] ReceiptType? type)
         {
-            return Ok(_dictionaryEnumService.GetExpenditurePlanType());
+            return Ok(_dictionaryEnumService.GetExpenditurePlanType(type));
         }
 
         public async override Task<IActionResult> Get()

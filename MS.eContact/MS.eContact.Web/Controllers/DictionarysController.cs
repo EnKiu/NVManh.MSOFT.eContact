@@ -2,10 +2,11 @@
 using Microsoft.AspNetCore.Mvc;
 using MS.ApplicationCore.Authorization;
 using MS.ApplicationCore.Interfaces;
+using MS.ApplicationCore.MSEnums;
 
 namespace MS.eContact.Web.Controllers
 {
-    [Route("api/[controller]")]
+    [Route("api/v1/[controller]")]
     [ApiController]
     public class DictionarysController : ControllerBase
     {
@@ -17,9 +18,17 @@ namespace MS.eContact.Web.Controllers
 
         [AllowAnonymous]
         [HttpGet("plan-type")]
-        public IActionResult GetExpenditurePlanTypeList()
+        public IActionResult GetExpenditurePlanTypeList([FromQuery] ReceiptType? type)
         {
-            var res = _dictionaryEnumService.GetExpenditurePlanType();
+            var res = _dictionaryEnumService.GetExpenditurePlanType(type);
+            return Ok(res);
+        }
+
+        [AllowAnonymous]
+        [HttpGet("expenditure-type")]
+        public IActionResult GetExpenditureTypes([FromQuery] ReceiptType? type)
+        {
+            var res = _dictionaryEnumService.GetExpenditureTypes(type);
             return Ok(res);
         }
 

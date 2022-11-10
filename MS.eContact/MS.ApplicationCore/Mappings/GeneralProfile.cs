@@ -16,6 +16,7 @@ namespace MS.ApplicationCore.Mappings
         {
             //_jwtUtils = jwtUtils;
             CreateMap<User, UserRegisterResponse>();
+            CreateMap<ExpenditurePlan, ExpenditurePlanResponse>();
             CreateMap<UserInfo, User>();
             CreateMap<User, UserInfo>();
             CreateMap<RegisterModel, User>()

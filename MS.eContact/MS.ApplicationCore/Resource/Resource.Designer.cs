@@ -115,6 +115,78 @@ namespace MS.ApplicationCore.Resource {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Thu từ nguồn khác.
+        /// </summary>
+        public static string Enum_ExpenditureType_INCREMENT_OTHER {
+            get {
+                return ResourceManager.GetString("Enum_ExpenditureType_INCREMENT_OTHER", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Thu theo kế hoạch.
+        /// </summary>
+        public static string Enum_ExpenditureType_INCREMENT_PLAN {
+            get {
+                return ResourceManager.GetString("Enum_ExpenditureType_INCREMENT_PLAN", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Thu từ nguồn ủng hộ của các mạnh thường quân.
+        /// </summary>
+        public static string Enum_ExpenditureType_INCREMENT_SUPER_RICH {
+            get {
+                return ResourceManager.GetString("Enum_ExpenditureType_INCREMENT_SUPER_RICH", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Chi ốm đau, nghỉ bệnh.
+        /// </summary>
+        public static string Enum_ExpenditureType_REDUCE_MEDICAL {
+            get {
+                return ResourceManager.GetString("Enum_ExpenditureType_REDUCE_MEDICAL", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Chi khác.
+        /// </summary>
+        public static string Enum_ExpenditureType_REDUCE_OTHER {
+            get {
+                return ResourceManager.GetString("Enum_ExpenditureType_REDUCE_OTHER", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Chi đám tang/ đám hiểu.
+        /// </summary>
+        public static string Enum_ExpenditureType_REDURE_FUNERAL {
+            get {
+                return ResourceManager.GetString("Enum_ExpenditureType_REDURE_FUNERAL", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Chi theo kế hoạch.
+        /// </summary>
+        public static string Enum_ExpenditureType_REDURE_PLAN {
+            get {
+                return ResourceManager.GetString("Enum_ExpenditureType_REDURE_PLAN", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Chi đám cưới thành viên.
+        /// </summary>
+        public static string Enum_ExpenditureType_REDURE_WEDDING {
+            get {
+                return ResourceManager.GetString("Enum_ExpenditureType_REDURE_WEDDING", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Có lỗi xảy ra vui lòng liên hệ Quản trị viên để được trợ giúp.
         /// </summary>
         public static string Exception_Message_General {

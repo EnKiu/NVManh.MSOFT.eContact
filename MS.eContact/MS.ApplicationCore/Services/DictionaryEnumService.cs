@@ -13,9 +13,32 @@ namespace MS.ApplicationCore.Services
     public class DictionaryEnumService : IDictionaryEnumService
     {
         List<EnumDictionary> dics = new List<EnumDictionary>();
-        public IEnumerable<EnumDictionary> GetExpenditurePlanType()
+        public IEnumerable<EnumDictionary> GetExpenditurePlanType(ReceiptType? type)
         {
-            return GetListEnumDictionary(typeof(ExpenditurePlanType).GetEnumValues());
+            var dics = GetListEnumDictionary(typeof(ExpenditurePlanType).GetEnumValues());
+            switch (type)
+            {
+                case ReceiptType.Income:
+                    return dics.Where(item => (int)item.Value < 200);
+                case ReceiptType.Outcome:
+                    return dics.Where(item => (int)item.Value >= 200);
+                default:
+                    return dics;
+            }
+        }
+
+        public IEnumerable<EnumDictionary> GetExpenditureTypes(ReceiptType? type)
+        {
+            var dics = GetListEnumDictionary(typeof(ExpenditureType).GetEnumValues());
+            switch (type)
+            {
+                case ReceiptType.Income:
+                    return dics.Where(item => (int)item.Value < 20);
+                case ReceiptType.Outcome:
+                    return dics.Where(item => (int)item.Value >= 20);
+                default:
+                    return dics;
+            }
         }
 
         public IEnumerable<EnumDictionary> GetGenders()

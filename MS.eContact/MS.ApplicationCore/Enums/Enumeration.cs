@@ -134,4 +134,20 @@ namespace MS.ApplicationCore.MSEnums
         REDUCE_OTHER = 24
 
     }
+
+    /// <summary>
+    /// Loại phiếu
+    /// </summary>
+    public enum ReceiptType
+    {
+        /// <summary>
+        /// Tăng (Thu)
+        /// </summary>
+        Income = 1,
+
+        /// <summary>
+        /// Giảm (Chi)
+        /// </summary>
+        Outcome = 2,
+    }
 }

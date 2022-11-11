@@ -148,7 +148,7 @@ export default {
           console.log(res);
           //   this.$emit("onSaveSuccess");
           //   this.$emit("update:formMode", Enum.FormMode.ADD);
-          router.push("/expenditures");
+          router.push("/funds");
         });
       }
     },
@@ -187,7 +187,7 @@ export default {
       }
     },
     onClose() {
-      router.push("/expenditures?isReload");
+      router.push("/funds?isReload");
     },
   },
   data() {

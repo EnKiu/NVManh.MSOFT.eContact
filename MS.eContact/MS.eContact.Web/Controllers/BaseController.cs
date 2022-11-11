@@ -71,8 +71,8 @@ namespace MS.eContact.Web.Controllers
         [HttpDelete("{id}")]
         public virtual async Task<IActionResult> Delete(string id)
         {
-            await _baseService.RemoveAsync(id);
-            return Ok();
+            var res = await _baseService.RemoveAsync(id);
+            return Ok(res);
         }
     }
 }

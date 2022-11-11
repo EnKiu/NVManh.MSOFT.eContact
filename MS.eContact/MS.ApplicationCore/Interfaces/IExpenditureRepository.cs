@@ -1,4 +1,5 @@
-﻿using MS.ApplicationCore.Entities;
+﻿using MS.ApplicationCore.DTOs;
+using MS.ApplicationCore.Entities;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -9,5 +10,8 @@ namespace MS.ApplicationCore.Interfaces
 {
     public interface IExpenditureRepository:IRepository<Expenditure>
     {
+        Task<IEnumerable<Expenditure>> GetRevenues();
+        Task<IEnumerable<Expenditure>> GetExpenditures();
+        Task<FundInfo> GetGeneralInfo();
     }
 }

@@ -25,6 +25,10 @@ body {
     align-items: center;
 }
 
+.text--underline {
+    text-decoration: underline;
+}
+
 .mg-bottom-0 {
     margin-bottom: 0;
 }
@@ -39,6 +43,10 @@ body {
 
 .--color-edit {
     color: #0084ff;
+}
+
+.--color-green {
+    color: #067933;
 }
 
 .--bold {

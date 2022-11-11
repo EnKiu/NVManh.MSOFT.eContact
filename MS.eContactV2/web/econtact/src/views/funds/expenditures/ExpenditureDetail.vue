@@ -105,7 +105,7 @@
       </div>
     </template>
     <template v-slot:footer>
-      <button class="btn btn--cancel">
+      <button class="btn btn--cancel" @click="onClose">
         <i class="icofont-ui-close"></i> Hủy
       </button>
       <button
@@ -138,6 +138,11 @@ export default {
     },
   },
   created() {
+    if (this.id) {
+      this.api({ url: "api/v1/expenditures/" + this.id }).then((res) => {
+        this.expenditure = res;
+      });
+    }
     if (this.type == Enum.ReceiptType.Income) {
       this.formTitle = "Chi tiết phiếu thu";
       this.expenditure.ExpenditureType = Enum.ExpenditureType.INCREMENT_PLAN;
@@ -185,10 +190,13 @@ export default {
       }
       return true;
     },
+    tabName() {
+      return this.type == 1 ? "revenues" : "expenditures";
+    },
   },
   methods: {
     onClose() {
-      router.push("/expenditures");
+      router.push("/funds?tab=" + this.tabName);
     },
     onChangeOptionType(value) {
       if (
@@ -232,7 +240,7 @@ export default {
         this.expenditure.ExpenditureType = null;
       }
     },
-    onChangeMember(value, text, item){
+    onChangeMember(value, text, item) {
       // Nếu chọn là theo kế hoạch, mặc định là thu/chi theo kế hoạch
       if (this.optionType == Enum.OptionExpenditurePlanType.ForPlan) {
         if (this.type == Enum.ReceiptType.Income) {
@@ -243,12 +251,11 @@ export default {
           this.expenditure.ExpenditureName = `[${text}] chi tiền [${this.expenditure.ExpenditurePlan.ExpenditurePlanName}]`;
         }
       } else {
-        if(this.type==Enum.ReceiptType.Income){
+        if (this.type == Enum.ReceiptType.Income) {
           this.expenditure.ExpenditureName = `[${text}] nộp tiền [${this.expenditure.ExpenditureType.Text}]`;
-        }else{
+        } else {
           this.expenditure.ExpenditureName = `[${text}] chi tiền [${this.expenditure.ExpenditureType.Text}]`;
         }
-        
       }
     },
     validate() {
@@ -299,8 +306,8 @@ export default {
           method = "PUT";
         }
         this.api({ url: url, data: this.expenditure, method: method }).then(
-          (res) => {
-            console.log("Thêm thành công: ", res);
+          () => {
+            router.push("/funds?tab=" + this.tabName);
           }
         );
       }
@@ -308,7 +315,7 @@ export default {
   },
   data() {
     return {
-      expenditure: { ExpenditureType: Enum.ExpenditureType.INCREMENT_PLAN },
+      expenditure: { ExpenditureType: Enum.ExpenditureType.INCREMENT_PLAN, ExpenditureDate:new Date() },
       formTitle: null,
       optionType: 1,
       plansFilter: [],

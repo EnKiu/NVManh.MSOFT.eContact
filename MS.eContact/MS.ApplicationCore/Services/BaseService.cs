@@ -106,9 +106,9 @@ namespace MS.ApplicationCore.Services
             _repository.Remove(key);
         }
 
-        public virtual async Task RemoveAsync(object key)
+        public virtual async Task<int> RemoveAsync(object key)
         {
-            await _repository.RemoveAsync(key);
+            return await _repository.RemoveAsync(key);
         }
 
         public int Update(TEntity entity, object pks)

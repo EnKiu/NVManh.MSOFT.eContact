@@ -61,7 +61,7 @@
       >
     </div>
     <div class="expenditure" id="expenditure">
-      <router-link to="/expenditures" class="navbar-item">
+      <router-link to="/funds" class="navbar-item">
         <span><i class="icofont-chart-arrows-axis"></i>Báo cáo Thu/Chi</span>
       </router-link>
     </div>

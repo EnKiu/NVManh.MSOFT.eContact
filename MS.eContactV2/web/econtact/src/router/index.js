@@ -6,9 +6,9 @@ import EventList from '../views/events/EventList.vue'
 import AlbumList from '../views/pictures/AlbumList.vue'
 
 // THU CHI
-import ExpenditureIndex from '../views/expenditure/Index.vue'
-import ExpenditurePlanDetail from '../views/expenditure/ExpenditurePlanDetail.vue'
-import ExpenditureDetail from '../views/expenditure/ExpenditureDetail.vue'
+import ExpenditureIndex from '../views/funds/Index.vue'
+import ExpenditurePlanDetail from '../views/funds/plans/ExpenditurePlanDetail.vue'
+import ExpenditureDetail from '../views/funds/expenditures/ExpenditureDetail.vue'
 
 import LoginPage from '../views/account/Login.vue'
 import Register from '../views/account/Register.vue'
@@ -69,11 +69,40 @@ const routes = [{
     //     component: ExpenditureIndex,
     //     beforeEnter: ifAuthenticated
     // },
+
+    // {
+    //     path: '/funds/plans/create',
+    //     name: 'ExpenditureList',
+    //     components: { ExpenditureDialog: ExpenditurePlanDetail },
+    //     props: route => ({ type: route.query.type, tab: route.query.tab }),
+    //     beforeEnter: ifAuthenticated
+    // },
+    // {
+    //     path: '/funds/plans/:id',
+    //     name: 'ExpenditureList',
+    //     components: { ExpenditureDialog: ExpenditurePlanDetail },
+    //     props: true,
+    //     beforeEnter: ifAuthenticated
+    // },
+    // {
+    //     path: '/funds/:id',
+    //     name: 'ExpenditureList',
+    //     components: { ExpenditureDialog: ExpenditureDetail },
+    //     props: route => ({ type: route.query.type, tab: route.query.tab }),
+    //     beforeEnter: ifAuthenticated
+    // },
+    // {
+    //     path: '/funds/create',
+    //     name: 'ExpenditureList',
+    //     components: { ExpenditureDialog: ExpenditureDetail },
+    //     props: route => ({ type: route.query.type, tab: route.query.tab }),
+    //     beforeEnter: ifAuthenticated
+    // },
     {
-        path: '/expenditures',
+        path: '/funds',
         name: 'ExpenditureList',
         component: ExpenditureIndex,
-        props: route => ({ type: route.query.type }),
+        props: route => ({ type: route.query.type, tab: route.query.tab }),
         children: [{
                 path: 'plans',
                 children: [{
@@ -100,21 +129,6 @@ const routes = [{
 
         beforeEnter: ifAuthenticated
     },
-    // {
-    //     path: '/expenditures/:id',
-    //     name: 'ExpenditureDetail',
-    //     component: ExpenditureDetail,
-    //     beforeEnter: ifAuthenticated
-    // },
-    // {
-    //     path: '/expenditures/plans/:id',
-    //     name: 'ExpenditurePlanDetail',
-    //     components: {
-    //         Other: ExpenditurePlanDetail
-    //     },
-    //     props: true,
-    //     beforeEnter: ifAuthenticated
-    // },
     {
         path: '/events',
         name: 'EventList',
@@ -132,7 +146,8 @@ const routes = [{
         name: 'AccountInfo',
         component: AccountInfo,
         beforeEnter: ifAuthenticated
-    }
+    },
+
 ]
 
 const router = createRouter({

@@ -14,54 +14,54 @@
     <div class="expenditure-statistic">
       <div class="increment-statistic">
         <div class="statistic__title">Tổng thu:</div>
-        <div class="increment-total">+13.500.000</div>
+        <div class="increment-total">
+          +{{ commonJs.formatMoney(FundInfo.RevenueTotal) }}
+        </div>
       </div>
       <div class="reduce-statistic">
         <div class="statistic__title">Tổng chi:</div>
-        <div class="reduce-total">-1.000.000</div>
+        <div class="reduce-total">
+          -{{ commonJs.formatMoney(FundInfo.ExpenditureTotal) }}
+        </div>
       </div>
       <div class="money-left-statistic">
         <div class="statistic__title">Quỹ còn lại:</div>
-        <div class="money-total">+12.500.000</div>
+        <div
+          class="money-total"
+          :class="FundInfo.FundLeft < 0 ? '--color-red' : '--color-green'"
+        >
+          {{ commonJs.formatMoney(FundInfo.FundLeft) }}
+        </div>
       </div>
     </div>
     <el-tabs v-model="activeName" class="demo-tabs" @tab-click="handleClick">
-      <el-tab-pane label="Kế hoạch Thu/Chi" name="first">
-        <div class="expenditure-plan-list">
-          <expenditure-plan-item
-            v-for="(plan, index) in plans"
-            :key="index"
-            :plan="plan"
-            @dblclick="onUpdatePlan(plan)"
-            @onUpdatePlan="onUpdatePlan(plan)"
-            @onDeleteSuccess="loadData()"
-          ></expenditure-plan-item>
-        </div>
+      <el-tab-pane label="Kế hoạch Thu/Chi" name="plans">
+       <expenditure-plan-list></expenditure-plan-list>
       </el-tab-pane>
-      <el-tab-pane label="Thu" name="second">Config</el-tab-pane>
-      <el-tab-pane label="Chi" name="third">Role</el-tab-pane>
+      <el-tab-pane label="Thu" name="revenues">
+        <fluctuation-list :isIncome="true"></fluctuation-list>
+      </el-tab-pane>
+      <el-tab-pane label="Chi" name="expenditures">
+        <fluctuation-list :isIncome="false"></fluctuation-list>
+      </el-tab-pane>
     </el-tabs>
     <router-view name="ExpenditureDialog" :type="type"></router-view>
   </div>
-  <!-- <expenditure-plan-detail
-    v-if="showDetail"
-    :planEdit="planForEdit"
-    :formMode="detailFormMode"
-    @onClose="showDetail = false"
-    @onSaveSuccess="onSavePlanSuccess"
-  ></expenditure-plan-detail> -->
 </template>
 <script>
-import ExpenditurePlanItem from "./ExpenditurePlanItem.vue";
+import FluctuationList from "./fluctuations/FluctuationList.vue";
+import ExpenditurePlanList from './plans/ExpenditurePlanList.vue'
 // import ExpenditurePlanDetail from "./ExpenditurePlanDetail.vue";
 import Enum from "@/scripts/enum";
 import router from "@/router";
 export default {
   name: "ExpenditureHome",
-  components: { ExpenditurePlanItem },
-  props: ["type"],
+  components: {FluctuationList,ExpenditurePlanList },
+  props: ["type", "tab"],
   emits: [],
   created() {
+    console.log("activeName: ",this.tab);
+    this.activeName = this.tab ? this.tab : "plans";
     this.loadData();
   },
   // beforeRouteEnter(to, from, next) {
@@ -72,26 +72,21 @@ export default {
   // },
   methods: {
     loadData() {
+      this.api({ url: "api/v1/expenditures/general-info" }).then((r) => {
+        this.FundInfo = r;
+      });
       this.api({ url: "/api/v1/expenditureplans" }).then((res) => {
         this.plans = res;
       });
     },
-    onAddPlan() {
-      // this.showDetail = true;
-      // this.detailFormMode = Enum.FormMode.ADD;
-      router.replace("/expenditures/plans/create");
-    },
-    onUpdatePlan(plan) {
-      // this.showDetail = true;
-      // this.planForEdit = plan;
-      // this.detailFormMode = Enum.FormMode.UPDATE;
-      router.replace("/expenditures/plans/" + plan.ExpenditurePlanId);
+    onAddPlan(){
+      router.replace("/funds/plans/create");
     },
     onReceive() {
-      router.replace("/expenditures/create?type=1");
+      router.replace("/funds/create?type=1");
     },
     onSpend() {
-      router.replace("/expenditures/create?type=2");
+      router.replace("/funds/create?type=2");
     },
     onSavePlanSuccess() {
       this.showDetail = false;
@@ -103,11 +98,12 @@ export default {
   },
   data() {
     return {
-      activeName: "first",
+      activeName: "plans",
       showDetail: false,
       plans: [],
       planForEdit: null,
       detailFormMode: Enum.FormMode.ADD,
+      FundInfo: {},
     };
   },
 };
@@ -154,6 +150,6 @@ button i {
 }
 
 .money-total {
-  color: #004982;
+  font-weight: 700;
 }
 </style>

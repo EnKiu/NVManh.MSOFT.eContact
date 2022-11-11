@@ -91,14 +91,14 @@ namespace MS.ApplicationCore.Services
             return addAlbumResult;
         }
 
-        public override async Task RemoveAsync(object key)
+        public override async Task<int> RemoveAsync(object key)
         {
             Guid.TryParse(key.ToString(), out var albumId);
             // Lấy toàn bộ thông tin ảnh có trong album:
             UnitOfWork.BeginTransaction();
             var pictures = await UnitOfWork.Albums.GetPicturesByAlbumId(albumId);
             var album = await UnitOfWork.Albums.FindAsync(albumId);
-            await base.RemoveAsync(key);
+            var res = await base.RemoveAsync(key);
             var count = 1;
             var totalFiles = pictures.Count();
             var userId = _commonFunction.GetCurrentUserId();
@@ -131,6 +131,7 @@ namespace MS.ApplicationCore.Services
             }
             UnitOfWork.Commit();
             //Thực hiện xóa ảnh từ service files
+            return res;
         }
     }
 }

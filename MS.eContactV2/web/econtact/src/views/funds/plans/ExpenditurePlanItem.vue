@@ -2,15 +2,15 @@
   <div class="plan">
     <div class="plan__name">
       <div class="plan__title">
-        {{ planTypeName }}:
+        <span class="text--underline" :class="isIncome?'--color-green':'--color-red'">{{ planTypeName }}:</span>
         {{ plan.ExpenditurePlanName }}
       </div>
       <!-- <div class="plan__state">(Đang thu)</div> -->
     </div>
     <div class="flex">
       <div class="plan__amount">
-        <div class="expenditure__fee">
-          {{ this.commonJs.formatMoney(plan.TotalMoney) }}
+        <div v-if="plan.TotalMoney" class="expenditure__fee" :class="isIncome?'--color-green':'--color-red'">
+          <span v-if="isIncome">+</span><span v-else>-</span>{{ this.commonJs.formatMoney(plan.TotalMoney) }}
         </div>
       </div>
       <div class="plan__option">
@@ -51,6 +51,12 @@ export default {
   //     }
   //   },
   computed: {
+    isIncome(){
+      if (this.plan.ExpenditurePlanType < 200) {
+        return true;
+      }
+      return false;
+    },
     planTypeName() {
       if (this.plan.ExpenditurePlanType < 200) {
         return "Thu";
@@ -92,6 +98,14 @@ export default {
   justify-content: space-between;
 }
 
+/* .plan__name{
+  margin-right: 8px;
+} */
+
+.plan__amount{
+  margin: 0 8px;
+  font-weight: 700;
+}
 .btn-mini+.btn-mini{
   margin-left: 4px;
 }

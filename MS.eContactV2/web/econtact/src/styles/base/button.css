@@ -74,3 +74,8 @@ button.btn--close-item {
     padding: 0;
     cursor: pointer;
 }
+
+button:disabled {
+    background-color: #ccc !important;
+    pointer-events: none !important;
+}

@@ -22,15 +22,22 @@ namespace MS.eContact.Web.Controllers
         IRepository<Contact> _repository;
         IBaseService<Contact> _baseService;
         IConfiguration _configuration;
+        IUnitOfWork _unitOfWork;
         readonly IFileTransfer _fileTransfer;
         private readonly IWebHostEnvironment _env;
-        public ContactsController(IRepository<Contact> repository, IConfiguration configuration, IWebHostEnvironment env, IFileTransfer fileTransfer, IBaseService<Contact> baseService) : base(repository, baseService)
+        public ContactsController(IRepository<Contact> repository, IConfiguration configuration, IWebHostEnvironment env, IFileTransfer fileTransfer, IBaseService<Contact> baseService, IUnitOfWork unitOfWork) : base(repository, baseService)
         {
             _configuration = configuration;
             _env = env;
             _repository = repository;
             _fileTransfer = fileTransfer;
             _baseService = baseService;
+            _unitOfWork = unitOfWork;
+        }
+
+        public async override Task<IActionResult> Get()
+        {
+            return Ok(await _unitOfWork.Contacts.AllAsync());
         }
 
         [AllowAnonymous]

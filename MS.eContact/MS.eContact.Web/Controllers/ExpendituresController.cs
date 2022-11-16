@@ -34,5 +34,12 @@ namespace MS.eContact.Web.Controllers
             var expenditures = await _unitOfWork.Expenditures.GetGeneralInfo();
             return Ok(expenditures);
         }
+
+        [HttpGet("find-option")]
+        public async Task<IActionResult> GetExpenditureByPlanIdAndContactId([FromQuery] string planId, [FromQuery] string contactId)
+        {
+            var expenditures = await _unitOfWork.Expenditures.GetExpenditureByPlanIdAndContactId(planId, contactId);
+            return Ok(expenditures);
+        }
     }
 }

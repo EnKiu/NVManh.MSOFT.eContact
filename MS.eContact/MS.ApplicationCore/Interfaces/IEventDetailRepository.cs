@@ -1,4 +1,5 @@
-﻿using MS.ApplicationCore.Entities;
+﻿using MS.ApplicationCore.DTOs;
+using MS.ApplicationCore.Entities;
 using System;
 using System.Collections.Generic;
 using System.Text;
@@ -9,7 +10,7 @@ namespace MS.ApplicationCore.Interfaces
     public interface IEventDetailRepository:IAsyncRepository<EventDetail>, IRepository<EventDetail>
     {
         public Task<bool> CheckRegisted(EventDetail eventDetail);
-        public Task<IEnumerable<EventDetail>> GetRegisterEventByEventId(int eventId);
+        public Task<IEnumerable<RegisterEventInfo>> GetRegisterEventByEventId(int eventId);
         Task<int> DeleteEventDetailByEventIdAndContactId(int eventId, Guid contactId);
     }
 }

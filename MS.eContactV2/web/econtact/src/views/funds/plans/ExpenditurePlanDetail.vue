@@ -31,6 +31,7 @@
           :isDisabled="false"
           propValue="EventId"
           propText="EventName"
+          @onSelected="onChangeEvent"
         >
         </m-combobox>
       </div>
@@ -39,8 +40,10 @@
           label="Số tiền/người"
           :onlyNumberChar="true"
           v-model="plan.AmountUnit"
+          :disabled="isEventType"
           required
         ></m-input>
+        <div class="money-format">{{ commonJs.formatMoney(plan.AmountUnit) }}</div>
       </div>
       <div class="m-row flex">
         <div class="m-col">
@@ -80,7 +83,9 @@
       </div>
     </template>
     <template v-slot:footer>
-      <button class="btn btn--cancel"><i class="icofont-ui-close"></i> Hủy</button>
+      <button class="btn btn--cancel">
+        <i class="icofont-ui-close" @click="onClose"></i> Hủy
+      </button>
       <button
         type="submit"
         form="form-info"
@@ -152,6 +157,12 @@ export default {
         });
       }
     },
+    onChangeEvent(value, text, item) {
+      console.log(`item`, item);
+      this.plan.AmountUnit = item.Spends;
+      this.plan.StartDate = new Date();
+      this.plan.EndDate = item.EventDate;
+    },
     onValidate() {
       try {
         var errors = [];
@@ -199,7 +210,14 @@ export default {
 </script>
 <style scoped>
 .m-row {
+  position: relative;
   margin-top: 16px;
   width: 100%;
+}
+.money-format {
+  position: absolute;
+  top: 63px;
+  right: 0;
+  font-weight: 700;
 }
 </style>

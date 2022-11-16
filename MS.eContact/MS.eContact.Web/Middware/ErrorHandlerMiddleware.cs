@@ -50,7 +50,14 @@ namespace MS.eContact.Web.Middware
                         break;
                     case MISAException e:
                         // custom application error
-                        response.StatusCode = (int)HttpStatusCode.BadRequest;
+                        if (e.StatusCode == HttpStatusCode.Conflict)
+                        {
+                            response.StatusCode = (int)HttpStatusCode.Conflict;
+                        }
+                        else
+                        {
+                            response.StatusCode = (int)HttpStatusCode.BadRequest;
+                        }
                         break;
                     case KeyNotFoundException e:
                         // not found error
@@ -68,7 +75,7 @@ namespace MS.eContact.Web.Middware
 #endif
                         break;
                 }
-                
+
                 var result = JsonSerializer.Serialize(responseObject);
                 await response.WriteAsync(result);
             }

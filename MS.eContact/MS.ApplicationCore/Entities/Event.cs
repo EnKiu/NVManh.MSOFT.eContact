@@ -60,5 +60,11 @@ namespace MS.ApplicationCore.Entities
         [NotMapQuery]
         public decimal? SpendsTotal { get; set; }
 
+        /// <summary>
+        /// Tổng số tiền đã thu
+        /// </summary>
+        [NotMapQuery]
+        public decimal? TotalRevenuesMoney { get; set; }
+
     }
 }

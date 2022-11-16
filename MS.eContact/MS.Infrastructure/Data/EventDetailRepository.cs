@@ -1,5 +1,6 @@
 ﻿using Dapper;
 using Microsoft.AspNetCore.SignalR;
+using MS.ApplicationCore.DTOs;
 using MS.ApplicationCore.Entities;
 using MS.ApplicationCore.Interfaces;
 using MS.eContact.Core;
@@ -42,12 +43,12 @@ namespace MS.Infrastructure.Data
             return res;
         }
 
-        public async Task<IEnumerable<EventDetail>> GetRegisterEventByEventId(int eventId)
+        public async Task<IEnumerable<RegisterEventInfo>> GetRegisterEventByEventId(int eventId)
         {
             var storeName = "Proc_EventDetail_GetListRegisterEventByEventId";
             var parameters = new DynamicParameters();
             parameters.Add("@p_EventId", eventId);
-            var res = await DbContext.Connection.QueryAsync<EventDetail>(storeName, param: parameters, transaction: DbContext.Transaction, commandType: System.Data.CommandType.StoredProcedure);
+            var res = await DbContext.Connection.QueryAsync<RegisterEventInfo>(storeName, param: parameters, transaction: DbContext.Transaction, commandType: System.Data.CommandType.StoredProcedure);
             return res;
         }
     }

@@ -47,6 +47,7 @@ namespace MS.eContact.Web.Controllers
         [HttpPost]
         public async virtual Task<IActionResult> Post([FromBody] TEntity entity)
         {
+            
             var res = await _baseService.AddAsync(entity);
             if (res > 0)
                 return Ok();

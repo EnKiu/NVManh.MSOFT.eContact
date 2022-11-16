@@ -13,5 +13,7 @@ namespace MS.ApplicationCore.Interfaces
         Task<IEnumerable<Expenditure>> GetRevenues();
         Task<IEnumerable<Expenditure>> GetExpenditures();
         Task<FundInfo> GetGeneralInfo();
+        Task<bool> CheckCurrentFundHasExits(Expenditure expenditure);
+        Task<Expenditure> GetExpenditureByPlanIdAndContactId(string planId, string contactId);
     }
 }

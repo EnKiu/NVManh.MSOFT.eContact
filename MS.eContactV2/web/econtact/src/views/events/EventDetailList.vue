@@ -37,13 +37,10 @@
             <m-column prop="FullName" label="Họ và tên">
               <template #default="scope">
                 <div class="cell__row">{{ scope.row.FullName }}</div>
-                <div
-                  v-if="!expireTime || scope.row.NumberAccompanying > 0 || scope.row.Note"
-                  class="cell__row --mini"
-                >
-                  <div v-if="scope.row.SpendsTotal > 0" style="color: #00b87a">
+                <div class="cell__row --mini">
+                  <div v-if="!scope.row.NotYetPaid" style="color: #00b87a">
                     + Nộp quỹ:
-                    {{ commonJs.formatMoney(scope.row.SpendsTotal) }}
+                    {{ commonJs.formatMoney(scope.row.Amount) }}
                     <button
                       v-if="!expireTime && isAdmin"
                       id="btnRemoveSpend"
@@ -56,7 +53,7 @@
                   <div v-else style="color: #ff0000">
                     - Chưa đóng quỹ.
                     <button
-                      v-if="!expireTime && isAdmin"
+                      v-if="isAdmin"
                       id="btnAddMoney"
                       title="Nộp tiền"
                       @click="onAddMoney(scope.row)"
@@ -83,7 +80,7 @@
                 </div>
               </template>
             </m-column>
-            <m-column v-if="!expireTime && isAdmin" label="Hủy đăng ký" width="70">
+            <m-column v-if="isAdmin" label="Hủy đăng ký" width="70">
               <template #header>
                 <button
                   id="btn-add-register"
@@ -215,6 +212,7 @@ export default {
         data: this.registerForUpdate,
       }).then(() => {
         this.showAddMoneyForm = false;
+        this.loadRegisters();
       });
     },
     onClose() {

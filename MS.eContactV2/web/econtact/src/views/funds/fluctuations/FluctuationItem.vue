@@ -8,7 +8,10 @@
       <div class="fluctuation__title">
         {{ item.ExpenditureName }}
       </div>
-      <div class="fluctuation__description" :class="isIncome ? '--color-green' : '--color-red'">
+      <div
+        class="fluctuation__description"
+        :class="isIncome ? '--color-green' : '--color-red'"
+      >
         {{ item.Description }}
       </div>
     </div>
@@ -23,7 +26,7 @@
           >{{ this.commonJs.formatMoney(item.Amount) }}
         </div>
       </div>
-      <div class="fluctuation__option">
+      <div v-if="isAdmin" class="fluctuation__option">
         <button
           class="btn-mini --color-red"
           title="Xóa khoản thu"
@@ -33,7 +36,7 @@
         </button>
         <button
           class="btn-mini --color-edit"
-          title="Sửa kế hoạch"
+          title="Sửa khoản"
           @click="onUpdateFluctuation(item)"
         >
           <i class="icofont-ui-edit"></i>
@@ -43,42 +46,44 @@
   </div>
 </template>
 <script>
-import router from '@/router';
-import Enum from '@/scripts/enum';
+import router from "@/router";
+import Enum from "@/scripts/enum";
 export default {
   name: "FluctuationItem",
   emits: ["onAfterDelete"],
   props: {
-    isIncome:{
-      type:Boolean,
-      default:false
+    isIncome: {
+      type: Boolean,
+      default: false,
     },
-    item:Object
+    item: Object,
+    isAdmin: Boolean,
   },
   computed: {
-    type(){
+    type() {
       if (this.isIncome) {
         return Enum.ReceiptType.Income;
       }
       return Enum.ReceiptType.Outcome;
-    }
+    },
   },
   created() {},
   methods: {
-    onDeleteFluctuation(item){
-      this.commonJs.showConfirm("Bạn có chắc chắn muốn xóa khoản này không?",()=>{
-        this.api({url:`api/v1/expenditures/${item.ExpenditureId}`,method:"DELETE"})
-        .then(()=>{
-          var pathName = this.isIncome?"revenues":"expenditures";
+    onDeleteFluctuation(item) {
+      this.commonJs.showConfirm("Bạn có chắc chắn muốn xóa khoản này không?", () => {
+        this.api({
+          url: `api/v1/expenditures/${item.ExpenditureId}`,
+          method: "DELETE",
+        }).then(() => {
+          var pathName = this.isIncome ? "revenues" : "expenditures";
           this.$emit("onAfterDelete");
           router.push(`/funds?tab=${pathName}`);
-        })
-      })
+        });
+      });
     },
-    onUpdateFluctuation(item){
+    onUpdateFluctuation(item) {
       router.push(`/funds/${item.ExpenditureId}?type=${this.type}`);
-    }
-
+    },
   },
   data() {
     return {
@@ -97,7 +102,7 @@ export default {
 .fluctuation + .fluctuation {
   border-top: 1px solid #dedede;
 }
-.fluctuation__date{
+.fluctuation__date {
   font-weight: 700;
 }
 .fluctuation__detail {
@@ -106,7 +111,7 @@ export default {
   justify-content: space-between;
 }
 
-.fluctuation__description{
+.fluctuation__description {
   font-size: 11px;
 }
 

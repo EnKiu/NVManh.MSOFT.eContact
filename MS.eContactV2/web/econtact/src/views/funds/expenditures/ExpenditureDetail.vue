@@ -10,9 +10,7 @@
           <div class="m-row">
             <el-radio-group v-model="optionType" @change="onChangeOptionType">
               <el-radio :label="1" size="large">{{
-                isIncrement == true
-                  ? "Thu theo đợt/kế hoạch"
-                  : "Chi theo đợt/kế hoạch"
+                isIncrement == true ? "Thu theo đợt/kế hoạch" : "Chi theo đợt/kế hoạch"
               }}</el-radio>
               <el-radio :label="2" size="large">Khác</el-radio>
             </el-radio-group>
@@ -33,9 +31,7 @@
           <div v-if="isByPlan == true" class="m-row">
             <m-combobox
               :label="
-                isIncrement == true
-                  ? 'Kế hoạch thu - Đợt thu'
-                  : 'Kế hoạch chi - Đợt chi'
+                isIncrement == true ? 'Kế hoạch thu - Đợt thu' : 'Kế hoạch chi - Đợt chi'
               "
               :url="apiPlanUrl"
               v-model="expenditure.ExpenditurePlanId"
@@ -85,9 +81,7 @@
             </div>
           </div>
           <div class="m-row">
-            <label for=""
-              >{{ isIncrement == true ? "Ngày thu" : "Ngày chi" }}
-            </label>
+            <label for="">{{ isIncrement == true ? "Ngày thu" : "Ngày chi" }} </label>
             <el-date-picker
               v-model="expenditure.ExpenditureDate"
               type="date"
@@ -155,8 +149,7 @@ export default {
     isByPlan: function () {
       if (
         this.optionType == Enum.OptionExpenditurePlanType.ForPlan ||
-        this.expenditure.ExpenditureType ==
-          Enum.ExpenditureType.INCREMENT_PLAN ||
+        this.expenditure.ExpenditureType == Enum.ExpenditureType.INCREMENT_PLAN ||
         this.expenditure.ExpenditureType == Enum.ExpenditureType.REDURE_PLAN
       ) {
         return true;
@@ -166,10 +159,8 @@ export default {
     },
     isEventType: function () {
       if (
-        this.expenditure.ExpenditureType ==
-          Enum.ExpenditurePlanType.INCREMENT_EVENT ||
-        this.expenditure.ExpenditureType ==
-          Enum.ExpenditurePlanType.REDURE_EVENT
+        this.expenditure.ExpenditureType == Enum.ExpenditurePlanType.INCREMENT_EVENT ||
+        this.expenditure.ExpenditureType == Enum.ExpenditurePlanType.REDURE_EVENT
       )
         return true;
       else return false;
@@ -230,8 +221,8 @@ export default {
       if (this.optionType == Enum.OptionExpenditurePlanType.ForPlan) {
         if (this.type == Enum.ReceiptType.Income) {
           // --> LÀ thu thì là thu theo kế hoạch:
-          this.expenditure.ExpenditureType =
-            Enum.ExpenditureType.INCREMENT_PLAN;
+          this.expenditure.Amount = item.AmountUnit;
+          this.expenditure.ExpenditureType = Enum.ExpenditureType.INCREMENT_PLAN;
         } else {
           // --> LÀ chi thì là chi theo kế hoạch:
           this.expenditure.ExpenditureType = Enum.ExpenditureType.REDURE_PLAN;
@@ -267,15 +258,11 @@ export default {
       }
 
       if (
-        (this.expenditure.ExpensitureType ==
-          Enum.ExpenditureType.INCREMENT_PLAN ||
-          this.expenditure.ExpensitureType ==
-            Enum.ExpenditureType.REDURE_PLAN) &&
+        (this.expenditure.ExpensitureType == Enum.ExpenditureType.INCREMENT_PLAN ||
+          this.expenditure.ExpensitureType == Enum.ExpenditureType.REDURE_PLAN) &&
         !this.expenditure.ExpenditurePlanId
       ) {
-        errors.push(
-          "[Kế hoạch thu/chi - Đợt thu/chi] không được phép để trống."
-        );
+        errors.push("[Kế hoạch thu/chi - Đợt thu/chi] không được phép để trống.");
         isValid = false;
       }
       if (!this.expenditure.ContactId) {
@@ -305,17 +292,45 @@ export default {
           url = "api/v1/expenditures/" + this.expenditure.ExpenditureId;
           method = "PUT";
         }
-        this.api({ url: url, data: this.expenditure, method: method }).then(
-          () => {
+        this.api({ url: url, data: this.expenditure, method: method })
+          .then(() => {
             router.push("/funds?tab=" + this.tabName);
-          }
-        );
+          })
+          .catch((res) => {
+            console.log(`res`, res);
+            if (res.status == 409) {
+              this.commonJs.showConfirm(
+                `Thành viên này đã nộp tiền cho khoản này rồi, Bạn có muốn cập nhật lại số tiền [${this.commonJs.formatMoney(
+                  this.expenditure.Amount
+                )}] cho thành viên này?. Nếu không vui lòng đóng thông báo này và cập nhật lại tổng số tiền của thành viên đã đóng.`,
+                () => {
+                  // Lấy thông tin khoản thu đã có:
+                  this.api({
+                    url: `api/v1/expenditures/find-option?planId=${this.expenditure.ExpenditurePlanId}&contactId=${this.expenditure.ContactId}`,
+                  }).then((res) => {
+                    console.log(`res`, res);
+                    this.expenditure.ExpenditureId = res.ExpenditureId;
+                    this.api({
+                      url: url + "/" + res.ExpenditureId,
+                      data: this.expenditure,
+                      method: "PUT",
+                    }).then(() => {
+                      router.push("/funds?tab=" + this.tabName);
+                    });
+                  });
+                }
+              );
+            }
+          });
       }
     },
   },
   data() {
     return {
-      expenditure: { ExpenditureType: Enum.ExpenditureType.INCREMENT_PLAN, ExpenditureDate:new Date() },
+      expenditure: {
+        ExpenditureType: Enum.ExpenditureType.INCREMENT_PLAN,
+        ExpenditureDate: new Date(),
+      },
       formTitle: null,
       optionType: 1,
       plansFilter: [],

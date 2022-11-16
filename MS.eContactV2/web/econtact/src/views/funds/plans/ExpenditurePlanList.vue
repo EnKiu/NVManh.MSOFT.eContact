@@ -4,6 +4,7 @@
       v-for="(plan, index) in plans"
       :key="index"
       :plan="plan"
+      :isAdmin="isAdmin"
       @dblclick="onUpdatePlan(plan)"
       @onUpdatePlan="onUpdatePlan(plan)"
       @onDeleteSuccess="loadData()"
@@ -11,11 +12,12 @@
   </div>
 </template>
 <script>
-import router from '@/router';
-import ExpenditurePlanItem from './ExpenditurePlanItem.vue';
+import router from "@/router";
+import ExpenditurePlanItem from "./ExpenditurePlanItem.vue";
 export default {
   name: "ExpenditurePlanList",
-  components: {ExpenditurePlanItem},
+  components: { ExpenditurePlanItem },
+  props: ["isAdmin"],
   created() {
     this.loadData();
   },
@@ -39,10 +41,9 @@ export default {
   },
   data() {
     return {
-        plans:[]
+      plans: [],
     };
   },
 };
 </script>
-<style scoped>
-</style>
+<style scoped></style>

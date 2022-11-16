@@ -5,6 +5,7 @@
       :key="index"
       :item="item"
       :isIncome="isIncome"
+      :isAdmin="isAdmin"
       @onAfterDelete="onAfterDeleteItem"
     ></fluctuation-item>
   </div>
@@ -17,6 +18,7 @@ export default {
   emits: [],
   props: {
     isIncome: Boolean,
+    isAdmin: Boolean,
   },
   created() {
     this.loadData();

@@ -1,13 +1,13 @@
 <template>
   <div>
     <div class="toolbar">
-      <button class="btn btn--default" @click="onAddPlan">
+      <button class="btn btn--default" :disabled="!isAdmin" @click="onAddPlan">
         <i class="icofont-coins"></i> Thêm kế hoạch
       </button>
-      <button class="btn btn--add" @click="onReceive">
+      <button class="btn btn--add" :disabled="!isAdmin" @click="onReceive">
         <i class="icofont-dong-plus"></i> Thu
       </button>
-      <button class="btn btn--remove" @click="onSpend">
+      <button class="btn btn--remove" :disabled="!isAdmin" @click="onSpend">
         <i class="icofont-dong-minus"></i> Chi
       </button>
     </div>
@@ -30,19 +30,20 @@
           class="money-total"
           :class="FundInfo.FundLeft < 0 ? '--color-red' : '--color-green'"
         >
-          {{ commonJs.formatMoney(FundInfo.FundLeft) }}
+          <span v-if="FundInfo.FundLeft > 0">+</span><span v-else>-</span
+          >{{ commonJs.formatMoney(FundInfo.FundLeft) }}
         </div>
       </div>
     </div>
     <el-tabs v-model="activeName" class="demo-tabs" @tab-click="handleClick">
       <el-tab-pane label="Kế hoạch Thu/Chi" name="plans">
-       <expenditure-plan-list></expenditure-plan-list>
+        <expenditure-plan-list :isAdmin="isAdmin"></expenditure-plan-list>
       </el-tab-pane>
       <el-tab-pane label="Thu" name="revenues">
-        <fluctuation-list :isIncome="true"></fluctuation-list>
+        <fluctuation-list :isIncome="true" :isAdmin="isAdmin"></fluctuation-list>
       </el-tab-pane>
       <el-tab-pane label="Chi" name="expenditures">
-        <fluctuation-list :isIncome="false"></fluctuation-list>
+        <fluctuation-list :isIncome="false" :isAdmin="isAdmin"></fluctuation-list>
       </el-tab-pane>
     </el-tabs>
     <router-view name="ExpenditureDialog" :type="type"></router-view>
@@ -50,17 +51,21 @@
 </template>
 <script>
 import FluctuationList from "./fluctuations/FluctuationList.vue";
-import ExpenditurePlanList from './plans/ExpenditurePlanList.vue'
+import ExpenditurePlanList from "./plans/ExpenditurePlanList.vue";
 // import ExpenditurePlanDetail from "./ExpenditurePlanDetail.vue";
 import Enum from "@/scripts/enum";
 import router from "@/router";
 export default {
   name: "ExpenditureHome",
-  components: {FluctuationList,ExpenditurePlanList },
+  components: { FluctuationList, ExpenditurePlanList },
   props: ["type", "tab"],
   emits: [],
   created() {
-    console.log("activeName: ",this.tab);
+    var roleValue = localStorage.getItem("userRoleValue");
+    if (roleValue == 1) {
+      this.isAdmin = true;
+    }
+    console.log("activeName: ", this.tab);
     this.activeName = this.tab ? this.tab : "plans";
     this.loadData();
   },
@@ -79,7 +84,7 @@ export default {
         this.plans = res;
       });
     },
-    onAddPlan(){
+    onAddPlan() {
       router.replace("/funds/plans/create");
     },
     onReceive() {
@@ -104,6 +109,7 @@ export default {
       planForEdit: null,
       detailFormMode: Enum.FormMode.ADD,
       FundInfo: {},
+      isAdmin: false,
     };
   },
 };

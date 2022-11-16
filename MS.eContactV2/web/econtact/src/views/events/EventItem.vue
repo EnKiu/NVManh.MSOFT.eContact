@@ -28,7 +28,7 @@
         >Hạn đăng ký: <span class="time--left-text">{{ timeLeftInfo }}</span></span
       >
       <span v-if="timeLeftInfo == null && item.IsCancel == false" class="time--ended"
-        >Đã kết thúc</span
+        ><span v-if="isEnd">Đã kết thúc</span><span v-else>Sắp diễn ra</span></span
       >
       <span v-if="item.IsCancel == true" class="--cancel">Đã hủy bỏ</span>
     </div>
@@ -121,6 +121,14 @@ export default {
     "onEditEvent",
   ],
   computed: {
+    isEnd() {
+      var startTime = new Date(this.item.StartTime);
+      if (startTime > new Date()) {
+        return false;
+      } else {
+        return true;
+      }
+    },
     eventDateFormat: function () {
       var eventDate = this.item.EventDate;
       return this.commonJs.formatDate(eventDate);
@@ -133,7 +141,7 @@ export default {
       return this.commonJs.formatMoney(this.item.Spends);
     },
     moneyTotalFormat: function () {
-      return this.commonJs.formatMoney(this.item.SpendsTotal);
+      return this.commonJs.formatMoney(this.item.TotalRevenuesMoney);
     },
     calculatorTimeLeft: function () {
       var startTime = new Date(this.item.StartTime);

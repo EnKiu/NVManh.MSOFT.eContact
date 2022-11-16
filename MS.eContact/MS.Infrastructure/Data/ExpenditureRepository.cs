@@ -40,5 +40,29 @@ namespace MS.Infrastructure.Data
             var data = await DbContext.Connection.QueryFirstOrDefaultAsync<FundInfo>(storeName, param: parameters, transaction: DbContext.Transaction, commandType: System.Data.CommandType.StoredProcedure);
             return data;
         }
+
+        public async Task<bool> CheckCurrentFundHasExits(Expenditure expenditure)
+        {
+            var sqlCommand = "SELECT e.ExpenditureId From Expenditure e WHERE e.ExpenditurePlanId = @ExpenditurePlanId AND e.ContactId = @ContactId";
+            var parameters = new DynamicParameters();
+            parameters.Add("@ExpenditurePlanId", expenditure.ExpenditurePlanId);
+            parameters.Add("@ContactId", expenditure.ContactId);
+            var data = await DbContext.Connection.QueryFirstOrDefaultAsync(sqlCommand, param: parameters, transaction: DbContext.Transaction, commandType: System.Data.CommandType.Text);
+            if (data!=null)
+            {
+                return true;
+            }
+            return false;
+        }
+
+        public async Task<Expenditure> GetExpenditureByPlanIdAndContactId(string planId, string contactId)
+        {
+            var sqlCommand = "SELECT * From Expenditure e WHERE e.ExpenditurePlanId = @ExpenditurePlanId AND e.ContactId = @ContactId";
+            var parameters = new DynamicParameters();
+            parameters.Add("@ExpenditurePlanId", planId.ToString());
+            parameters.Add("@ContactId", contactId.ToString());
+            var data = await DbContext.Connection.QueryFirstOrDefaultAsync<Expenditure>(sqlCommand, param: parameters, transaction: DbContext.Transaction, commandType: System.Data.CommandType.Text);
+            return data;
+        }
     }
 }

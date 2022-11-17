@@ -1,6 +1,7 @@
 ﻿using Dapper;
 using MS.ApplicationCore.Entities;
 using MS.ApplicationCore.Interfaces;
+using MS.ApplicationCore.Utilities;
 using MS.Infrastructure.UnitOfWork;
 using System;
 using System.Collections.Generic;
@@ -21,6 +22,7 @@ namespace MS.Infrastructure.Data
             parameters.Add("@Description", entity.Description);
             parameters.Add("@UrlPath", entity.UrlPath);
             parameters.Add("@AlbumId", entity.AlbumId.ToString());
+            parameters.Add("@p_OrganizationId", CommonFunction.GetCurrentOrganozationId());
             var rowAffects = await DbContext.Connection.ExecuteAsync($"Proc_Picture_Insert", param: parameters, transaction: DbContext.Transaction, commandType: System.Data.CommandType.StoredProcedure);
             return rowAffects;
         }
@@ -30,6 +32,7 @@ namespace MS.Infrastructure.Data
             var sql = "UPDATE Picture p SET TotalViews = IFNULL(TotalViews,0)+1 WHERE PictureId = @PictureId";
             var parameters = new DynamicParameters();
             parameters.Add("@PictureId", pictureId);
+            parameters.Add("@p_OrganizationId", CommonFunction.GetCurrentOrganozationId());
             var res = await DbContext.Connection.ExecuteAsync(sql, param: parameters, transaction: DbContext.Transaction, commandType: System.Data.CommandType.Text);
             return res;
         }

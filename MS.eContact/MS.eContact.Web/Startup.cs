@@ -103,13 +103,13 @@ namespace MS.eContact.Web
                                       {
                                           builder.WithOrigins("http://localhost:5002",
                                                               "http://localhost:5005",
-                                                              "http://a1.manhnv.net",
-                                                              "http://wwww.a1.manhnv.net",
-                                                              "https://a1.manhnv.net",
-                                                              "https://wwww.a1.manhnv.net",
-                                                              "http://a1api.nmanh.com",
-                                                              "https://wwww.a1api.nmanh.com",
-                                                              "https://a1api.nmanh.com")
+                                                              "http://lopminh.com",
+                                                              "http://wwww.lopminh.com",
+                                                              "https://lopminh.com",
+                                                              "https://wwww.lopminh.com",
+                                                              "http://api.lopminh.com",
+                                                              "https://wwww.api.lopminh.com",
+                                                              "https://api.lopminh.com")
                                                               .AllowAnyHeader()
                                                               .AllowAnyMethod()
                                                               .AllowCredentials();

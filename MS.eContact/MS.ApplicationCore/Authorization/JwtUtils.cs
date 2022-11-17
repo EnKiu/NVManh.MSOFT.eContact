@@ -6,6 +6,7 @@ using MS.ApplicationCore.DTOs;
 using MS.ApplicationCore.Entities;
 using MS.ApplicationCore.Entities.Auth;
 using MS.ApplicationCore.Exceptions;
+using MS.ApplicationCore.Utilities;
 using System;
 using System.Collections.Generic;
 using System.IdentityModel.Tokens.Jwt;
@@ -51,6 +52,7 @@ namespace MS.ApplicationCore.Authorization
                 {
                     new Claim("id", user.UserId.ToString()),
                     new Claim("UserName", user.UserName.ToString()),
+                    new Claim("OrganizationId", user.OrganizationId.ToString()),
                     new Claim(ClaimTypes.Name, user.UserName),
                     new Claim(JwtRegisteredClaimNames.Jti, Guid.NewGuid().ToString()),
                 };
@@ -90,11 +92,10 @@ namespace MS.ApplicationCore.Authorization
 
             var jwtToken = (JwtSecurityToken)validatedToken;
             var userId =jwtToken.Claims.First(x => x.Type == "id").Value.ToString();
-
+            var orgID = jwtToken.Claims.First(x => x.Type == "OrganizationId").Value.ToString();
+            CommonFunction.SetCurrentOrganozationId(orgID);
             // return user id from JWT token if validation successful
             return userId;
-
-
 
         }
 

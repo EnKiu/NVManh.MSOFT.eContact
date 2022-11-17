@@ -2,6 +2,7 @@
 using MS.ApplicationCore.DTOs;
 using MS.ApplicationCore.Entities;
 using MS.ApplicationCore.Interfaces;
+using MS.ApplicationCore.Utilities;
 using MS.Infrastructure.UnitOfWork;
 using System;
 using System.Collections.Generic;
@@ -21,6 +22,7 @@ namespace MS.Infrastructure.Data
         {
             var storeName = "Proc_Expenditure_GetRevenues";
             var parameters = new DynamicParameters();
+            parameters.Add("@p_OrganizationId", CommonFunction.GetCurrentOrganozationId());
             var data = await DbContext.Connection.QueryAsync<Expenditure>(storeName, param: parameters, transaction: DbContext.Transaction, commandType: System.Data.CommandType.StoredProcedure);
             return data;
         }
@@ -29,6 +31,7 @@ namespace MS.Infrastructure.Data
         {
             var storeName = "Proc_Expenditure_GetExpenditures";
             var parameters = new DynamicParameters();
+            parameters.Add("@p_OrganizationId", CommonFunction.GetCurrentOrganozationId());
             var data = await DbContext.Connection.QueryAsync<Expenditure>(storeName, param: parameters, transaction: DbContext.Transaction, commandType: System.Data.CommandType.StoredProcedure);
             return data;
         }
@@ -37,6 +40,7 @@ namespace MS.Infrastructure.Data
         {
             var storeName = "Proc_Expenditure_GetGeneralInfo";
             var parameters = new DynamicParameters();
+            parameters.Add("@p_OrganizationId", CommonFunction.GetCurrentOrganozationId());
             var data = await DbContext.Connection.QueryFirstOrDefaultAsync<FundInfo>(storeName, param: parameters, transaction: DbContext.Transaction, commandType: System.Data.CommandType.StoredProcedure);
             return data;
         }
@@ -47,6 +51,7 @@ namespace MS.Infrastructure.Data
             var parameters = new DynamicParameters();
             parameters.Add("@ExpenditurePlanId", expenditure.ExpenditurePlanId);
             parameters.Add("@ContactId", expenditure.ContactId);
+            parameters.Add("@p_OrganizationId", CommonFunction.GetCurrentOrganozationId());
             var data = await DbContext.Connection.QueryFirstOrDefaultAsync(sqlCommand, param: parameters, transaction: DbContext.Transaction, commandType: System.Data.CommandType.Text);
             if (data!=null)
             {
@@ -61,6 +66,7 @@ namespace MS.Infrastructure.Data
             var parameters = new DynamicParameters();
             parameters.Add("@ExpenditurePlanId", planId.ToString());
             parameters.Add("@ContactId", contactId.ToString());
+            parameters.Add("@p_OrganizationId", CommonFunction.GetCurrentOrganozationId());
             var data = await DbContext.Connection.QueryFirstOrDefaultAsync<Expenditure>(sqlCommand, param: parameters, transaction: DbContext.Transaction, commandType: System.Data.CommandType.Text);
             return data;
         }

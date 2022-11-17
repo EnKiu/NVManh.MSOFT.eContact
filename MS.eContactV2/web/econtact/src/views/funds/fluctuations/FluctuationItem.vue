@@ -123,9 +123,6 @@ export default {
   margin: 0 8px;
   font-weight: 700;
 }
-.btn-mini + .btn-mini {
-  margin-left: 4px;
-}
 
 .fluctuation__option {
   width: 45px;

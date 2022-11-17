@@ -1,4 +1,5 @@
-﻿using System;
+﻿using MS.ApplicationCore.Entities;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -10,5 +11,7 @@ namespace MS.ApplicationCore.DTOs
     {
         public int? TotalMembers { get; set; }
         public decimal? TotalMoneys { get; set; }
+        public Organization Organization { get; set; }
+        public string? Description { get; set; }
     }
 }

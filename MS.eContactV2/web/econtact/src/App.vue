@@ -80,6 +80,7 @@ export default {
   async created() {
     if (this.$store.getters.isAuthenticated) {
       await this.$store.dispatch(USER_REQUEST);
+
       // this.hubConnection = notification.createHub();
       // // this.hubConnection = notification.CreateHubProxy();
       // this.hubConnection
@@ -101,7 +102,7 @@ export default {
   data() {
     return {
       showHomePage: false,
-      showNew: false,
+      showNew: true,
       progressing: false,
     };
   },

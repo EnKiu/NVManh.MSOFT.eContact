@@ -20,5 +20,6 @@ namespace MS.ApplicationCore.Entities
         public IList<Picture> Pictures { get; set; }
         public int TotalPictures { get; set; }
         public int TotalViews { get; set; }
+        public Guid? OrganizationId { get; set; }
     }
 }

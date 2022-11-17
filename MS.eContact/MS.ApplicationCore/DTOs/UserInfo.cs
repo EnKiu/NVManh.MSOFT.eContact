@@ -57,5 +57,6 @@ namespace MS.ApplicationCore.DTOs
                 return null;
             }
         }
+        public Guid? OrganizationId { get; set; }
     }
 }

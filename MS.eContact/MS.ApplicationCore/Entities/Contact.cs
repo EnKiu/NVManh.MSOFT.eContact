@@ -80,5 +80,7 @@ namespace MS.ApplicationCore.Entities
                 return null;
             }
         }
+
+        public Guid? OrganizationId { get; set; }
     }
 }

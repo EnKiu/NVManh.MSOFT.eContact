@@ -1,6 +1,7 @@
 ﻿using Dapper;
 using MS.ApplicationCore.Entities;
 using MS.ApplicationCore.Interfaces;
+using MS.ApplicationCore.Utilities;
 using MS.Infrastructure.UnitOfWork;
 using System;
 using System.Collections.Generic;
@@ -18,11 +19,14 @@ namespace MS.Infrastructure.Data
         public async override Task<IEnumerable<Album>> AllAsync()
         {
             var storeName = "Proc_Album_GetAll";
-            var albums = await DbContext.Connection.QueryAsync<Album>(storeName,transaction: DbContext.Transaction, commandType: System.Data.CommandType.StoredProcedure);
+            var parameters = new DynamicParameters();
+            parameters.Add("@p_OrganizationId", CommonFunction.GetCurrentOrganozationId());
+            var albums = await DbContext.Connection.QueryAsync<Album>(storeName,param:parameters, transaction: DbContext.Transaction, commandType: System.Data.CommandType.StoredProcedure);
             return albums;
         }
         public async override Task<int> AddAsync(Album entity)
         {
+            entity.OrganizationId = Guid.Parse(CommonFunction.GetCurrentOrganozationId());
             var parameters = new DynamicParameters();
             parameters.Add("@AlbumId", entity.AlbumId.ToString());
             parameters.Add("@AlbumName", entity.AlbumName);
@@ -36,6 +40,7 @@ namespace MS.Infrastructure.Data
         public async Task<IEnumerable<Picture>> GetPicturesByAlbumId(Guid albumId)
         {
             var parameters = new DynamicParameters();
+            parameters.Add("@p_OrganizationId", CommonFunction.GetCurrentOrganozationId());
             parameters.Add("@p_AlbumId", albumId);
             var pictures = await DbContext.Connection.QueryAsync<Picture>($"Proc_Picture_GetPicturesByAlbumId", param: parameters, transaction: DbContext.Transaction, commandType: System.Data.CommandType.StoredProcedure);
             return pictures;

@@ -12,5 +12,6 @@ namespace MS.ApplicationCore.Interfaces
 
         Task<int> DeleteEventDetailByEventIdAndUserId(int eventId, string userId);
 
+        Task<IEnumerable<Event>> GetEventLeftTime();
     }
 }

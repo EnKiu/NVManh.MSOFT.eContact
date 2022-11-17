@@ -128,7 +128,6 @@ export default {
     },
   },
   created() {
-    console.log(this.id);
     if (this.id && this.id != "create") {
       this.api({ url: "/api/v1/expenditureplans/" + this.id }).then((res) => {
         this.plan = res;

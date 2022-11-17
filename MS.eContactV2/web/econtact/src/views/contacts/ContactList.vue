@@ -26,7 +26,7 @@
         width="100%"
         height="100%"
       >
-        <m-column prop="FullName" label="#" width="68px">
+        <m-column prop="FullName" label="#" width="45px">
           <template #default="scope">
             <div
               class="avatar"
@@ -47,7 +47,32 @@
             <div>{{ scope.row.MobileNumber }}</div>
           </template>
         </m-column>
+        <m-column v-if="isAdmin" fixed="right" width="55">
+          <template #default="scope">
+            <div class="button-column">
+              <button
+                class="btn-mini --color-edit"
+                :title="scope.row.FullName"
+                @click="onUpdate(scope.row)"
+              >
+                <i class="icofont-ui-edit"></i> <span style="font-size: 13px">Sửa</span>
+              </button>
+              <button
+                class="btn-mini --color-red"
+                :title="scope.row.FullName"
+                @click="onDelete(scope.row)"
+              >
+                <i class="icofont-ui-delete"></i> <span style="font-size: 13px">Xóa</span>
+              </button>
+            </div>
+          </template>
+        </m-column>
       </m-table>
+      <div class="toobar-ext" v-if="isAdmin">
+        <button class="btn btn--default" @click="onAddClick">
+          <i class="icofont-ui-add"></i> Thêm thành viên
+        </button>
+      </div>
     </div>
   </div>
   <contact-detail
@@ -58,6 +83,7 @@
   ></contact-detail>
 </template>
 <script>
+import Enum from "@/scripts/enum";
 import ContactDetail from "./ContactDetail.vue";
 export default {
   name: "ContactList",
@@ -65,6 +91,10 @@ export default {
   props: [],
   emits: [],
   created() {
+    var roleValue = localStorage.getItem("userRoleValue");
+    if (roleValue == 1) {
+      this.isAdmin = true;
+    }
     this.loadData();
   },
   watch: {
@@ -73,6 +103,24 @@ export default {
     },
   },
   methods: {
+    onAddClick() {
+      this.detailFormMode = Enum.FormMode.ADD;
+      this.contactSelected = {};
+    },
+    onDelete(contact) {
+      this.commonJs.showConfirm("Bạn có chắc chắn muốn xóa thành viên này?", () => {
+        this.api({ url: `/api/v1/contacts/${contact.ContactId}`, method: "DELETE" }).then(
+          () => {
+            this.loadData();
+          }
+        );
+      });
+      event.stopPropagation();
+    },
+    onUpdate(contact) {
+      this.contactSelected = contact;
+      this.detailFormMode = Enum.FormMode.UPDATE;
+    },
     loadData() {
       // Lấy danh sách liên hệ
       this.api({
@@ -121,6 +169,7 @@ export default {
       textSearch: "",
       detailFormMode: null,
       contactSelected: {},
+      isAdmin: false,
     };
   },
 };
@@ -190,11 +239,27 @@ export default {
 }
 
 .avatar {
-  width: 50px;
-  height: 50px;
+  width: 40px;
+  height: 40px;
   background-repeat: no-repeat;
   background-position: center;
   background-size: cover;
   border-radius: 50%;
+}
+
+.toobar-ext {
+  position: absolute;
+  bottom: 0;
+  right: 0;
+  z-index: 999;
+}
+
+.button-column {
+  display: flex;
+  flex-direction: column;
+}
+
+.btn-mini + .btn-mini {
+  margin-left: 0;
 }
 </style>

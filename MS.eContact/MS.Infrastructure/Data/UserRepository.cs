@@ -5,6 +5,7 @@ using MS.ApplicationCore.DTOs;
 using MS.ApplicationCore.Entities;
 using MS.ApplicationCore.Entities.Auth;
 using MS.ApplicationCore.Interfaces;
+using MS.ApplicationCore.Utilities;
 using MS.Infrastructure.UnitOfWork;
 using System;
 using System.Collections.Generic;
@@ -24,11 +25,11 @@ namespace MS.Infrastructure.Data
         public async Task<UserInfo> GetUserAuthenticate(string userName, string password)
         {
 
-            var sql = "SELECT * FROM User WHERE (UserName = @UserName OR Email = @UserName OR PhoneNumber = @UserName) AND PasswordHash = @Password";
+            var sql = "Proc_GetUserAuthenticate";
             var parameters = new DynamicParameters();
-            parameters.Add("@UserName", userName);
-            parameters.Add("@Password", password);
-            var user = await DbContext.Connection.QueryFirstOrDefaultAsync<UserInfo>(sql, param: parameters, transaction: DbContext.Transaction);
+            parameters.Add("@p_UserName", userName);
+            parameters.Add("@p_Password", password);
+            var user = await DbContext.Connection.QueryFirstOrDefaultAsync<UserInfo>(sql, param: parameters, transaction: DbContext.Transaction,commandType:System.Data.CommandType.StoredProcedure);
 
             // get roles:
             if (user == null)
@@ -37,6 +38,7 @@ namespace MS.Infrastructure.Data
             }
             var sqlRoles = "SELECT a.RoleId,a.RoleName,a.RoleValue, b.UserId FROM Role a INNER JOIN UserRole b ON a.RoleId = b.RoleId WHERE b.UserId = @UserId";
             parameters.Add("@UserId", user.UserId);
+            parameters.Add("@p_OrganizationId", CommonFunction.GetCurrentOrganozationId());
             user.Roles = await DbContext.Connection.QueryAsync<Role>(sqlRoles, param: parameters, transaction: DbContext.Transaction);
 
             return user;
@@ -52,6 +54,7 @@ namespace MS.Infrastructure.Data
             var sqlSelectEmployeeInfo = "SELECT * FROM View_Employee e WHERE e.UserId = @UserId";
             var parameters = new DynamicParameters();
             parameters.Add($"@UserID", id);
+            parameters.Add("@p_OrganizationId", CommonFunction.GetCurrentOrganozationId());
             var userResponse = await DbContext.Connection.QueryFirstOrDefaultAsync<UserInfo>(sqlCommand, param: parameters, transaction: DbContext.Transaction);
             if (userResponse != null)
             {
@@ -73,6 +76,7 @@ namespace MS.Infrastructure.Data
             var sqlSelectEmployeeInfo = "SELECT * FROM View_Employee e WHERE e.UserId = @UserId";
             var parameters = new DynamicParameters();
             parameters.Add($"@UserID", id);
+            parameters.Add("@p_OrganizationId", CommonFunction.GetCurrentOrganozationId());
             var user = DbContext.Connection.QueryFirstOrDefault<UserInfo>(sqlCommand, param: parameters, transaction: DbContext.Transaction);
             if (user != null)
             {
@@ -140,6 +144,7 @@ namespace MS.Infrastructure.Data
             var sql = "SELECT * FROM User WHERE (UserName = @UserName OR Email = @UserName OR PhoneNumber = @UserName)";
             var parameters = new DynamicParameters();
             parameters.Add("@UserName", userName);
+            parameters.Add("@p_OrganizationId", CommonFunction.GetCurrentOrganozationId());
             var data = await DbContext.Connection.QueryFirstOrDefaultAsync<User>(sql, param: parameters, transaction: DbContext.Transaction);
             return data;
         }
@@ -224,6 +229,7 @@ namespace MS.Infrastructure.Data
             var parameters = new DynamicParameters();
             parameters.Add("@PhoneNumber", phoneNumber);
             parameters.Add("@MobileNumber", phoneNumber);
+            parameters.Add("@p_OrganizationId", CommonFunction.GetCurrentOrganozationId());
             var data = await DbContext.Connection.QueryFirstOrDefaultAsync<UserRegisterResponse>(sql, param: parameters, transaction: DbContext.Transaction);
             return data;
         }
@@ -238,6 +244,7 @@ namespace MS.Infrastructure.Data
             var sqlSelectEmployeeInfo = "SELECT * FROM View_Employee e WHERE e.UserId = @UserId";
             var parameters = new DynamicParameters();
             parameters.Add($"@UserID", id);
+            parameters.Add("@p_OrganizationId", CommonFunction.GetCurrentOrganozationId());
             var user = await DbContext.Connection.QueryFirstOrDefaultAsync<UserInfo>(sqlCommand, param: parameters, transaction: DbContext.Transaction);
             if (user != null)
             {
@@ -253,6 +260,7 @@ namespace MS.Infrastructure.Data
             var sql = "SELECT u.UserName FROM User u WHERE u.ContactId = @ContactId";
             DynamicParameters parameters = new DynamicParameters();
             parameters.Add("@ContactId", contactId);
+            parameters.Add("@p_OrganizationId", CommonFunction.GetCurrentOrganozationId());
             var userName = await DbContext.Connection.QueryFirstOrDefaultAsync<string>(sql, param: parameters, transaction: DbContext.Transaction);
             return userName;
         }
@@ -262,6 +270,7 @@ namespace MS.Infrastructure.Data
             var sql = "Proc_GetClass_Info";
             DynamicParameters parameters = new DynamicParameters();
             parameters.Add("@UserId", id);
+            parameters.Add("@p_OrganizationId", CommonFunction.GetCurrentOrganozationId());
             var result = await DbContext.Connection.QueryFirstOrDefaultAsync<ClassInfo>(sql, param: parameters, transaction: DbContext.Transaction, commandType: System.Data.CommandType.StoredProcedure);
             return result;
         }

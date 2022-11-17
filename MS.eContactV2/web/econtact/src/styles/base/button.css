@@ -79,3 +79,7 @@ button:disabled {
     background-color: #ccc !important;
     pointer-events: none !important;
 }
+
+.btn-mini+.btn-mini {
+    margin-left: 4px;
+}

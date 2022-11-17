@@ -3,6 +3,7 @@ using MS.ApplicationCore.DTOs;
 using MS.ApplicationCore.Entities;
 using MS.ApplicationCore.Interfaces;
 using MS.ApplicationCore.MSEnums;
+using MS.ApplicationCore.Utilities;
 using MS.Infrastructure.UnitOfWork;
 using System;
 using System.Collections.Generic;
@@ -36,6 +37,7 @@ namespace MS.Infrastructure.Data
             var sql = "Proc_ExpenditurePlan_GetAll";
             DynamicParameters parameters = new DynamicParameters();
             parameters.Add("@p_PlanTypes", expenditurePlanType);
+            parameters.Add("@p_OrganizationId", CommonFunction.GetCurrentOrganozationId());
             var expenditurePlans = await DbContext.Connection.QueryAsync<ExpenditurePlanResponse>(sql,param: parameters, transaction: DbContext.Transaction,commandType:System.Data.CommandType.StoredProcedure);
             return expenditurePlans;
         }
@@ -46,6 +48,7 @@ namespace MS.Infrastructure.Data
             var parameters = new DynamicParameters();
             parameters.Add("@EventId", eventId);
             parameters.Add("@ExpenditureType", ExpenditurePlanType.INCREMENT_EVENT);
+            parameters.Add("@p_OrganizationId", CommonFunction.GetCurrentOrganozationId());
             var expenditurePlan = await DbContext.Connection.QueryFirstOrDefaultAsync<ExpenditurePlan>(sql, parameters, transaction:DbContext.Transaction);
             return expenditurePlan;
         }

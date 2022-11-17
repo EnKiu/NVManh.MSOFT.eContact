@@ -13,10 +13,22 @@
           >
             <!-- <img :src="contact.AvatarFullPath" alt="" /> -->
           </div>
-          <div class="contact__info">
-            <div class="contact__info--name">
-              {{ contact.FirstName }} {{ contact.LastName }}
+          <div
+            class="contact__info"
+            :class="{ 'margin-bottom-10': formMode == Enum.FormMode.ADD }"
+          >
+            <div v-if="formMode != Enum.FormMode.ADD" class="contact__info--name">
+              {{ contact.FullName }}
             </div>
+            <m-input
+              class="no-border margin-0"
+              :class="{ 'bg-blue': formMode == 3 }"
+              :disabled="formMode == 3"
+              :isFocus="true"
+              v-if="formMode == 1"
+              placeholder="Nhập họ và tên"
+              v-model="contact.FullName"
+            ></m-input>
             <!-- <div class="contact__info--rank"></div> -->
           </div>
           <div class="contact__phone">
@@ -28,6 +40,7 @@
                     :class="{ 'bg-blue': formMode == 3 }"
                     :disabled="formMode == 3"
                     :focus="true"
+                    placeholder="Số điện thoại chính"
                     v-model="contact.MobileNumber"
                   ></m-input>
                 </div>
@@ -41,6 +54,7 @@
                     class="no-border margin-0"
                     :class="{ 'bg-yellow': formMode == 3 }"
                     :disabled="formMode == 3"
+                    placeholder="Số điện thoại phụ"
                     v-model="contact.PhoneNumber"
                   ></m-input>
                 </div>
@@ -141,6 +155,7 @@
   />
 </template>
 <script>
+import Enum from "@/scripts/enum";
 export default {
   name: "BaseDialog",
   components: {},
@@ -168,6 +183,23 @@ export default {
     this.contact = this.contactInput;
     this.originalContact = JSON.stringify(this.contactInput);
   },
+  watch: {
+    "contact.FullName": function (newValue) {
+      if (newValue) {
+        var nameArr = newValue.split(" ");
+        if (nameArr.length > 0) {
+          var firstName = "";
+          var lastName = nameArr[nameArr.length - 1];
+          for (let index = 0; index < nameArr.length - 1; index++) {
+            console.log(nameArr[index]);
+            firstName += nameArr[index] + " ";
+          }
+          this.contact.FirstName = firstName;
+          this.contact.LastName = lastName;
+        }
+      }
+    },
+  },
   methods: {
     onSubmit() {
       var formData = new FormData();
@@ -183,18 +215,28 @@ export default {
       // var baseUrl = process.env.VUE_APP_BASE_URL;
       // var contactId = this.contact.ContactId;
       // gọi api save dữ liệu:
-      this.api({
-        url: "/api/v1/contacts",
-        data: formData,
-        method: "PUT",
-      })
-        .then((res) => {
-          this.$emit("afterSave", res);
-        })
-        .catch((res) => {
-          if (res.status == 403) this.$emit("update:formMode", this.Enum.FormMode.VIEW);
+      if (this.formMode == Enum.FormMode.ADD) {
+        this.api({
+          url: "/api/v1/contacts/create",
+          data: formData,
+          method: "POST",
+        }).then((res) => {
           this.$emit("afterSave", res);
         });
+      } else {
+        this.api({
+          url: "/api/v1/contacts",
+          data: formData,
+          method: "PUT",
+        })
+          .then((res) => {
+            this.$emit("afterSave", res);
+          })
+          .catch((res) => {
+            if (res.status == 403) this.$emit("update:formMode", this.Enum.FormMode.VIEW);
+            this.$emit("afterSave", res);
+          });
+      }
     },
     onChangeEditMode() {
       this.$emit("update:formMode", this.Enum.FormMode.UPDATE);

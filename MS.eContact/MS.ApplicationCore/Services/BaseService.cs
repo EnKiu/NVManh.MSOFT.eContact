@@ -14,34 +14,13 @@ namespace MS.ApplicationCore.Services
     {
         readonly IRepository<TEntity> _repository;
         protected Dictionary<string, List<string>> Errors = new();
-        protected IUnitOfWork UnitOfWork;
+        public IUnitOfWork UnitOfWork;
         protected readonly IMapper Mapper;
         public BaseService(IRepository<TEntity> repository, IUnitOfWork unitOfWork, IMapper mapper)
         {
             _repository = repository;
             UnitOfWork = unitOfWork;
             Mapper = mapper;
-        }
-        public int Add(TEntity entity)
-        {
-            ValidateObject(entity);
-            BeforeSave(entity);
-            if (Errors.Count == 0)
-            {
-                var res = _repository.Add(entity);
-                AfterSave(entity);
-                return res;
-            }
-            else
-                throw new MISAException(System.Net.HttpStatusCode.BadRequest,Errors);
-        }
-
-        public int Add(IEnumerable<TEntity> entities)
-        {
-            if (Errors.Count == 0)
-                return _repository.Add(entities);
-            else
-                throw new MISAException(System.Net.HttpStatusCode.BadRequest, Errors);
         }
 
         public virtual async Task<int> AddAsync(TEntity entity)
@@ -69,41 +48,6 @@ namespace MS.ApplicationCore.Services
         public IEnumerable<TEntity> All()
         {
             return _repository.All();
-        }
-
-        public TEntity Find(object pksFields)
-        {
-            return _repository.Find(pksFields);
-        }
-
-        public IEnumerable<TEntity> GetData(string query, object parameters)
-        {
-            return _repository.GetData(query, parameters);
-        }
-
-        public int InstertOrUpdate(TEntity entity, object pks)
-        {
-            BeforeSave(entity);
-            if (Errors.Count == 0)
-                return _repository.InstertOrUpdate(entity, pks);
-            else
-                throw new MISAException(System.Net.HttpStatusCode.BadRequest, Errors);
-           
-        }
-
-        public async Task<int> InstertOrUpdateAsync(TEntity entity, object pks)
-        {
-            BeforeSave(entity);
-            if (Errors.Count == 0)
-                return await _repository.InstertOrUpdateAsync(entity, pks);
-            else
-                throw new MISAException(System.Net.HttpStatusCode.BadRequest, Errors);
-            
-        }
-
-        public void Remove(object key)
-        {
-            _repository.Remove(key);
         }
 
         public virtual async Task<int> RemoveAsync(object key)

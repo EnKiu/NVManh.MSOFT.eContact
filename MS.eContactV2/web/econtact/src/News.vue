@@ -1,16 +1,14 @@
 <template>
-  <div class="news" @click="showNews">
+  <div v-if="events.length > 0" class="news" @click="showNews">
     <button class="close-comment" @click="onClose">
       <i class="icofont-close"></i>
     </button>
     <div class="news__icon"><i class="icofont-hand-right"></i></div>
     <div class="news-content">
-      <div class="news__info">
-        THÔNG BÁO HOT: BẤM ĐỂ ĐĂNG KÝ tham gia họp lớp kỷ niệm 15 năm ra trường
-      </div>
+      <div class="news__info">THÔNG BÁO HOT: BẤM ĐỂ ĐĂNG KÝ [{{ item.EventName }}]!</div>
 
       <span
-        >Chỉ còn: <span class="time--left">{{ timeLeftInfo }}</span></span
+        >Hạn đăng ký: <span class="time--left">{{ timeLeftInfo }}</span></span
       >
     </div>
   </div>
@@ -22,7 +20,17 @@ export default {
   props: [],
   emits: ["onClose"],
   created() {
-    this.interValTime();
+    this.api({ url: "api/v1/events/event-left-time" }).then((res) => {
+      this.events = res;
+      if (res && res.length > 0) {
+        var lastest = res[0];
+        this.item = lastest;
+        console.log(lastest.ExpireRegisterDate);
+        if (!lastest.ExpireRegisterDate && lastest.EventDate)
+          this.item.ExpireRegisterDate = lastest.EventDate;
+      }
+      this.interValTime();
+    });
   },
   methods: {
     onClose() {
@@ -37,7 +45,7 @@ export default {
     interValTime() {
       this.calculatorTimeInfo();
       var nowTime = new Date();
-      var timeStart = new Date(this.item.StartTime);
+      var timeStart = new Date(this.item.ExpireRegisterDate);
       if (timeStart > nowTime) {
         setInterval(this.calculatorTimeInfo, 1000);
       }
@@ -47,7 +55,7 @@ export default {
       //   console.log(this.timeLeftInfo);
       try {
         var currentDate = new Date();
-        var value = new Date(self.item.StartTime);
+        var value = new Date(self.item.ExpireRegisterDate);
         var timeBetween = value - currentDate;
         if (timeBetween < 0) {
           self.timeLeftInfo = null;
@@ -103,8 +111,9 @@ export default {
   },
   data() {
     return {
-      item: { StartTime: new Date("2022-11-06 23:59:00") },
+      item: {},
       timeLeftInfo: null,
+      events: [],
     };
   },
 };

@@ -1,14 +1,13 @@
 <template>
   <div class="page-title animate-charcter" style="">
-    Cựu học sinh A1 (2004-2007) - trường thpt tứ sơn
+    {{ classInfo.Description }}
   </div>
   <nav class="navbar">
     <div class="logo"></div>
     <div class="navbar-list">
-      <router-link to="/" class="navbar-item">
+      <!-- <router-link to="/" class="navbar-item">
         <span class="navbar-item__text"><i class="icofont-navigation-menu"></i></span>
-        <!-- <span class="item__text-label">Tin tức</span> -->
-      </router-link>
+      </router-link> -->
       <router-link to="/contacts" class="navbar-item">
         <span class="navbar-item__text"><i class="icofont-contacts"></i></span>
         <span class="item__text-label">Danh bạ</span>
@@ -106,6 +105,7 @@ export default {
   },
   props: ["isAuthenticated", "isProfileLoaded", "classInfo"],
   created() {
+    console.log(`classInfo`, this.classInfo);
     if (this.isAuthenticated) {
       this.account.AvatarFullPath = localStorage.getItem("avatar");
       this.account.LastName = localStorage.getItem("lastName");
@@ -250,12 +250,12 @@ export default {
   color: #0c701e;
 }
 
-.expenditure a{
+.expenditure a {
   text-decoration: none;
   margin: 0 10px;
 }
 
-.expenditure .router-link-active{
+.expenditure .router-link-active {
   color: #fff;
   background-color: #ff0000;
 }

@@ -7,7 +7,15 @@
   </div>
 </template>
 <script>
-export default {};
+export default {
+  name: "TheMain",
+  methods: {},
+  data() {
+    return {
+      showSuggest: true,
+    };
+  },
+};
 </script>
 
 <style scoped>

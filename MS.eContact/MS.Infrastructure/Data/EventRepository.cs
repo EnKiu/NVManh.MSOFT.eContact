@@ -1,7 +1,10 @@
 ﻿using Dapper;
 using Microsoft.AspNetCore.Http;
+using Microsoft.Extensions.Logging;
 using MS.ApplicationCore.Entities;
+using MS.ApplicationCore.Entities.Auth;
 using MS.ApplicationCore.Interfaces;
+using MS.ApplicationCore.Utilities;
 using MS.Infrastructure.UnitOfWork;
 using System;
 using System.Collections.Generic;
@@ -31,6 +34,7 @@ namespace MS.Infrastructure.Data
             var storeName = "Proc_Event_GetEventInfo_ByUserId";
             DynamicParameters parameters = new DynamicParameters();
             parameters.Add("p_UserId", userId);
+            parameters.Add("p_OrganizationId", CommonFunction.GetCurrentOrganozationId());
             return await DbContext.Connection.QueryAsync<Event>(storeName,param:parameters, DbContext.Transaction, commandType: System.Data.CommandType.StoredProcedure);
             //return await DbContext.Connection.QueryAsync<Event>($"SELECT * FROM Event Order By EventDate DESC", DbContext.Transaction, commandType: System.Data.CommandType.Text);
         }
@@ -41,6 +45,7 @@ namespace MS.Infrastructure.Data
             var storeName = "Proc_Contact_GetContactNotRegisterEventByEventId";
             var parameters = new DynamicParameters();
             parameters.Add("@p_EventId", eventId);
+            parameters.Add("@p_OrganizationId", CommonFunction.GetCurrentOrganozationId());
             var data = await DbContext.Connection.QueryAsync<Contact>(storeName, parameters, transaction: DbContext.Transaction, commandType: System.Data.CommandType.StoredProcedure);
             return data;
         }
@@ -48,7 +53,7 @@ namespace MS.Infrastructure.Data
         {
             // Cập nhật thông tin ngày bắt đầu:
             entity.EventDate = (DateTime)entity.StartTime;
-
+            entity.OrganizationId = Guid.Parse(CommonFunction.GetCurrentOrganozationId());
             var rowAffects = 0;
             DbContext.Connection.Open();
             DbContext.Connection.BeginTransaction();
@@ -69,6 +74,7 @@ namespace MS.Infrastructure.Data
         {
             // Cập nhật thông tin ngày bắt đầu:
             entity.EventDate = (DateTime)entity.StartTime;
+            entity.OrganizationId = Guid.Parse(CommonFunction.GetCurrentOrganozationId());
             var rowAffects = await DbContext.Connection.ExecuteAsync($"Proc_Event_InsertEvent", entity, transaction: DbContext.Transaction, commandType: System.Data.CommandType.StoredProcedure);
             return rowAffects;
         }
@@ -79,7 +85,17 @@ namespace MS.Infrastructure.Data
             DynamicParameters parameters = new DynamicParameters();
             parameters.Add("@p_EventId",eventId);
             parameters.Add("@p_UserId", userId);
+            parameters.Add("@p_OrganizationId", CommonFunction.GetCurrentOrganozationId());
             var res = await DbContext.Connection.ExecuteAsync(storeName, param: parameters, transaction: DbContext.Transaction, commandType: System.Data.CommandType.StoredProcedure);
+            return res;
+        }
+
+        public async Task<IEnumerable<Event>> GetEventLeftTime()
+        {
+            var storeName = "Proc_Event_GetEventLeftTime";
+            DynamicParameters parameters = new DynamicParameters();
+            parameters.Add("@p_OrganizationId", CommonFunction.GetCurrentOrganozationId());
+            var res = await DbContext.Connection.QueryAsync<Event>(storeName, param: parameters, transaction: DbContext.Transaction, commandType: System.Data.CommandType.StoredProcedure);
             return res;
         }
     }

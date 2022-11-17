@@ -4,7 +4,9 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Configuration;
 using MS.ApplicationCore.Authorization;
 using MS.ApplicationCore.Entities;
+using MS.ApplicationCore.Entities.Auth;
 using MS.ApplicationCore.Interfaces;
+using MS.ApplicationCore.MSEnums;
 using System.Linq;
 using System.Threading.Tasks;
 
@@ -28,6 +30,14 @@ namespace MS.eContact.Web.Controllers
             _repository = repository;
             _service = service;
         }
+
+        [Authorize(MSRole.Member)]
+        [HttpGet("event-left-time")]
+        public async Task<IActionResult> GetEventLeftTime()
+        {
+            return Ok(await _repository.GetEventLeftTime());
+        }
+
 
         [AllowAnonymous]
         [HttpGet("contact-no-register")]

@@ -11,6 +11,5 @@ namespace MS.ApplicationCore.Interfaces
         Task<int> AddAsync(IEnumerable<TEntity> entities);
         Task<int> RemoveAsync(object key);
         Task<int> UpdateAsync(TEntity entity, object pks);
-        Task<int> InstertOrUpdateAsync(TEntity entity, object pks);
     }
 }

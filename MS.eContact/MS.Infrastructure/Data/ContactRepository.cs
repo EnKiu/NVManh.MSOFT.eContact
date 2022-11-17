@@ -1,6 +1,7 @@
 ﻿using Dapper;
 using MS.ApplicationCore.Entities;
 using MS.ApplicationCore.Interfaces;
+using MS.ApplicationCore.Utilities;
 using MS.Infrastructure.UnitOfWork;
 using System;
 using System.Collections.Generic;
@@ -20,12 +21,18 @@ namespace MS.Infrastructure.Data
 
         public async override Task<IEnumerable<Contact>> AllAsync()
         {
-            return await DbContext.Connection.QueryAsync<Contact>($"SELECT * FROM Contact c ORDER BY c.SortOrder", transaction: DbContext.Transaction, commandType: System.Data.CommandType.Text);
+            var sql = "SELECT * FROM Contact c WHERE c.OrganizationId = @p_OrganizationId ORDER BY c.SortOrder";
+            DynamicParameters parameters = new DynamicParameters();
+            parameters.Add("@p_OrganizationId", CommonFunction.GetCurrentOrganozationId());
+            return await DbContext.Connection.QueryAsync<Contact>(sql, param:parameters, transaction: DbContext.Transaction, commandType: System.Data.CommandType.Text);
         }
 
         public override IEnumerable<Contact> All()
         {
-            return  DbContext.Connection.Query<Contact>($"SELECT * FROM Contact c ORDER BY c.SortOrder", transaction: DbContext.Transaction, commandType: System.Data.CommandType.Text);
+            var sql = "SELECT * FROM Contact c WHERE c.OrganizationId = @p_OrganizationId ORDER BY c.SortOrder";
+            DynamicParameters parameters = new DynamicParameters();
+            parameters.Add("@p_OrganizationId", CommonFunction.GetCurrentOrganozationId());
+            return  DbContext.Connection.Query<Contact>(sql, param: parameters, transaction: DbContext.Transaction, commandType: System.Data.CommandType.Text);
         }
     }
 }

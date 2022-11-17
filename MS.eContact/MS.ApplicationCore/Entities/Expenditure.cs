@@ -16,12 +16,14 @@ namespace MS.ApplicationCore.Entities
         public ExpenditureType? ExpenditureType { get; set; }
         public string? Description { get; set; }
         public Guid? ExpenditurePlanId { get; set; }
+        public Guid? OrganizationId { get; set; }
         public Guid? ContactId { get; set; }
         public decimal Amount { get; set; }
         public DateTime? CreatedDate { get; set; }
         public string? CreatedBy { get; set; }
         public DateTime? ModifiedDate { get; set; }
         public string? ModifiedBy { get; set; }
+
 
     }
 

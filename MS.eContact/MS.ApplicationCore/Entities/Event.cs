@@ -66,5 +66,7 @@ namespace MS.ApplicationCore.Entities
         [NotMapQuery]
         public decimal? TotalRevenuesMoney { get; set; }
 
+        public Guid? OrganizationId { get; set; }
+
     }
 }

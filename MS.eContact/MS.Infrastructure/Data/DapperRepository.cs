@@ -2,6 +2,7 @@
 using MS.ApplicationCore.Entities;
 using MS.ApplicationCore.Exceptions;
 using MS.ApplicationCore.Interfaces;
+using MS.ApplicationCore.Utilities;
 using MS.Infrastructure.UnitOfWork;
 using System;
 using System.Collections.Generic;
@@ -30,6 +31,7 @@ namespace MS.Infrastructure.Data
             var rowAffects = 0;
             try
             {
+                SetDefaultOrganization(entity);
                 rowAffects = DbContext.Connection.Execute($"Proc_Insert{_tableName}", entity, transaction: DbContext.Transaction, commandType: System.Data.CommandType.StoredProcedure);
             }
             catch (Exception ex)
@@ -43,15 +45,20 @@ namespace MS.Infrastructure.Data
             return rowAffects;
         }
 
-        public virtual int Add(IEnumerable<TEntity> entities)
+        protected void SetDefaultOrganization(TEntity entity)
         {
-            throw new NotImplementedException();
+            var orgProp = typeof(TEntity).GetProperty("OrganizationId");
+            if (orgProp != null && orgProp.GetValue(entity) == null)
+            {
+                orgProp.SetValue(entity, Guid.Parse(CommonFunction.GetCurrentOrganozationId()));
+            }
         }
 
         public virtual async Task<int> AddAsync(TEntity entity)
         {
             try
             {
+                SetDefaultOrganization(entity);
                 var rowAffects = await DbContext.Connection.ExecuteAsync($"Proc_Insert{_tableName}", entity, transaction: DbContext.Transaction, commandType: System.Data.CommandType.StoredProcedure);
                 return rowAffects;
             }
@@ -65,26 +72,39 @@ namespace MS.Infrastructure.Data
 
         public async Task<int> AddAsync(IEnumerable<TEntity> entities)
         {
-            throw new NotImplementedException();
+            var res = 0;
+            DbContext.Connection.BeginTransaction();
+            foreach (var item in entities)
+            {
+                res += await AddAsync(item);
+            }
+            DbContext.Transaction.Commit();
+            return res;
         }
         #endregion
 
         #region GET
         public virtual IEnumerable<TEntity> All()
         {
-            return DbContext.Connection.Query<TEntity>($"SELECT * FROM {_tableName}", transaction: DbContext.Transaction, commandType: System.Data.CommandType.Text);
+            DynamicParameters parameters = new DynamicParameters();
+            parameters.Add("@p_OrganizationId", CommonFunction.GetCurrentOrganozationId());
+            return DbContext.Connection.Query<TEntity>($"SELECT * FROM {_tableName}",param:parameters, transaction: DbContext.Transaction, commandType: System.Data.CommandType.Text);
         }
 
         public virtual async Task<IEnumerable<TEntity>> AllAsync()
         {
-            return await DbContext.Connection.QueryAsync<TEntity>($"SELECT * FROM {_tableName}", transaction: DbContext.Transaction, commandType: System.Data.CommandType.Text);
+            DynamicParameters parameters = new DynamicParameters();
+            parameters.Add("@p_OrganizationId", CommonFunction.GetCurrentOrganozationId());
+            return await DbContext.Connection.QueryAsync<TEntity>($"SELECT * FROM {_tableName}", param: parameters, transaction: DbContext.Transaction, commandType: System.Data.CommandType.Text);
         }
 
         public TEntity Find(object pksFields)
         {
+
             var sql = $"SELECT * FROM {_tableName} WHERE {_tableName}Id = @Id";
             DynamicParameters parameters = new DynamicParameters();
             parameters.Add("@Id", pksFields);
+            parameters.Add("@p_OrganizationId", CommonFunction.GetCurrentOrganozationId());
             return DbContext.Connection.QueryFirstOrDefault<TEntity>(sql,param:parameters,transaction:DbContext.Transaction, commandType: System.Data.CommandType.Text);
         }
 
@@ -93,27 +113,9 @@ namespace MS.Infrastructure.Data
             return await DbContext.GetByIdAsync<TEntity>(pksFields.ToString());
         }
 
-        public IEnumerable<TEntity> GetData(string qry, object parameters)
-        {
-            throw new NotImplementedException();
-        }
-
-        public async Task<IEnumerable<TEntity>> GetDataAsync(string qry, object parameters)
-        {
-            throw new NotImplementedException();
-        }
         #endregion
 
         #region Insert Or Update
-        public int InstertOrUpdate(TEntity entity, object pks)
-        {
-            throw new NotImplementedException();
-        }
-
-        public async Task<int> InstertOrUpdateAsync(TEntity entity, object pks)
-        {
-            throw new NotImplementedException();
-        }
 
         public int Update(TEntity entity, object pks)
         {
@@ -139,11 +141,6 @@ namespace MS.Infrastructure.Data
         #endregion
 
         #region DELETE/REMOVE
-        public void Remove(object key)
-        {
-            throw new NotImplementedException();
-        }
-
         public async Task<int> RemoveAsync(object key)
         {
             var rowAffects = 0;

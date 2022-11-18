@@ -189,6 +189,7 @@ const mutations = {
     },
     [UPDATE_CLASS_INFO]: (state, classInfo) => {
         state.classInfo = classInfo;
+        document.title = classInfo.Description;
     }
 };
 

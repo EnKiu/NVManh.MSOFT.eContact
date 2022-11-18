@@ -36,9 +36,10 @@ const ifAuthenticated = (to, from, next) => {
 const routes = [{
         path: '/',
         name: 'HomePage',
-        components: {
-            HomePage: HomePage
-        },
+        component: HomePage,
+        // components: {
+        //     HomePage: HomePage
+        // },
         beforeEnter: ifAuthenticated
     },
     {

@@ -127,9 +127,9 @@ export default {
   text-align: right;
 }
 
-.note {
+/* .note {
   max-width: 270px;
-}
+} */
 
 .auth-info a {
   color: rgb(255, 255, 255);

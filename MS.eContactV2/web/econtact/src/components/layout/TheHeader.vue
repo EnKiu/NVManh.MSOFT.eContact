@@ -10,7 +10,7 @@
       </router-link> -->
       <router-link to="/contacts" class="navbar-item">
         <span class="navbar-item__text"><i class="icofont-contacts"></i></span>
-        <span class="item__text-label">Danh bạ</span>
+        <span class="item__text-label">Thành viên</span>
       </router-link>
       <router-link to="/events" class="navbar-item">
         <span class="navbar-item__text"><i class="icofont-history"></i></span>

@@ -26,21 +26,24 @@
       <p class="content__text">
         Cám ơn và xin lỗi các bạn vì sự bất tiện này!
       </p>
-      <div class="page-button">
+      <!-- <div class="page-button">
         <router-link to="/login" class="btn btn--default btn--link">Đăng nhập</router-link>
         <div> hoặc <router-link to="/register"><b>Tạo tài khoản</b>.</router-link></div>
-      </div>
+      </div> -->
     </div>
   </div>
 </template>
 <script>
 export default {
   name: "HomePage",
-  props:["showHomePage"]
+  props: ["showHomePage"],
 };
 </script>
 <style scoped>
-.page-not-authenticate{
+.page-not-authenticate {
+  margin: 0 auto;
+}
+/* .page-not-authenticate{
     position: fixed;
     top: 0;
     right: 0;
@@ -51,22 +54,23 @@ export default {
     display: flex;
     align-items: center;
     justify-content: center;
-}
+} */
 
-.content{
-    max-width: 300px;
-    margin: 24px;
-    padding: 0 16px 16px;
-    background-color: #fff;
-    border-radius: 4px;
+.content {
+  margin: 0 auto;
+  max-width: 300px;
+  /* margin: 24px; */
+  padding: 0 16px 16px;
+  background-color: #fff;
+  border-radius: 4px;
 }
-.page-button{
-  display:flex;
+.page-button {
+  display: flex;
   flex-direction: column;
   justify-content: flex-end;
 }
 
-.btn--link{
+.btn--link {
   display: flex;
   align-items: center;
   justify-content: center;

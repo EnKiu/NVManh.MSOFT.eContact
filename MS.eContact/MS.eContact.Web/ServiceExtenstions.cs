@@ -48,7 +48,8 @@ namespace MS.eContact.Web
             service.AddTransient<IContactRepository, ContactRepository>();
             service.AddTransient<IContactService, ContactService>();
             service.AddTransient<IDictionaryEnumService, DictionaryEnumService>();
-
+            service.AddTransient<IOrganizationService, OrganizationService>();
+            service.AddTransient<IOrganizationRepository, OrganizationRepository>();
             service.AddTransient<IJwtUtils, JwtUtils>();
             service.AddHttpContextAccessor();
 

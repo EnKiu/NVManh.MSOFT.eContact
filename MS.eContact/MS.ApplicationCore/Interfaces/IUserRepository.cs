@@ -38,14 +38,23 @@ namespace MS.ApplicationCore.Interfaces
         Task<bool> CheckUserNameExist(string userName);
 
         Task<string> GetUserNameByContactId(Guid contactId);
+
         /// <summary>
-        /// Kiểm tra số điện thoại đã đăng ký hay chưa?
+        /// Kiểm tra số điện thoại đã tồn tại trong hệ thống hay chưa?
         /// </summary>
         /// <param name="phone">Số điện thoại cần kiểm tra</param>
         /// <returns>true - đã được đăng ký; false- chưa được đăng ký</returns>
         /// CreatedBy: NVMANH (10.09.2022)
         Task<bool> CheckPhoneNumberExist(string phone);
 
+
+        /// <summary>
+        /// Kiểm tra số điện thoại đúng với số điện thoại được khai báo trong hệ thống hay không?
+        /// </summary>
+        /// <param name="phone">Số điện thoại cần kiểm tra</param>
+        /// <returns>true - đã được đăng ký; false- chưa được đăng ký</returns>
+        /// CreatedBy: NVMANH (10.09.2022)
+        Task<string?> GetMobileNumberByContactId(Guid contactId);
         /// <summary>
         ///  Kiểm tra Email đã được đăng ký hay chưa
         /// </summary>

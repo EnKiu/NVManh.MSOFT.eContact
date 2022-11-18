@@ -4,12 +4,25 @@
       <div class="form__title">Tạo tài khoản mới</div>
       <form class="register-form" id="FRM_REGISTER" @submit.prevent="onRegister">
         <m-combobox
-          label="Chủ tài khoản"
-          url="/api/v1/contacts/register"
+          label="Chọn lớp"
+          url="/api/v1/organizations"
+          placeholder="Chọn đúng lớp của mình"
+          v-model="user.OrganizationId"
+          :required="true"
+          :isDisabled="false"
+          :isFocus="true"
+          propValue="OrganizationId"
+          propText="OrganizationName"
+        >
+        </m-combobox>
+        <m-combobox
+         :class="'mg-top-10'"
+          label="Chọn thành viên"
+          :url="`/api/v1/organizations/${user.OrganizationId}/contacts`"
           placeholder="Chọn thành viên sử dụng tài khoản này"
           v-model="user.ContactId"
           :required="true"
-          :isDisabled="false"
+          :isDisabled="!user.OrganizationId"
           :isFocus="true"
           propValue="ContactId"
           propText="FullName"

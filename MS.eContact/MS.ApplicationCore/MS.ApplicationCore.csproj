@@ -8,7 +8,9 @@
   <ItemGroup>
     <Folder Include="Constants\" />
   </ItemGroup>
-
+ <ItemGroup>
+	 <RuntimeHostConfigurationOption Include="System.Drawing.EnableUnixSupport" Value="true" />
+ </ItemGroup>
   <ItemGroup>
     <PackageReference Include="AutoMapper.Extensions.Microsoft.DependencyInjection" Version="12.0.0" />
     <PackageReference Include="Microsoft.AspNetCore.Cryptography.KeyDerivation" Version="6.0.10" />

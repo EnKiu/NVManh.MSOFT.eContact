@@ -103,12 +103,29 @@ namespace MS.ApplicationCore.Services
                 //    Errors.Add("Email đã được đăng ký.");
                 if (await UnitOfWork.Users.CheckPhoneNumberExist(user.PhoneNumber) == true)
                     AddErrors("PhoneNumber", $"Số điện thoại [{user.PhoneNumber}] đã được sử dụng bởi 1 thành viên khác.");
+
                 if (user.Password.Trim() != user.RePassword.Trim())
                     AddErrors("RePassword", "Mật khẩu xác nhận không khớp.");
+
                 if (await UnitOfWork.Users.CheckUserNameExist(user.UserName) == true)
                     AddErrors("UserName", $"Số điện thoại đã [{user.UserName}] được sử dụng bởi 1 thành viên khác.");
+
                 if (user.UserName.Length < 10)
-                    AddErrors("UserName", "Số điện thoại không hợp lệ.");
+                    AddErrors("UserName", "Số điện thoại không hợp lệ. Cần ít nhất 10 ký tự.");
+
+                var phoneNumberRegistedByAdmin = await UnitOfWork.Users.GetMobileNumberByContactId(user.ContactId);
+                if (string.IsNullOrEmpty(phoneNumberRegistedByAdmin))
+                {
+                    AddErrors("MobileNumber", "Thành viên hiện tại chưa được khai báo thông tin số điện thoại trong hồ sơ (Cần yêu cầu Quản trị viên cập nhật số điện thoại trước).");
+                }else if(phoneNumberRegistedByAdmin!= user.UserName)
+                {
+                    var length = phoneNumberRegistedByAdmin.Length;
+                    if (length > 3)
+                    {
+                        var erroMSg = $"Số điện thoại không khớp với số điện thoại đã khai báo trong hồ sơ (SĐT trong hồ sơ là ***{phoneNumberRegistedByAdmin.Substring(length - 3,3)} - liên hệ Quản trị viên của lớp để được cập nhật).";
+                        AddErrors("PhoneNumber", erroMSg);
+                    }
+                }
             }
             if (Errors.Count > 0)
             {

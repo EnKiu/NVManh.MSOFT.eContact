@@ -274,5 +274,14 @@ namespace MS.Infrastructure.Data
             var result = await DbContext.Connection.QueryFirstOrDefaultAsync<ClassInfo>(sql, param: parameters, transaction: DbContext.Transaction, commandType: System.Data.CommandType.StoredProcedure);
             return result;
         }
+
+        public async Task<string?> GetMobileNumberByContactId(Guid contactId)
+        {
+            var sql = "SELECT c.MobileNumber FROM Contact c WHERE c.ContactId = @ContactId";
+            DynamicParameters parameters = new DynamicParameters();
+            parameters.Add("@ContactId", contactId);
+            var result = await DbContext.Connection.QueryFirstOrDefaultAsync<string>(sql, param: parameters, transaction: DbContext.Transaction, commandType: System.Data.CommandType.Text);
+            return result;
+        }
     }
 }

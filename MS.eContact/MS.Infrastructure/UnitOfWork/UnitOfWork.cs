@@ -22,6 +22,8 @@ namespace MS.Infrastructure.UnitOfWork
         public IExpenditureRepository Expenditures { get; }
 
         public IContactRepository Contacts { get; }
+
+        public IOrganizationRepository Organizations { get; }
         #endregion
 
         private readonly MySqlDbContext _dbContext;
@@ -36,7 +38,8 @@ namespace MS.Infrastructure.UnitOfWork
             IUserRolesRepository userRoles,
             IExpenditurePlanRepository expenditurePlans,
             IExpenditureRepository expenditures, 
-            IContactRepository contacts)
+            IContactRepository contacts,
+            IOrganizationRepository organizations)
         {
             _id = Guid.NewGuid();
             Albums = albums;
@@ -49,6 +52,7 @@ namespace MS.Infrastructure.UnitOfWork
             ExpenditurePlans = expenditurePlans;
             Expenditures = expenditures;
             Contacts = contacts;
+            Organizations = organizations;
         }
 
         public Guid Id

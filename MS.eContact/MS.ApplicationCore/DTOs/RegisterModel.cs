@@ -13,5 +13,7 @@ namespace MS.ApplicationCore.Entities
         public string Password { get; set; }
         public string RePassword { get; set; }
         public Guid ContactId { get; set; }
+        public Guid OrganizationId { get; set; }
+
     }
 }

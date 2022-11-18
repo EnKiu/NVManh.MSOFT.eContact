@@ -22,6 +22,6 @@ namespace MS.ApplicationCore.Interfaces
         IExpenditurePlanRepository ExpenditurePlans { get; }
         IExpenditureRepository Expenditures { get; }
         IContactRepository Contacts { get; }
-
+        IOrganizationRepository Organizations { get; }
     }
 }

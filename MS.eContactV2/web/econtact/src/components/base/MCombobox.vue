@@ -343,6 +343,10 @@ export default {
     },
   },
   watch: {
+    url: function(newValue){
+      this.clearButtonOnClick();
+      this.loadData();
+    },
     modelValue: function (newValue, oldValue) {
       this.setTextForInput();
     },

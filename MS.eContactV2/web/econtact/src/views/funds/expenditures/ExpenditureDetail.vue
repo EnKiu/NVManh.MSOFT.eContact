@@ -266,7 +266,7 @@ export default {
         isValid = false;
       }
       if (!this.expenditure.ContactId) {
-        errors.push("[Người thu/chi] không được phép để trống.");
+        errors.push("[Người nộp tiền/chi tiền] không được phép để trống.");
         isValid = false;
       }
 

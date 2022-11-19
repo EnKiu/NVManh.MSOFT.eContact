@@ -17,6 +17,7 @@ using MS.ApplicationCore.Authorization;
 using static System.Net.WebRequestMethods;
 using MS.ApplicationCore.Exceptions;
 using MS.Infrastructure.UnitOfWork;
+using MS.ApplicationCore.MSEnums;
 
 namespace MS.eContact.Web.Controllers
 {
@@ -38,6 +39,7 @@ namespace MS.eContact.Web.Controllers
             _unitOfWork = unitOfWork;
         }
 
+        [Authorize(MSRole.Member)]
         public async override Task<IActionResult> Get()
         {
             return Ok(await _unitOfWork.Contacts.AllAsync());

@@ -10,5 +10,6 @@ namespace MS.ApplicationCore.DTOs
     public class ExpenditurePlanResponse:ExpenditurePlan
     {
         public decimal TotalMoney { get; set; }
+        public string? EventName { get; set; }
     }
 }

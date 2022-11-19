@@ -17,6 +17,7 @@
       </div>
       <div class="toast__text">{{ msg }}</div>
       <div
+        @click="onCloseToast"
         class="toast__close"
         :class="{
           'toast__icon--info': isInfo,
@@ -35,6 +36,7 @@ import MISAEnum from "@/scripts/enum";
 
 export default {
   name: "MToast",
+  emits: ["onClose"],
   props: ["type", "msg"],
   created() {
     switch (this.type) {
@@ -64,7 +66,11 @@ export default {
         break;
     }
   },
-
+  methods: {
+    onCloseToast() {
+      this.$emit("onClose");
+    },
+  },
   data() {
     return {
       isWarning: true,

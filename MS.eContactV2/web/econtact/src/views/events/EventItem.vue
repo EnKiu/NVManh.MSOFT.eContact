@@ -285,6 +285,7 @@ export default {
   border-radius: 4px;
   box-shadow: 0px 0px 10px #404040;
   margin: 0 auto;
+  background-color: #fff;
 }
 
 .event + .event {

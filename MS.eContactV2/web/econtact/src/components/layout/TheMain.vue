@@ -1,8 +1,8 @@
 <template>
   <div class="main">
     <div class="main-container">
-      <router-view :key="$route.fullPath"></router-view>
-      <!-- <router-view></router-view> -->
+      <!-- <router-view :key="$route.fullPath"></router-view> -->
+      <router-view></router-view>
     </div>
   </div>
 </template>
@@ -25,10 +25,10 @@ export default {
   height: calc(100vh - 85px);
   display: flex;
   justify-content: center;
-  padding: 16px;
+  /* padding: 16px; */
   box-sizing: border-box;
   overflow-y: auto;
-  background-color: #fff;
+  /* background-color: #fff; */
   z-index: 99;
 }
 
@@ -36,5 +36,9 @@ export default {
   max-width: 700px;
   height: 100%;
   position: relative;
+  background-color: #ffffff5c;
+  padding: 10px;
+  box-sizing: border-box;
+  overflow-y: auto;
 }
 </style>

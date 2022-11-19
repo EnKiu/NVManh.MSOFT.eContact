@@ -59,6 +59,11 @@ namespace MS.eContact.Web.Middware
                             response.StatusCode = (int)HttpStatusCode.BadRequest;
                         }
                         break;
+                    case MSMySqlException e:
+                        // custom application error
+                        response.StatusCode = (int)e.StatusCode;
+                        responseObject.UserMsg = error.Message;
+                        break;
                     case KeyNotFoundException e:
                         // not found error
                         response.StatusCode = (int)HttpStatusCode.NotFound;

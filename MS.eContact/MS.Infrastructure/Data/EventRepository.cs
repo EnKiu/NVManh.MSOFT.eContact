@@ -9,6 +9,7 @@ using MS.Infrastructure.UnitOfWork;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Net.WebSockets;
 using System.Text;
 using System.Threading.Tasks;
 
@@ -30,7 +31,8 @@ namespace MS.Infrastructure.Data
         }
         public async override Task<IEnumerable<Event>> AllAsync()
         {
-            var userId = _httpContextAccessor.HttpContext.User?.Claims?.First(x => x.Type == "id").Value;
+            //var userId = _httpContextAccessor.HttpContext.User?.Claims?.First(x => x.Type == "id").Value;
+            var userId = CommonFunction.UserId;
             var storeName = "Proc_Event_GetEventInfo_ByUserId";
             DynamicParameters parameters = new DynamicParameters();
             parameters.Add("p_UserId", userId);

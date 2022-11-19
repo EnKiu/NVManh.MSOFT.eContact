@@ -25,7 +25,7 @@
       <div v-if="isEventType" class="m-row">
         <m-combobox
           label="Sự kiện"
-          url="/api/v1/Events"
+          url="/api/v1/events"
           v-model="plan.EventId"
           :required="true"
           :isDisabled="false"

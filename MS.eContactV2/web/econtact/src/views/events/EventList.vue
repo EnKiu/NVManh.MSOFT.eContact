@@ -206,7 +206,6 @@ export default {
 .toolbar {
   display: flex;
   align-items: center;
-  background-color: #fff;
   justify-content: flex-start;
 }
 

@@ -36,10 +36,12 @@
 
             <m-column prop="FullName" label="Họ và tên">
               <template #default="scope">
-                <div class="cell__row">{{ scope.row.FullName }}</div>
+                <div class="cell__row">
+                  {{ scope.row.FullName }}
+                </div>
                 <div class="cell__row --mini">
                   <div v-if="!scope.row.NotYetPaid" style="color: #00b87a">
-                    + Nộp quỹ:
+                    + Đã nộp quỹ:
                     {{ commonJs.formatMoney(scope.row.Amount) }}
                     <button
                       v-if="!expireTime && isAdmin"
@@ -198,7 +200,14 @@ export default {
         () => {
           this.registerForUpdate = register;
           this.registerForUpdate.SpendsTotal = 0;
-          this.onSaveEventDetail();
+          this.api({
+            url: "/api/v1/expenditures/" + register.ExpenditureId,
+            method: "DELETE",
+          }).then(() => {
+            this.showAddMoneyForm = false;
+            this.loadRegisters();
+          });
+          // this.onSaveEventDetail();
         }
       );
     },

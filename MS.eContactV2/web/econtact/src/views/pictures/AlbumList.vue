@@ -206,6 +206,7 @@ export default {
   float: left;
   max-width: 100%;
   border: 1px solid #dedede;
+  background-color: #fff;
   border-radius: 4px;
   box-shadow: 0 0 10px #404040;
   padding: 16px;

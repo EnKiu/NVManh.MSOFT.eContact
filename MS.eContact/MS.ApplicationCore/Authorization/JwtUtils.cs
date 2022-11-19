@@ -21,10 +21,15 @@ namespace MS.ApplicationCore.Authorization
     public interface IJwtUtils
     {
         public string GenerateJwtToken(UserInfo user);
-        public string? ValidateJwtToken(string token);
+        public JwtInfo ValidateJwtToken(string token);
         public ClaimsPrincipal? GetPrincipalFromExpiredToken(string? token);
         public string CreateToken(List<Claim> authClaims);
         string HashPassword(string password);
+    }
+    public class JwtInfo
+    {
+        public string? UserId { get; set; }
+        public string? OrganizationId { get; set; }
     }
 
     /// <summary>
@@ -71,8 +76,9 @@ namespace MS.ApplicationCore.Authorization
         /// </summary>
         /// <param name="token"></param>
         /// <returns></returns>
-        public string? ValidateJwtToken(string token)
+        public JwtInfo ValidateJwtToken(string token)
         {
+            var jwInfo = new JwtInfo();
             if (token == null)
                 return null;
 
@@ -91,11 +97,12 @@ namespace MS.ApplicationCore.Authorization
             }, out SecurityToken validatedToken);
 
             var jwtToken = (JwtSecurityToken)validatedToken;
-            var userId =jwtToken.Claims.First(x => x.Type == "id").Value.ToString();
-            var orgID = jwtToken.Claims.First(x => x.Type == "OrganizationId").Value.ToString();
-            CommonFunction.SetCurrentOrganozationId(orgID);
+            jwInfo.UserId = jwtToken.Claims.First(x => x.Type == "id").Value.ToString();
+            jwInfo.OrganizationId = jwtToken.Claims.First(x => x.Type == "OrganizationId").Value.ToString();
+            CommonFunction.SetCurrentOrganozationId(jwInfo.OrganizationId);
+            CommonFunction.UserId = jwInfo.UserId;
             // return user id from JWT token if validation successful
-            return userId;
+            return jwInfo;
 
         }
 

@@ -4,9 +4,12 @@ using MS.ApplicationCore.Exceptions;
 using MS.ApplicationCore.Interfaces;
 using MS.ApplicationCore.Utilities;
 using MS.Infrastructure.UnitOfWork;
+using MySqlConnector;
 using System;
 using System.Collections.Generic;
 using System.Data.Common;
+using System.Net;
+using System.Net.WebSockets;
 using System.Text;
 using System.Threading.Tasks;
 using System.Transactions;
@@ -128,6 +131,7 @@ namespace MS.Infrastructure.Data
         {
             try
             {
+                SetDefaultOrganization(entity);
                 var rowAffects = await DbContext.UpdateAsync<TEntity>(entity);
                 //var rowAffects = await DbContext.Connection.ExecuteAsync($"Proc_Update{_tableName}", entity, transaction: DbContext.Transaction, commandType: System.Data.CommandType.StoredProcedure);
                 return rowAffects;
@@ -147,7 +151,22 @@ namespace MS.Infrastructure.Data
             var sql = $"DELETE FROM {_tableName} WHERE {_tableName}Id = @Id";
             var parameters = new DynamicParameters();
             parameters.Add("@Id", key);
-            rowAffects = await DbContext.Connection.ExecuteAsync(sql, parameters, transaction: DbContext.Transaction, commandType: System.Data.CommandType.Text);
+            try
+            {
+                rowAffects = await DbContext.Connection.ExecuteAsync(sql, parameters, transaction: DbContext.Transaction, commandType: System.Data.CommandType.Text);
+
+            }
+            catch (MySqlException ex)
+            {
+                if (ex.Number == (int)MySqlErrorCode.RowIsReferenced2 || ex.Number == (int)MySqlErrorCode.RowIsReferenced)
+                {
+                    throw new MSMySqlException(HttpStatusCode.InternalServerError, "Không thể xóa do có phát sinh dữ liệu và nghiệp vụ liên quan.");
+                }
+                else
+                {
+                    throw;
+                }
+            }
             return rowAffects;
         }
 

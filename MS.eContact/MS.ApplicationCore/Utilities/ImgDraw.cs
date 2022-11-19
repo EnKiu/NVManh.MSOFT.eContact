@@ -35,7 +35,7 @@ namespace MS.ApplicationCore.Utilities
             float height = (float)sizeImg.Height;
             float emSize = height;
 
-            font = new Font(FontFamily.GenericSansSerif, emSize, FontStyle.Regular);
+            font = new Font(FontFamily.GenericSansSerif, emSize, FontStyle.Bold);
             font = FindBestFitFont(drawing, text, font, sizeImg);
 
             //measure the string to see how big the image needs to be
@@ -80,7 +80,7 @@ namespace MS.ApplicationCore.Utilities
 
                 // Try a smaller font (90% of old size)
                 Font oldFont = font;
-                font = new Font(font.Name, (float)(font.Size * .9), font.Style);
+                font = new Font(font.Name, (float)(font.Size * .6), font.Style);
                 oldFont.Dispose();
             }
         }

@@ -25,7 +25,6 @@ export default {
       if (res && res.length > 0) {
         var lastest = res[0];
         this.item = lastest;
-        console.log(lastest.ExpireRegisterDate);
         if (!lastest.ExpireRegisterDate && lastest.EventDate)
           this.item.ExpireRegisterDate = lastest.EventDate;
       }

@@ -80,6 +80,11 @@
     /* background-color: #BDBDBD !important; */
 }
 
+.el-tabs__header {
+    padding: 0 10px !important;
+    margin: 0 0 0px !important;
+}
+
 .el-table .el-table__cell {
     padding: 0 !important;
 }

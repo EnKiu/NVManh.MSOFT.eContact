@@ -240,6 +240,9 @@ const commonJs = {
         }, 5000)
 
     },
+    hideToast() {
+        store.dispatch(CLEAR_TOAST, {});
+    },
     showProgress(progressInfo) {
         store.dispatch(SHOW_PROGRESS, progressInfo);
     },

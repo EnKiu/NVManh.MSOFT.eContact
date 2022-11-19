@@ -26,22 +26,27 @@
         width="100%"
         height="100%"
       >
-        <m-column prop="FullName" label="#" width="45px">
+        <!-- <m-column prop="FullName" label="#" width="45px">
+          
+        </m-column> -->
+        <m-column prop="FullName" label="Họ và tên">
           <template #default="scope">
-            <div
-              class="avatar"
-              @click="onSelectContact(scope.row)"
-              :style="{
-                'background-image': `url(${
-                  scope.row.AvatarFullPath ||
-                  'https://file.nmanh.com/e-contact/Content/imgs/avatar.png'
-                })`,
-              }"
-            ></div>
+            <div class="flex">
+              <div
+                class="avatar"
+                @click="onSelectContact(scope.row)"
+                :style="{
+                  'background-image': `url(${
+                    scope.row.AvatarFullPath ||
+                    'https://file.nmanh.com/e-contact/Content/imgs/avatar.png'
+                  })`,
+                }"
+              ></div>
+              <div>{{ scope.row.FullName }}</div>
+            </div>
           </template>
         </m-column>
-        <m-column prop="FullName" label="Họ và tên" width="160px"></m-column>
-        <m-column label="Số điện thoại">
+        <m-column label="SĐT" width="90px">
           <template #default="scope">
             <div>{{ scope.row.PhoneNumber }}</div>
             <div>{{ scope.row.MobileNumber }}</div>
@@ -68,11 +73,11 @@
           </template>
         </m-column>
       </m-table>
-      <div class="toobar-ext" v-if="isAdmin">
-        <button class="btn btn--default" @click="onAddClick">
-          <i class="icofont-ui-add"></i> Thêm thành viên
-        </button>
-      </div>
+    </div>
+    <div class="toobar-ext" v-if="isAdmin">
+      <button class="btn btn--default" @click="onAddClick">
+        <i class="icofont-ui-add"></i> Thêm thành viên
+      </button>
     </div>
   </div>
   <contact-detail
@@ -108,13 +113,17 @@ export default {
       this.contactSelected = {};
     },
     onDelete(contact) {
-      this.commonJs.showConfirm("Bạn có chắc chắn muốn xóa thành viên này?", () => {
-        this.api({ url: `/api/v1/contacts/${contact.ContactId}`, method: "DELETE" }).then(
-          () => {
+      this.commonJs.showConfirm(
+        `Bạn có chắc chắn muốn xóa [${contact.FullName}]?`,
+        () => {
+          this.api({
+            url: `/api/v1/contacts/${contact.ContactId}`,
+            method: "DELETE",
+          }).then(() => {
             this.loadData();
-          }
-        );
-      });
+          });
+        }
+      );
       event.stopPropagation();
     },
     onUpdate(contact) {
@@ -179,8 +188,9 @@ export default {
   min-width: 300px;
   box-sizing: border-box;
   height: 100%;
-  max-width: 350px;
   margin: 0 auto;
+  display: flex;
+  flex-direction: column;
 }
 .contact__search {
   width: 100%;
@@ -191,7 +201,6 @@ export default {
   position: sticky;
   display: flex;
   top: 0;
-  background-color: #fff;
   box-sizing: border-box;
 }
 
@@ -221,7 +230,6 @@ export default {
   font-size: 16px;
   position: absolute;
   z-index: 900;
-  background-color: #dedede;
   color: #fff;
   border-radius: 50%;
   display: flex;
@@ -233,25 +241,35 @@ export default {
   cursor: pointer;
 }
 .contact__list {
-  margin-top: 10px;
-  height: calc(100% - 40px);
+  margin-top: 4px;
+  /* height: calc(100% - 50px); */
   overflow-y: auto;
+  border-radius: 0px;
+  padding: 4px;
+  background-color: #fff;
+  flex: 1;
 }
 
 .avatar {
-  width: 40px;
-  height: 40px;
+  width: 35px;
+  height: 35px;
   background-repeat: no-repeat;
   background-position: center;
   background-size: cover;
   border-radius: 50%;
+  flex-shrink: 0;
+  flex-grow: 0;
+  flex-basis: 35px;
+  margin-right: 4px;
 }
 
 .toobar-ext {
-  position: absolute;
-  bottom: 0;
-  right: 0;
+  position: relative;
+  margin-top: 4px;
+  background-color: #fff;
+  padding: 4px;
   z-index: 999;
+  border-radius: 0 0 4px 4px;
 }
 
 .button-column {

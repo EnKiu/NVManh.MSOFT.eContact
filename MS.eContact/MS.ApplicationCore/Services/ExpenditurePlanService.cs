@@ -15,7 +15,7 @@ namespace MS.ApplicationCore.Services
         {
         }
 
-        protected override void BeforeSave(ExpenditurePlan entity)
+        protected override async Task BeforeSave(ExpenditurePlan entity)
         {
             if (entity.StartDate != null)
             {

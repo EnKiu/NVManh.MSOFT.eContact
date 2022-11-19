@@ -1,16 +1,5 @@
 <template>
-  <div>
-    <div class="toolbar">
-      <button class="btn btn--default" :disabled="!isAdmin" @click="onAddPlan">
-        <i class="icofont-coins"></i> Thêm kế hoạch
-      </button>
-      <button class="btn btn--add" :disabled="!isAdmin" @click="onReceive">
-        <i class="icofont-dong-plus"></i> Thu
-      </button>
-      <button class="btn btn--remove" :disabled="!isAdmin" @click="onSpend">
-        <i class="icofont-dong-minus"></i> Chi
-      </button>
-    </div>
+  <div class="fund-container">
     <div class="expenditure-statistic">
       <div class="increment-statistic">
         <div class="statistic__title">Tổng thu:</div>
@@ -35,17 +24,30 @@
         </div>
       </div>
     </div>
-    <el-tabs v-model="activeName" class="demo-tabs" @tab-click="handleClick">
-      <el-tab-pane label="Kế hoạch Thu/Chi" name="plans">
-        <expenditure-plan-list :isAdmin="isAdmin"></expenditure-plan-list>
-      </el-tab-pane>
-      <el-tab-pane label="Thu" name="revenues">
-        <fluctuation-list :isIncome="true" :isAdmin="isAdmin"></fluctuation-list>
-      </el-tab-pane>
-      <el-tab-pane label="Chi" name="expenditures">
-        <fluctuation-list :isIncome="false" :isAdmin="isAdmin"></fluctuation-list>
-      </el-tab-pane>
-    </el-tabs>
+    <div class="tab-panel">
+      <el-tabs v-model="activeName" class="demo-tabs" @tab-click="handleClick">
+        <el-tab-pane label="Kế hoạch Thu/Chi" name="plans">
+          <expenditure-plan-list :isAdmin="isAdmin"></expenditure-plan-list>
+        </el-tab-pane>
+        <el-tab-pane label="Thu" name="revenues">
+          <fluctuation-list :isIncome="true" :isAdmin="isAdmin"></fluctuation-list>
+        </el-tab-pane>
+        <el-tab-pane label="Chi" name="expenditures">
+          <fluctuation-list :isIncome="false" :isAdmin="isAdmin"></fluctuation-list>
+        </el-tab-pane>
+      </el-tabs>
+    </div>
+    <div class="toolbar">
+      <button class="btn btn--default" :disabled="!isAdmin" @click="onAddPlan">
+        <i class="icofont-coins"></i> Thêm kế hoạch
+      </button>
+      <button class="btn btn--add" :disabled="!isAdmin" @click="onReceive">
+        <i class="icofont-dong-plus"></i> Thu
+      </button>
+      <button class="btn btn--remove" :disabled="!isAdmin" @click="onSpend">
+        <i class="icofont-dong-minus"></i> Chi
+      </button>
+    </div>
     <router-view name="ExpenditureDialog" :type="type"></router-view>
   </div>
 </template>
@@ -65,9 +67,11 @@ export default {
     if (roleValue == 1) {
       this.isAdmin = true;
     }
-    console.log("activeName: ", this.tab);
     this.activeName = this.tab ? this.tab : "plans";
     this.loadData();
+    this.hubConnection.on("UpdateFundInfo", (fundInfo) => {
+      this.FundInfo = fundInfo;
+    });
   },
   // beforeRouteEnter(to, from, next) {
   //   console.log(`to`, to);
@@ -115,16 +119,31 @@ export default {
 };
 </script>
 <style scoped>
+.fund-container {
+  position: relative;
+  height: 100%;
+  background-color: #fff !important;
+  box-sizing: border-box;
+  border-radius: 0 0 4px 4px;
+  /* border: 1px solid #004982; */
+}
+.tab-panel {
+  position: relative;
+  background-color: #fff !important;
+  height: calc(100% - 60px);
+}
 .expenditure-plan-list {
   max-height: calc(100vh - 270px);
   overflow-y: auto;
 }
 .toolbar {
+  width: 100%;
   position: absolute;
-  left: -2px;
-  bottom: -10px;
-  margin-bottom: 8px;
+  left: 0px;
+  bottom: 0px;
   z-index: 1000;
+  padding: 4px;
+  box-shadow: 0 0 10px #ccc;
 }
 
 .toolbar button + button {
@@ -138,10 +157,11 @@ button i {
   display: flex;
   align-items: center;
   justify-content: space-between;
-  border: 1px solid #004982;
-  border-radius: 4px;
+  border-bottom: 1px solid #ccc;
+  border-radius: 4px 4px 0 0;
   padding: 8px;
   box-shadow: 0px 0px 10px #404040;
+  background-color: #fff;
 }
 .statistic__title {
   font-weight: 700;

@@ -47,7 +47,7 @@ namespace MS.Infrastructure.Data
 
         public async Task<bool> CheckCurrentFundHasExits(Expenditure expenditure)
         {
-            var sqlCommand = "SELECT e.ExpenditureId From Expenditure e WHERE e.ExpenditurePlanId = @ExpenditurePlanId AND e.ContactId = @ContactId";
+            var sqlCommand = "SELECT e.ExpenditureId From Expenditure e WHERE e.ExpenditurePlanId = @ExpenditurePlanId AND e.ContactId = @ContactId AND e.OrganizationId = @p_OrganizationId";
             var parameters = new DynamicParameters();
             parameters.Add("@ExpenditurePlanId", expenditure.ExpenditurePlanId);
             parameters.Add("@ContactId", expenditure.ContactId);

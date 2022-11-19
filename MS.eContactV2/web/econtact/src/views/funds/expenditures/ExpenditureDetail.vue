@@ -2,49 +2,43 @@
   <m-dialog :title="formTitle" @onClose="onClose">
     <template v-slot:content>
       <div>
-        <form
-          id="frm-detail"
-          @submit.prevent="onSave"
-          @keydown.enter="$event.preventDefault()"
-        >
-          <div class="m-row">
-            <el-radio-group v-model="optionType" @change="onChangeOptionType">
-              <el-radio :label="1" size="large">{{
-                isIncrement == true ? "Thu theo đợt/kế hoạch" : "Chi theo đợt/kế hoạch"
-              }}</el-radio>
-              <el-radio :label="2" size="large">Khác</el-radio>
-            </el-radio-group>
-          </div>
-          <div class="m-row">
-            <m-combobox
-              :label="isIncrement == true ? 'Mục đích thu' : 'Mục đích chi'"
-              :url="'/api/v1/dictionarys/expenditure-type?type=' + type"
-              v-model="expenditure.ExpenditureType"
-              :required="true"
-              :isDisabled="optionType == 1"
-              @onSelected="onChangeExpenditureType"
-              propValue="Value"
-              propText="Text"
-            >
-            </m-combobox>
-          </div>
-          <div v-if="isByPlan == true" class="m-row">
-            <m-combobox
-              :label="
-                isIncrement == true ? 'Kế hoạch thu - Đợt thu' : 'Kế hoạch chi - Đợt chi'
-              "
-              :url="apiPlanUrl"
-              v-model="expenditure.ExpenditurePlanId"
-              :required="true"
-              :isDisabled="false"
-              propValue="ExpenditurePlanId"
-              propText="ExpenditurePlanName"
-              @onSelected="onSelectExpenditurePlan"
-            >
-            </m-combobox>
-          </div>
+        <div class="m-row">
+          <el-radio-group v-model="optionType" @change="onChangeOptionType">
+            <el-radio :label="1" size="large">{{
+              isIncrement == true ? "Thu theo đợt/kế hoạch" : "Chi theo đợt/kế hoạch"
+            }}</el-radio>
+            <el-radio :label="2" size="large">Khác</el-radio>
+          </el-radio-group>
+        </div>
+        <div class="m-row">
+          <m-combobox
+            :label="isIncrement == true ? 'Mục đích thu' : 'Mục đích chi'"
+            :url="'/api/v1/dictionarys/expenditure-type?type=' + type"
+            v-model="expenditure.ExpenditureType"
+            :required="true"
+            :isDisabled="optionType == 1"
+            propValue="Value"
+            propText="Text"
+          >
+          </m-combobox>
+        </div>
+        <div v-if="isByPlan == true" class="m-row">
+          <m-combobox
+            :label="
+              isIncrement == true ? 'Kế hoạch thu - Đợt thu' : 'Kế hoạch chi - Đợt chi'
+            "
+            :url="apiPlanUrl"
+            v-model="expenditure.ExpenditurePlanId"
+            :required="true"
+            :isDisabled="false"
+            propValue="ExpenditurePlanId"
+            propText="ExpenditurePlanName"
+            @onSelected="onSelectExpenditurePlan"
+          >
+          </m-combobox>
+        </div>
 
-          <!-- <div v-if="isEventType" class="m-row">
+        <!-- <div v-if="isEventType" class="m-row">
             <m-combobox
               label="Sự kiện"
               url="/api/v1/Events"
@@ -56,46 +50,45 @@
             >
             </m-combobox>
           </div> -->
-          <div class="m-row">
-            <m-combobox
-              :label="isIncrement == true ? 'Người nộp tiền' : 'Người chi tiền'"
-              url="/api/v1/contacts"
-              v-model="expenditure.ContactId"
-              :required="true"
-              :isDisabled="false"
-              propValue="ContactId"
-              propText="FullName"
-              @onSelected="onChangeMember"
-            >
-            </m-combobox>
+        <div class="m-row">
+          <m-combobox
+            :label="isIncrement == true ? 'Người nộp tiền' : 'Người chi tiền'"
+            url="/api/v1/contacts"
+            v-model="expenditure.ContactId"
+            :required="true"
+            :isDisabled="false"
+            propValue="ContactId"
+            propText="FullName"
+            @onSelected="onChangeMember"
+          >
+          </m-combobox>
+        </div>
+        <div class="m-row">
+          <m-input
+            label="Số tiền"
+            :onlyNumberChar="true"
+            v-model="expenditure.Amount"
+            required
+          ></m-input>
+          <div class="money">
+            {{ commonJs.formatMoney(expenditure.Amount) }}
           </div>
-          <div class="m-row">
-            <m-input
-              label="Số tiền"
-              :onlyNumberChar="true"
-              v-model="expenditure.Amount"
-              required
-            ></m-input>
-            <div class="money">
-              {{ commonJs.formatMoney(expenditure.Amount) }}
-            </div>
-          </div>
-          <div class="m-row">
-            <label for="">{{ isIncrement == true ? "Ngày thu" : "Ngày chi" }} </label>
-            <el-date-picker
-              v-model="expenditure.ExpenditureDate"
-              type="date"
-              format="DD-MM-YYYY"
-              :placeholder="isIncrement == true ? 'Ngày thu' : 'Ngày chi'"
-            />
-          </div>
-          <div class="m-row">
-            <m-text-area
-              label="Mô tả/ Ghi chú"
-              v-model="expenditure.Description"
-            ></m-text-area>
-          </div>
-        </form>
+        </div>
+        <div class="m-row">
+          <label for="">{{ isIncrement == true ? "Ngày thu" : "Ngày chi" }} </label>
+          <el-date-picker
+            v-model="expenditure.ExpenditureDate"
+            type="date"
+            format="DD-MM-YYYY"
+            :placeholder="isIncrement == true ? 'Ngày thu' : 'Ngày chi'"
+          />
+        </div>
+        <div class="m-row">
+          <m-text-area
+            label="Mô tả/ Ghi chú"
+            v-model="expenditure.Description"
+          ></m-text-area>
+        </div>
       </div>
     </template>
     <template v-slot:footer>
@@ -103,7 +96,7 @@
         <i class="icofont-ui-close"></i> Hủy
       </button>
       <button
-        type="submit"
+        @click="onSave"
         form="frm-detail"
         class="btn btn--default"
         style="margin-left: 10px"
@@ -135,7 +128,17 @@ export default {
     if (this.id) {
       this.api({ url: "api/v1/expenditures/" + this.id }).then((res) => {
         this.expenditure = res;
+        if (
+          this.expenditure.ExpenditureType == Enum.ExpenditureType.INCREMENT_PLAN ||
+          this.expenditure.ExpenditureType == Enum.ExpenditureType.REDURE_PLAN
+        ) {
+          this.optionType = Enum.OptionExpenditurePlanType.ForPlan;
+        } else {
+          this.optionType = Enum.OptionExpenditurePlanType.ForOther;
+        }
       });
+    } else {
+      this.optionType = Enum.OptionExpenditurePlanType.ForPlan;
     }
     if (this.type == Enum.ReceiptType.Income) {
       this.formTitle = "Chi tiết phiếu thu";
@@ -146,6 +149,34 @@ export default {
     }
   },
   computed: {
+    expenditureNameComputed: function () {
+      switch (this.expenditure.ExpenditureType) {
+        case Enum.ExpenditureType.INCREMENT_PLAN: // Thu theo kế hoạch
+          return `[${this.contactName}] nộp tiền theo kế hoạch [${this.planName}] `;
+        case Enum.ExpenditureType.INCREMENT_SUPER_RICH: // thu từ mạnh thường quân
+          return `[${this.contactName}] TÀI TRỢ [${this.commonJs.formatMoney(
+            this.expenditure.Amount
+          )}]`;
+        case Enum.ExpenditureType.INCREMENT_OTHER: // Thu từ nguồn khác
+          return `[${this.contactName}] nộp quỹ [${this.commonJs.formatMoney(
+            this.expenditure.Amount
+          )}]`;
+        case Enum.ExpenditureType.REDURE_PLAN: // Chi theo kế hoạch
+          return `[${this.contactName}] chi tiền theo kế hoạch [${this.planName}]`;
+        case Enum.ExpenditureType.REDURE_WEDDING: // Chi cho đám cưới thành viên
+          return `[${this.contactName}] chi tiền [đám cưới thành viên]`;
+        case Enum.ExpenditureType.REDURE_FUNERAL: // Chi ma chay, cưới hỏi
+          return `[${this.contactName}] chi tiền [đám ma/đám hiếu]`;
+        case Enum.ExpenditureType.REDUCE_MEDICAL: // Chi ốm đau
+          return `[${this.contactName}] chi tiền [thăm hỏi ốm đau]`;
+        case Enum.ExpenditureType.REDUCE_OTHER: // Chi khác
+          return `[${this.contactName}] chi [${this.commonJs.formatMoney(
+            this.expenditure.Amount
+          )}]`;
+        default:
+          return "test";
+      }
+    },
     isByPlan: function () {
       if (
         this.optionType == Enum.OptionExpenditurePlanType.ForPlan ||
@@ -204,19 +235,12 @@ export default {
         this.expenditure.ExpenditureType = null;
       }
     },
-    /* eslint-disable */
-    onChangeExpenditureType(value, text, item) {
-      this.expenditure.ExpenditureType = item;
-      if (
-        value == Enum.ExpenditureType.INCREMENT_PLAN ||
-        value == Enum.ExpenditureType.INCREMENT_PLAN
-      ) {
-      }
-    },
+
     /* eslint-disable */
     onSelectExpenditurePlan(value, text, item) {
       this.expenditure.ExpenditurePlanId = value;
       this.expenditure.ExpenditurePlan = item;
+      this.planName = item.EventName;
       // Nếu chọn là theo kế hoạch, mặc định là thu/chi theo kế hoạch
       if (this.optionType == Enum.OptionExpenditurePlanType.ForPlan) {
         if (this.type == Enum.ReceiptType.Income) {
@@ -227,64 +251,49 @@ export default {
           // --> LÀ chi thì là chi theo kế hoạch:
           this.expenditure.ExpenditureType = Enum.ExpenditureType.REDURE_PLAN;
         }
-      } else {
-        this.expenditure.ExpenditureType = null;
       }
     },
     onChangeMember(value, text, item) {
-      // Nếu chọn là theo kế hoạch, mặc định là thu/chi theo kế hoạch
-      if (this.optionType == Enum.OptionExpenditurePlanType.ForPlan) {
-        if (this.type == Enum.ReceiptType.Income) {
-          // --> LÀ thu thì là thu theo kế hoạch:
-          this.expenditure.ExpenditureName = `[${text}] nộp tiền [${this.expenditure.ExpenditurePlan.ExpenditurePlanName}]`;
-        } else {
-          // --> LÀ chi thì là chi theo kế hoạch:
-          this.expenditure.ExpenditureName = `[${text}] chi tiền [${this.expenditure.ExpenditurePlan.ExpenditurePlanName}]`;
-        }
-      } else {
-        if (this.type == Enum.ReceiptType.Income) {
-          this.expenditure.ExpenditureName = `[${text}] nộp tiền [${this.expenditure.ExpenditureType.Text}]`;
-        } else {
-          this.expenditure.ExpenditureName = `[${text}] chi tiền [${this.expenditure.ExpenditureType.Text}]`;
-        }
-      }
+      this.contactName = item.LastName;
     },
     validate() {
-      var errors = [];
-      var isValid = true;
-      if (!this.expenditure.ExpenditureType) {
-        errors.push("[Mục đích thu/chi] không được để trống.");
-        isValid = false;
-      }
+      return true;
+      // var errors = [];
+      // var isValid = true;
+      // if (!this.expenditure.ExpenditureType) {
+      //   errors.push("[Mục đích thu/chi] không được để trống.");
+      //   isValid = false;
+      // }
 
-      if (
-        (this.expenditure.ExpensitureType == Enum.ExpenditureType.INCREMENT_PLAN ||
-          this.expenditure.ExpensitureType == Enum.ExpenditureType.REDURE_PLAN) &&
-        !this.expenditure.ExpenditurePlanId
-      ) {
-        errors.push("[Kế hoạch thu/chi - Đợt thu/chi] không được phép để trống.");
-        isValid = false;
-      }
-      if (!this.expenditure.ContactId) {
-        errors.push("[Người nộp tiền/chi tiền] không được phép để trống.");
-        isValid = false;
-      }
+      // if (
+      //   (this.expenditure.ExpensitureType == Enum.ExpenditureType.INCREMENT_PLAN ||
+      //     this.expenditure.ExpensitureType == Enum.ExpenditureType.REDURE_PLAN) &&
+      //   !this.expenditure.ExpenditurePlanId
+      // ) {
+      //   errors.push("[Kế hoạch thu/chi - Đợt thu/chi] không được phép để trống.");
+      //   isValid = false;
+      // }
+      // if (!this.expenditure.ContactId) {
+      //   errors.push("[Người nộp tiền/chi tiền] không được phép để trống.");
+      //   isValid = false;
+      // }
 
-      if (!this.expenditure.Amount) {
-        errors.push("[Số tiền] không được phép để trống.");
-        isValid = false;
-      }
-      this.commonJs.showMessenger({
-        title: "Dữ liệu không hợp lệ",
-        msg: errors,
-        type: Enum.MsgType.Error,
-        confirm: () => {
-          console.log("Validate không hợp lệ");
-        },
-      });
-      return isValid;
+      // if (!this.expenditure.Amount) {
+      //   errors.push("[Số tiền] không được phép để trống.");
+      //   isValid = false;
+      // }
+      // this.commonJs.showMessenger({
+      //   title: "Dữ liệu không hợp lệ",
+      //   msg: errors,
+      //   type: Enum.MsgType.Error,
+      //   confirm: () => {
+      //     console.log("Validate không hợp lệ");
+      //   },
+      // });
+      // return isValid;
     },
     onSave() {
+      this.expenditure.ExpenditureName = this.expenditureNameComputed;
       if (this.validate()) {
         var url = "api/v1/expenditures";
         var method = "POST";
@@ -297,7 +306,6 @@ export default {
             router.push("/funds?tab=" + this.tabName);
           })
           .catch((res) => {
-            console.log(`res`, res);
             if (res.status == 409) {
               this.commonJs.showConfirm(
                 `Thành viên này đã nộp tiền cho khoản này rồi, Bạn có muốn cập nhật lại số tiền [${this.commonJs.formatMoney(
@@ -308,7 +316,6 @@ export default {
                   this.api({
                     url: `api/v1/expenditures/find-option?planId=${this.expenditure.ExpenditurePlanId}&contactId=${this.expenditure.ContactId}`,
                   }).then((res) => {
-                    console.log(`res`, res);
                     this.expenditure.ExpenditureId = res.ExpenditureId;
                     this.api({
                       url: url + "/" + res.ExpenditureId,
@@ -332,9 +339,11 @@ export default {
         ExpenditureDate: new Date(),
       },
       formTitle: null,
-      optionType: 1,
+      optionType: null,
       plansFilter: [],
       expenditureTypesFilter: [],
+      contactName: "",
+      planName: "",
     };
   },
 };

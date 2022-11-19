@@ -44,12 +44,13 @@ namespace MS.ApplicationCore.Authorization
                 // Sử dụng try/ catch để loại trừ trường hợp khi đăng nhập/ đăng xuất mà có gửi 1 Token không hợp lệ:
                 try
                 {
-                    var userId = jwtUtils.ValidateJwtToken(token);
-                    if (userId != null)
+                    var jwtInfo = jwtUtils.ValidateJwtToken(token);
+                    if (jwtInfo != null)
                     {
-                        context.Items.Add("userId", userId);
+                        context.Items.Add("userId", jwtInfo.UserId);
+                        context.Items.Add("organizationId", jwtInfo.OrganizationId);
                         // Trích xuất thông tin người dùng, gắn nó vào context để sử dụng khi cần
-                        var userInfo = await userService.GetUserInfoById(userId);
+                        var userInfo = await userService.GetUserInfoById(jwtInfo.UserId);
                         userInfo.HighestRole = userInfo.Roles.FirstOrDefault()?.RoleValue;
                         context.Items["User"] = userInfo;
 

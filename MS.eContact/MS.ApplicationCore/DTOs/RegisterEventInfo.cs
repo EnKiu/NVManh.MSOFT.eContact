@@ -11,5 +11,7 @@ namespace MS.ApplicationCore.DTOs
     {
         public bool NotYetPaid { get; set; }
         public decimal? Amount { get; set; }
+        public Guid? ExpenditureId { get; set; }
+        public Guid? ExpenditurePlanId { get; set; }
     }
 }

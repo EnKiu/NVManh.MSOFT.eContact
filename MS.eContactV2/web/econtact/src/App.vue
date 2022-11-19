@@ -24,7 +24,12 @@
     @btnCancelClick="hideNotice"
     @confirmFunction="confirmFunction"
   />
-  <m-toast v-if="isShowToast" :msg="msgToast" :type="msgToastType"></m-toast>
+  <m-toast
+    v-if="isShowToast"
+    :msg="msgToast"
+    :type="msgToastType"
+    @onClose="onCloseToast"
+  ></m-toast>
 
   <news-list v-if="isAuthenticated && showNew" @onClose="showNew = false"></news-list>
   <progress-bar v-if="isShowProgressBar" :processList="processList"></progress-bar>
@@ -97,6 +102,9 @@ export default {
     },
     closeMessageBox() {
       this.showMessageBox = false;
+    },
+    onCloseToast() {
+      this.commonJs.hideToast();
     },
   },
   data() {

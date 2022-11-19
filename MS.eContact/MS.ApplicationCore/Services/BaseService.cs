@@ -2,9 +2,11 @@
 using MS.ApplicationCore.Entities;
 using MS.ApplicationCore.Exceptions;
 using MS.ApplicationCore.Interfaces;
+using MS.ApplicationCore.Utilities;
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Security.AccessControl;
 using System.Text;
 using System.Threading.Tasks;
 
@@ -25,12 +27,13 @@ namespace MS.ApplicationCore.Services
 
         public virtual async Task<int> AddAsync(TEntity entity)
         {
-            ValidateObject(entity);
-            BeforeSave(entity);
+            entity.EntityState = MSEnums.EntityState.ADD;
+            await ValidateObject(entity);
+            await ProcessEntityBeforeSave(entity);
             if (Errors.Count == 0)
             {
                 var res = await _repository.AddAsync(entity);
-                AfterSave(entity);
+                await AfterSave(entity);
                 return res;
             }
             else
@@ -52,50 +55,77 @@ namespace MS.ApplicationCore.Services
 
         public virtual async Task<int> RemoveAsync(object key)
         {
+            var res = await _repository.RemoveAsync(key);
+            await AfterDeleted();
             return await _repository.RemoveAsync(key);
-        }
-
-        public int Update(TEntity entity, object pks)
-        {
-            BeforeSave(entity);
-            if (Errors.Count == 0)
-            {
-                var res = _repository.Update(entity,pks);
-                AfterSave(entity);
-                return res;
-            }
-            else
-                throw new MISAException(System.Net.HttpStatusCode.BadRequest, Errors);
         }
 
         public virtual async Task<int> UpdateAsync(TEntity entity, object pks)
         {
-            BeforeSave(entity);
+            entity.EntityState = MSEnums.EntityState.UPDATE;
+            await ValidateObject(entity);
+            await ProcessEntityBeforeSave(entity);
             if (Errors.Count == 0)
             {
                 var res = await _repository.UpdateAsync(entity, pks);
-                AfterSave(entity);
+                await AfterSave(entity);
                 return res;
             }
             else
                 throw new MISAException(System.Net.HttpStatusCode.BadRequest, Errors);
         }
 
-        protected virtual void BeforeSave(TEntity entity)
+        private async Task ProcessEntityBeforeSave(TEntity entity)
+        {
+            var timeNow = TimeZoneInfo.ConvertTimeBySystemTimeZoneId(DateTime.Now, "SE Asia Standard Time");
+            if (entity.EntityState == MSEnums.EntityState.ADD)
+            {
+                var createdDate = typeof(TEntity).GetProperty("CreatedDate");
+                var createdBy = typeof(TEntity).GetProperty("CreatedBy");
+                if (createdDate != null)
+                {
+                    createdDate.SetValue(entity, timeNow);
+                }
+                if (createdBy != null)
+                {
+                    createdBy.SetValue(entity, CommonFunction.UserId);
+                }
+            }
+            else
+            {
+                var mdifiedDate = typeof(TEntity).GetProperty("ModifiedDate");
+                var modifiedBy = typeof(TEntity).GetProperty("ModifiedBy");
+                if (mdifiedDate != null)
+                {
+                    mdifiedDate.SetValue(entity, timeNow);
+                }
+                if (modifiedBy != null)
+                {
+                    modifiedBy.SetValue(entity, CommonFunction.UserId);
+                }
+            }
+            await BeforeSave(entity);
+        }
+        protected virtual async Task BeforeSave(TEntity entity)
+        {
+            
+        }
+
+        protected virtual async Task AfterSave(TEntity entity)
         {
 
         }
 
-        protected virtual void AfterSave(TEntity entity)
+        protected virtual async Task ValidateObject(TEntity entity)
+        {
+
+        }
+        protected virtual async Task ValidateObjectCustom(TEntity entity)
         {
 
         }
 
-        protected virtual void ValidateObject(TEntity entity)
-        {
-
-        }
-        protected virtual void ValidateObjectCustom(TEntity entity)
+        protected virtual async Task AfterDeleted()
         {
 
         }

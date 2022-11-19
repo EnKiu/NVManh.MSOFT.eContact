@@ -16,6 +16,7 @@ namespace MS.ApplicationCore.Utilities
         private readonly IHttpContextAccessor _httpContextAccessor;
         public static string LanguageCode = "vi-VN";
         private static string? OrganizationId = null;
+        public static string? UserId = null;
         public CommonFunction(IHttpContextAccessor httpContextAccessor)
         {
             _httpContextAccessor = httpContextAccessor;

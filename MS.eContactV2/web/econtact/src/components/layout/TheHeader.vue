@@ -1,6 +1,8 @@
 <template>
-  <div class="page-title animate-charcter" style="">
-    {{ classInfo.Description }}
+  <div class="page-title" style="">
+    <div class="animate-charcter">
+      {{ classInfo.Description }}
+    </div>
   </div>
   <nav class="navbar">
     <div class="logo"></div>
@@ -105,7 +107,6 @@ export default {
   },
   props: ["isAuthenticated", "isProfileLoaded", "classInfo"],
   created() {
-    console.log(`classInfo`, this.classInfo);
     if (this.isAuthenticated) {
       this.account.AvatarFullPath = localStorage.getItem("avatar");
       this.account.LastName = localStorage.getItem("lastName");
@@ -147,8 +148,8 @@ export default {
   flex-direction: column;
   align-items: center;
   justify-content: center;
-  background-color: black;
   color: #fff;
+  background-color: #fff !important;
   text-align: center;
   text-transform: uppercase;
   font-weight: 700;

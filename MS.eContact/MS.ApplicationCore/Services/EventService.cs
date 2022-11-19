@@ -5,6 +5,7 @@ using MS.ApplicationCore.Interfaces;
 using System;
 using System.Collections.Generic;
 using System.Text;
+using System.Threading.Tasks;
 
 namespace MS.ApplicationCore.Services
 {
@@ -16,7 +17,7 @@ namespace MS.ApplicationCore.Services
             _repository = repository;
         }
 
-        protected override void BeforeSave(Event entity)
+        protected override async Task BeforeSave(Event entity)
         {
             // Chuyển giờ sang UTC:
             //TimeZoneInfo timeInfo = TimeZoneInfo.FindSystemTimeZoneById("Indochina Time");
@@ -35,7 +36,7 @@ namespace MS.ApplicationCore.Services
                 entity.ExpireRegisterDate = TimeZoneInfo.ConvertTimeBySystemTimeZoneId((DateTime)entity.ExpireRegisterDate, "SE Asia Standard Time");
             }
         }
-        protected override void ValidateObject(Event entity)
+        protected async override Task ValidateObject(Event entity)
         {
             
             // Kiểm tra các thông tin bắt buộc nhập:
